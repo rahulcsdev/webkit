@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
 import { dropDown } from "../utils/data";
 import { FiChevronDown, FiChevronRight } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalProject from "../components/ModalProject";
+import ModalProject from "../../components/ModalProject";
 const manrope = Manrope({ subsets: ["latin"] });
 const Projects = () => {
   const myDivRef = useRef<any>(null);

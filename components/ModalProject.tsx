@@ -1,6 +1,6 @@
 import React from "react";
 import { Manrope,Roboto } from "next/font/google";
-import { catergory } from "../utils/data";
+import { catergory } from "../app/utils/data";
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: any;

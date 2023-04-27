@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import logo from "../assets/logo.svg";
 import Image from "next/image";
 import { Manrope,Roboto } from "next/font/google";
-import { navLinks } from "../utils/data";
+import { navLinks } from "../app/utils/data";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {useRouter} from 'next/navigation'
