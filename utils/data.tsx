@@ -277,4 +277,93 @@ export const catergory=[
       name:'Development',
       value:'development'
    },
+];
+
+
+
+export const projectsData=[
+   {
+      title:'Theme development',
+      desc:'Preparing framework of block-based WordPress Theme.',
+      percentage:25,
+      btn:'high',
+      people:2
+   },
+   {
+      title:'Vuetify Dashboard in Admin',
+      desc:'Start development server and check Vue project in browser.',
+      percentage:30,
+      btn:'medium',
+      people:4
+   },
+   {
+      title:'Wordpress Dashboard Plugins',
+      desc:'Customize your WordPress with smart WordPress plugins.',
+      percentage:40,
+      btn:'low',
+      people:3
+   },
+   {
+      title:'Hotel Management App',
+      desc:'Build a Cloud-based Hotel Management Theme.',
+      percentage:40,
+      btn:'high',
+      people:3
+   },
+   {
+      title:'Video Streaming Theme',
+      desc:'Launch OTT and media streaming theme.',
+      percentage:25,
+      btn:'high',
+      people:3
+   },
+   {
+      title:'Medical Clinic Theme',
+      desc:"Hospital and private clinic doctor's theme.",
+      percentage:30,
+      btn:'meduium',
+      people:4
+   },
+   {
+      title:'Social Media Dashboard',
+      desc:"Leverage data with Social Media Dashboard.",
+      percentage:18,
+      btn:'low',
+      people:3
+   },
+   {
+      title:'Cloud Service Theme',
+      desc:"Exclusively for cloud-based/ Startup theme.",
+      percentage:40,
+      btn:'high',
+      people:3
+   },
+   {
+      title:'Automotive WordPress Theme',
+      desc:"Dealership-based business WordPress theme.",
+      percentage:25,
+      btn:'high',
+      people:2
+   },
+   {
+      title:'Online Education Template',
+      desc:"Remote students and teachers dashboard.",
+      percentage:25,
+      btn:'medium',
+      people:4
+   },
+   {
+      title:'Blog/Magazine Theme',
+      desc:"Launch visually appealing Blog theme.",
+      percentage:15,
+      btn:'low',
+      people:4
+   },
+   {
+      title:'XAMIN: AI Theme',
+      desc:"Artificial Intelligence inspired WordPress theme.",
+      percentage:40,
+      btn:'high',
+      people:3
+   },
 ]

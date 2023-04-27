@@ -22,8 +22,10 @@ interface cardType{
 interface Props{
   data:cardType
 }
+
 const CardCarousal = (props:Props) => {
     const {data}=props;
+    console.log(data)
     const arr = new Array(data.image).fill(0);
   return (
     <div className={`relative bg-white drop-shadow-md rounded-xl p-5 my-2 mx-3 max-w-[400px]`} >
@@ -49,7 +51,7 @@ const CardCarousal = (props:Props) => {
             ))}
           </div>
         <button className={`px-2 ${roboto.className} text-base py-1 rounded-md ${data.sbg} text-[${data.color}] border-none outline-none`} >
-  {data.btn}
+          {data.btn}
         </button>
     </div>
     </div>

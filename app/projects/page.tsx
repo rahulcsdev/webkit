@@ -2,21 +2,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
-import { dropDown } from "../../utils/data";
+import { dropDown, projectsData } from "../../utils/data";
 import { FiChevronDown, FiChevronRight } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
 import ModalProject from "../../components/ModalProject";
+import ProjectCard from "@/components/ProjectCard";
 const manrope = Manrope({ subsets: ["latin"] });
 const Projects = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
-
+  const [isExpand, setIsExpand] = useState(false);
+  const [value,setValue]=useState('progress');
+  const [showModal, setShowModal] = useState(false);
+  const [viewMode, setViewMode] = useState(true);
   const handleDateChange = (date: Date) => {
     setDate(date);
   };
 
+  
   useEffect(() => {
     const handleScroll = () => {
       const { current: myDiv } = myDivRef;
@@ -35,18 +40,17 @@ const Projects = () => {
     };
   }, [myDivRef]);
 
-  const [isExpand, setIsExpand] = useState(false);
-   const [value,setValue]=useState('progress');
-   const [showModal, setShowModal] = useState(false);
-
+ 
 function handleCloseModal(){
   setShowModal(false);
 }
-
+const clickS="bg-[#5773FF] text-white";
+const notClickS="bg-gray-100 text-black";
   return (
     <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
       <Navbar isScrolling={isScrolling} />
       <div className="px-5 py-6">
+        {/* Second Navbar */}
         <div className="p-5 bg-white drop-shadow-md rounded-xl">
           <div className="flex items-center justify-between">
             <h1
@@ -78,20 +82,30 @@ function handleCloseModal(){
              
             </div>
             <div className="flex items-center gap-3 border-r-2 border-gray-200 pr-6">
-              <div className="p-2 rounded-full cursor-pointer bg-[#5773FF] text-xl text-white">
+              <div onClick={()=>setViewMode(true)} className={`p-2 rounded-full cursor-pointer  text-xl ${viewMode?clickS:notClickS} `}>
                 <RxDashboard/>
               </div>
-              <div className="p-2 text-xl  cursor-pointer rounded-full bg-gray-100 text-black">
+              <div onClick={()=>setViewMode(false)} className={`p-2 text-xl  cursor-pointer rounded-full ${!viewMode?clickS:notClickS} `}>
                 <HiBars3/>
               </div>
             </div>
              <div className="relative">
-              <button onClick={()=>setShowModal(true)} className={`bg-[#5773FF] text-white px-3 py-2 rounded-lg capitalize`} >new project</button>
+              <button onClick={()=>setShowModal(true)} className={`${clickS} px-3 py-2 rounded-lg capitalize`} >new project</button>
              </div>
             
             </div>
            
           </div>
+        </div>
+
+        <div className="mt-5">
+          <h1 className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
+                  {
+                    projectsData.map((data,index)=>(
+                         <ProjectCard  key={index} data={data} />
+                    ))
+                  }
+          </h1>
         </div>
       </div>
       <ModalProject showModal={showModal} handleCloseModal={handleCloseModal} />
