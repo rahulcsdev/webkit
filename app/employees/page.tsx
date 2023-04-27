@@ -5,6 +5,8 @@ import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
 import ModalEmployee from "../../components/ModalEmployee";
+import { employeesData } from "../../utils/data";
+import EmployeesCardData from "@/components/EmployeesCardData";
 
 
 const manrope = Manrope({ subsets: ["latin"] });
@@ -77,18 +79,15 @@ const Employees = () => {
 
      {/* Employee Cards */}
 
-     <div className="px-5 py-6">
-     <div className="p-5 max-w-lg bg-white drop-shadow-md rounded-xl">
-        <h4>Rubin Franci</h4>
-        <p>rubinfranci@gmail.com</p>
-        <div>
-          <div></div>
-        </div>
-       <div className="border border-black">
-       <button>Message</button>
-       </div>
-      </div>
+     <div className="px-5 py-6 ">
+     <div className="grid grid-cols-3 gap-5">
+     {employeesData.map((item, index) => (
+          <EmployeesCardData key={index} data={item} />
+        ))}
      </div>
+     </div>
+
+    
 
     </div>
     </>    

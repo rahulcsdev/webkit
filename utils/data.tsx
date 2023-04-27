@@ -316,3 +316,51 @@ export const role = [
       value:'seo'
    }
 ]
+
+export const employeesData = [
+   {
+      id : 1,
+      name : "Ruben Franci",
+      email : "rubenfranci@gmail.com"
+   },
+   {
+      id : 2,
+      name : "Kaylynn Press",
+      email : "kaylynnpress@gmail.com"
+   },
+   {
+      id : 3,
+      name : "Corey Press",
+      email : "coreypress@gmail.com"
+   },
+   {
+      id : 4,
+      name : "Zain Carder",
+      email : "zaincarder@gmail.com"
+   },
+   {
+      id : 5,
+      name : "Erin Donin",
+      email : "erindonin@gmail.com"
+   },
+   {
+      id : 6,
+      name : "Mira Herwitz",
+      email : "miraherwitz@gmail.com"
+   },
+   {
+      id : 7,
+      name : "Kaiya George",
+      email : "kaiyageorge@gmail.com"
+   },
+   {
+      id : 8,
+      name : "Lincoln George",
+      email : "lincolngeorge@gmail.com"
+   },
+   {
+      id : 9,
+      name : "Paityn Siphron",
+      email : "paitynsiphron@gmail.com"
+   }
+]
