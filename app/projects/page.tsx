@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
-import { dropDown } from "../utils/data";
+import { dropDown } from "../../utils/data";
 import { FiChevronDown, FiChevronRight } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";

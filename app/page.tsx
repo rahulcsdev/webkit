@@ -1,6 +1,6 @@
 "use client"
 import { Manrope } from "next/font/google";
-import { boxCardData, cartData, dataDev, progressData } from "./utils/data";
+import { boxCardData, cartData, dataDev, progressData } from "../utils/data";
 import Card from "../components/Card";
 import {useRef,useState,useEffect} from 'react'
 import CardPro from "../components/CardPro";
