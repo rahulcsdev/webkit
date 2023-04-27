@@ -2,49 +2,32 @@
 import { Manrope } from "next/font/google";
 import { boxCardData, cartData, dataDev, progressData } from "../utils/data";
 import Card from "../components/Card";
-import {useRef,useState,useEffect} from 'react'
+import {useState} from 'react'
 import CardPro from "../components/CardPro";
-import Navbar from "../components/Navbar";
+ 
 import BoxCard from "../components/BoxCard";
 import CustomCalender from "../components/CustomCalender";
 import DataCard from "../components/DataCard";
 import MyCarousal from "../components/MyCarousal";
-import Footer from "../components/Footer";
+ 
+import LayoutNav from "@/components/LayoutNav";
+import Footer from "@/components/Footer";
  
 
 const manrope = Manrope({ subsets: ["latin"] });
 
 export default function Home() { 
-  const myDivRef = useRef<any>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
+ 
   const [date, setDate] = useState<Date>(new Date());
 
 const handleDateChange=(date:Date)=>{
   setDate(date);
 }
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const { current: myDiv } = myDivRef;
-      if (myDiv.scrollTop > 0) {
-        setIsScrolling(true);
-      } else {
-        setIsScrolling(false);
-      }
-    };
-
-    const { current: myDiv } = myDivRef;
-    myDiv.addEventListener('scroll', handleScroll);
-
-    return () => {
-      myDiv.removeEventListener('scroll', handleScroll);
-    };
-  }, [myDivRef]);
+ 
  
   return (
-    <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
-      <Navbar isScrolling={isScrolling} />
-    <div className="px-5 py-6">
+    <LayoutNav>
+       <div className="px-5 py-6">
       <div className="flex items-stretch justify-center w-full flex-wrap gap-5">
         {cartData.map((item, index) => (
           <Card key={index} data={item} />
@@ -105,7 +88,7 @@ const handleDateChange=(date:Date)=>{
       </div>
 
     </div>
-    <Footer/>
-    </div>
+    <Footer  />
+    </LayoutNav>
   );
 }

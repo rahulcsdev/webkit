@@ -10,6 +10,7 @@ import ModalProject from "../../components/ModalProject";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectCardCol from "@/components/ProjectCardCol";
 import Footer from "@/components/Footer";
+import LayoutNav from "@/components/LayoutNav";
 const manrope = Manrope({ subsets: ["latin"] });
 const Projects = () => {
   const myDivRef = useRef<any>(null);
@@ -23,23 +24,7 @@ const Projects = () => {
     setDate(date);
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const { current: myDiv } = myDivRef;
-      if (myDiv.scrollTop > 0) {
-        setIsScrolling(true);
-      } else {
-        setIsScrolling(false);
-      }
-    };
-
-    const { current: myDiv } = myDivRef;
-    myDiv.addEventListener("scroll", handleScroll);
-
-    return () => {
-      myDiv.removeEventListener("scroll", handleScroll);
-    };
-  }, [myDivRef]);
+ 
 
   function handleCloseModal() {
     setShowModal(false);
@@ -47,9 +32,8 @@ const Projects = () => {
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
   return (
-    <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
-      <Navbar isScrolling={isScrolling} />
-      <div className="px-5 py-6">
+ <LayoutNav>
+ <div className="px-5 py-6">
         {/* Second Navbar */}
         <div className="p-5 bg-white drop-shadow-md rounded-xl">
           <div className="flex items-center justify-between">
@@ -134,10 +118,12 @@ const Projects = () => {
           )}
         </div>
       </div>
+   <ModalProject showModal={showModal} handleCloseModal={handleCloseModal} />
+   <Footer/>
+ </LayoutNav>
+     
 
-      <ModalProject showModal={showModal} handleCloseModal={handleCloseModal} />
-      <Footer/>
-    </div>
+   
   );
 };
 
