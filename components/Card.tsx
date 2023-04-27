@@ -24,7 +24,7 @@ const Card = (props:Props) => {
     <div  className={`bg-white drop-shadow-md rounded-xl min-w-[280px]  p-5 flex flex-col ${roboto.className} `}>
     <div className="flex justify-between items-center">
     <h1 className={`text-[#140F49] text-xl font-medium ${manrope.className} `} >{data.title}</h1>
-     <h1   className={`capitalize ${data.bg} ${data.color} text-sm font-semibold px-2 py-1 rounded-md`}>{data.type}</h1>
+     <h1 className={`capitalize ${data.bg} ${data.color} text-sm font-semibold px-2 py-1 rounded-md`}>{data.type}</h1>
      
     </div>
     <p className={`text-[1.7em] text-[#140F49] font-medium ${manrope.className} `} >${data.cost}</p>

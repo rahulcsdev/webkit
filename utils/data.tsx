@@ -278,3 +278,41 @@ export const catergory=[
       value:'development'
    },
 ]
+
+export const type = [
+   {
+      name:'Type',
+      value:''
+   },
+   {
+      name:'Employee',
+      value:'employee'
+   }
+]
+
+export const role = [
+   {
+      name:'Role',
+      value:''
+   },
+   {
+      name:'Designer',
+      value:'designer'
+   },
+   {
+      name:'Developer',
+      value:'developer'
+   },
+   {
+      name:'Manager',
+      value:'manager'
+   },
+   {
+      name:'BDE',
+      value:'bde'
+   },
+   {
+      name:'SEO',
+      value:'seo'
+   }
+]

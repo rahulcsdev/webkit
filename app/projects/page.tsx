@@ -93,8 +93,12 @@ function handleCloseModal(){
            
           </div>
         </div>
+        
       </div>
       <ModalProject showModal={showModal} handleCloseModal={handleCloseModal} />
+     
+
+
     </div>
   );
 };
