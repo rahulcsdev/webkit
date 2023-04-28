@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../../components/Navbar";
 import ModalTasks from "../../components/ModalTasks";
+import CardTask from "../../components/CardTask";
 const Tasks = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -38,7 +39,7 @@ const Tasks = () => {
   return (
     <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
       <Navbar isScrolling={isScrolling} />
-      <div className="rounded-2xl flex items-center w-[95%] mx-auto p-4   justify-between shadow-xl  ">
+      <div className="rounded-3xl flex items-center w-[95%] mx-auto p-4   justify-between shadow-xl  ">
         <h1 className="font-semibold">Your Task</h1>
         <div>
           <button
@@ -50,6 +51,11 @@ const Tasks = () => {
         </div>
       </div>
       <ModalTasks showModal={showModal} handleCloseModal={handleCloseModal} />
+
+      <div className="bg-white p-4 mt-4 shadow-md w-[95%] mx-auto rounded-3xl">
+        <CardTask heading="heading" />
+        <CardTask heading="heading" />
+      </div>
     </div>
   );
 };
