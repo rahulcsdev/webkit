@@ -237,6 +237,101 @@ export const carousalData=[
      color:'#007ece '
    },
 ]
+
+export const deskCarousalData=[
+   {
+     title:"name",
+     date:"02/02/2021",
+     percentage:60,
+     bg:'bg-[#50C6B4]',
+     sbg:'bg-[#ceefea]',
+     btn:'SEO',
+     image:4,
+     color:'#50C6B4'
+   },
+   {
+     title:"Add multiple theme options",
+     date:"02/02/2021",
+     percentage:60,
+     bg:'bg-[#FFCF52]',
+     sbg:'bg-[#fff2cf]',
+     btn:'Development',
+     image:4,
+     color:'#cf9700'
+   },
+   {
+     title:"Admin Panel Cuatomization",
+     date:"02/02/2021",
+     percentage:60,
+     bg:'bg-[#0023d0]',
+     sbg:'bg-[#d0d8ff]',
+     btn:'Content',
+     image:4,
+     color:'#0023d0'
+   },
+   {
+     title:"Hotel Management App UI Kit",
+     date:"02/02/2021",
+     percentage:60,
+     bg:'bg-[#b53209]',
+     sbg:'bg-[#fccfc1]',
+     btn:'Design',
+     image:4,
+     color:'#b53209'
+   },
+   {
+     title:"General Improvment in progress",
+     date:"02/02/2021",
+     percentage:60,
+     bg:'bg-[#007ece]',
+     sbg:'bg-[#9bd8ff]',
+     btn:'Testing',
+     image:4,
+     color:'#007ece '
+   },
+   {
+     title:"Hotel Management App UI Kit",
+     date:"02/02/2021",
+     percentage:60,
+     bg:'bg-[#b53209]',
+     sbg:'bg-[#fccfc1]',
+     btn:'Design',
+     image:4,
+     color:'#b53209'
+   },
+   {
+     title:"General Improvment in progress",
+     date:"02/02/2021",
+     percentage:60,
+     bg:'bg-[#007ece]',
+     sbg:'bg-[#9bd8ff]',
+     btn:'Testing',
+     image:4,
+     color:'#007ece '
+   },
+   {
+     title:"Hotel Management App UI Kit",
+     date:"02/02/2021",
+     percentage:60,
+     bg:'bg-[#b53209]',
+     sbg:'bg-[#fccfc1]',
+     btn:'Design',
+     image:4,
+     color:'#b53209'
+   },
+   {
+     title:"General Improvment in progress",
+     date:"02/02/2021",
+     percentage:60,
+     bg:'bg-[#007ece]',
+     sbg:'bg-[#9bd8ff]',
+     btn:'Testing',
+     image:4,
+     color:'#007ece '
+   },
+]
+
+
 export const dropDown=[
    {
       name:'in Progress',
@@ -252,6 +347,25 @@ export const dropDown=[
       name:'Category',
       icon:<MdOutlineFileCopy/>,
       value:'category'
+   },
+
+]
+
+export const deskDropDown=[
+   {
+      name:'Duplicate',
+      icon:<BsMic/>,
+      value:'duplicate'
+   },
+   {
+      name:'Rename',
+      icon:<RiLinksLine/>,
+      value:'rename'
+   },
+   {
+      name:'Delete',
+      icon:<MdOutlineFileCopy/>,
+      value:'delete'
    },
 
 ]
