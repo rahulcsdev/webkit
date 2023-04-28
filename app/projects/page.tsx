@@ -48,29 +48,31 @@ const Projects = () => {
                   className={`bg-gray-100 px-3 p-2  rounded-xl flex items-center gap-1 cursor-pointer`}
                   onClick={() => setIsExpand((prev) => !prev)}
                 >
-                  <p className="capitalize text-sm text-[#605C8D]">
-                    {" "}
-                    <span className="font-semibold text-base text-[#605C8D]">
-                      Stauts
-                    </span>{" "}
-                    : {value}
-                  </p>{" "}
-                  {!isExpand ? <FiChevronRight /> : <FiChevronDown />}
+                  <p className="font-semibold text-base text-[#605C8D]">Status :</p>
+                  <select className={`capitalize bg-transparent border-none outline-none`} >
+                  {
+                    dropDown.map((item,index)=>(
+                      <option  defaultValue='progress' value={item.value} className={`px-2 py-1`} >{item.name}</option>
+                    ))
+                  }
+                  </select>
+                
+                
                 </div>
-                {isExpand && (
-                  <div className="mt-2 absolute -bottom-28 p-3 left-0 rounded-xl flex bg-white drop-shadow-lg flex-col gap-2">
+                {/* {isExpand && (
+                  <div className="mt-2 z-10 absolute -bottom-28 p-3 left-0 rounded-xl flex bg-white drop-shadow-lg flex-col gap-2">
                     {dropDown.map((item, index) => (
                       <div
                         key={index}
                         onClick={() => setValue(item.value)}
-                        className=" flex items-center justify-start gap-3 scale-1 delay-100 duration-150 transition-transform hover:scale-105 cursor-pointer"
+                        className="z-10 flex items-center justify-start gap-3 scale-1 delay-100 duration-150 transition-transform hover:scale-105 cursor-pointer"
                       >
                         {item.icon}
                         <h1 className="">{item.name}</h1>
                       </div>
                     ))}
                   </div>
-                )}
+                )} */}
               </div>
               <div className="flex items-center gap-3 border-r-2 border-gray-200 pr-6">
                 <div
