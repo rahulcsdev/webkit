@@ -5,15 +5,20 @@ import { employeeData, projectsData } from "../utils/data";
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: any;
-  
+  title:any,
 }
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Manrope({ weight: "400", subsets: ["latin"] });
-const ModalProject = (props: typeModal) => {
-  const { showModal, handleCloseModal } = props;
+const EditModalProject = (props: typeModal) => {
+  const { showModal, handleCloseModal,title } = props;
   const [options, setOptions] = useState<any>([]);
- 
- 
+ const [details, setDetails] = useState<object>([]);
+const fetchDetails=()=>{
+    const filterData=projectsData.filter((item)=>item.title===title);
+  setDetails(filterData);
+  console.log(title)
+  console.log(filterData)
+}
 
   useEffect(() => {
     const getEmployeeInfo = () => {
@@ -26,7 +31,9 @@ const ModalProject = (props: typeModal) => {
     
     getEmployeeInfo();
   }, []);
- 
+useEffect(()=>{
+  fetchDetails();
+},[title])
   return (
     <>
       {showModal && (
@@ -43,7 +50,7 @@ const ModalProject = (props: typeModal) => {
                 <h2
                   className={`font-semibold mb-2 text-center text-[#140F49] text-2xl ${manrope.className}`}
                 >
-                  New Project
+                  Edit Project
                 </h2>
               </div>
               <div className="p-4">
@@ -164,4 +171,4 @@ const ModalProject = (props: typeModal) => {
   );
 };
 
-export default ModalProject;
+export default EditModalProject;

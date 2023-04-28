@@ -15,12 +15,13 @@ interface dataTypes  {
     people:number
  }
  interface Props{
-    data:dataTypes
+    data:dataTypes,
+    openDetails:any
  }
 
 
 const ProjectCardCol = (props:Props) => {
-    const {data:{title,desc,percentage,btn,people}}=props;
+    const {data:{title,desc,percentage,btn,people},openDetails}=props;
      const bg=percentage>0&&percentage<20?'#FFCF52':percentage>=20&&percentage<30?"#5773FF":percentage>=30&&percentage<40?"#F35421":percentage>=40&&percentage<60?"#50C6B4":'#5773FF'
      const arr = new Array(people).fill(0);
   return (
@@ -43,23 +44,27 @@ const ProjectCardCol = (props:Props) => {
           <h2 className={`text-[#140F49] ${manrope.className} font-semibold text-[1.2em] `}>{title}</h2>
           <p className={`text-[#605C8D] text-base ${roboto.className} mt-1`}>{desc}</p>
         </div>
-        <div className="mt-4 flex justify-between flex-col items-center">
+        <div className="mt-4 gap-2 flex justify-between flex-col items-center">
         <div className="flex">
-            {arr.map((item, index) => (
-              <Image
-                key={index}
-                src={index % 2 == 0 ? pic1 : pic2}
-                height={30}
-                width={30}
-                alt="image"
-                className={`rounded-full -mr-3`}
-              />
+            {arr.slice(0,3).map((item, index) => (
+              <div
+              className={`text-white text-sm px-2 py-1 rounded-md ${
+                index % 2 == 0
+                  ? "bg-sky-400 "
+                  : index % 3 == 0
+                  ? "bg-orange-600"
+                  : "bg-yellow-500"
+              }`}
+            >
+              Rahul
+            </div>
             ))}
           </div>
           <button
+          onClick={()=>openDetails(title)}
             className={`px-2 py-1 rounded-md bg-transparent text-[${bg}] hover:bg-[#e1e5f7] transition-all delay-75 ease-in duration-100`}
           >
-            {btn}
+            view
           </button>
         </div>
         </div>

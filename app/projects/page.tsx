@@ -11,24 +11,33 @@ import ProjectCard from "@/components/ProjectCard";
 import ProjectCardCol from "@/components/ProjectCardCol";
 import Footer from "@/components/Footer";
 import LayoutNav from "@/components/LayoutNav";
+import EditModalProject from "@/components/EditModalProject";
+ 
 const manrope = Manrope({ subsets: ["latin"] });
 const Projects = () => {
-  const myDivRef = useRef<any>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [date, setDate] = useState<Date>(new Date());
-  const [isExpand, setIsExpand] = useState(false);
-  const [value, setValue] = useState("progress");
-  const [showModal, setShowModal] = useState(false);
-  const [viewMode, setViewMode] = useState(true);
-  const handleDateChange = (date: Date) => {
-    setDate(date);
-  };
-
  
+  const [isExpand, setIsExpand] = useState(false);
+ 
+  const [showModal, setShowModal] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  
+  const [viewMode, setViewMode] = useState(true);
+  const [details, setDetails] = useState<object>([]);
+  const [selectedFeild, setSelectedFeild] = useState<string>()
+ const openDetails=(title:string)=>{
+   setSelectedFeild(title)
+   setShowModalEdit(true);
+
+ }
 
   function handleCloseModal() {
     setShowModal(false);
   }
+  
+  function handleCloseModalEdit() {
+    setShowModalEdit(false);
+  }
+  
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
   return (
@@ -52,27 +61,14 @@ const Projects = () => {
                   <select className={`capitalize bg-transparent border-none outline-none`} >
                   {
                     dropDown.map((item,index)=>(
-                      <option  defaultValue='progress' value={item.value} className={`px-2 py-1`} >{item.name}</option>
+                      <option key={index} defaultValue='progress' value={item.value} className={`px-2 py-1`} >{item.name}</option>
                     ))
                   }
                   </select>
                 
                 
                 </div>
-                {/* {isExpand && (
-                  <div className="mt-2 z-10 absolute -bottom-28 p-3 left-0 rounded-xl flex bg-white drop-shadow-lg flex-col gap-2">
-                    {dropDown.map((item, index) => (
-                      <div
-                        key={index}
-                        onClick={() => setValue(item.value)}
-                        className="z-10 flex items-center justify-start gap-3 scale-1 delay-100 duration-150 transition-transform hover:scale-105 cursor-pointer"
-                      >
-                        {item.icon}
-                        <h1 className="">{item.name}</h1>
-                      </div>
-                    ))}
-                  </div>
-                )} */}
+          
               </div>
               <div className="flex items-center gap-3 border-r-2 border-gray-200 pr-6">
                 <div
@@ -108,19 +104,21 @@ const Projects = () => {
           {viewMode ? (
             <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
               {projectsData.map((data, index) => (
-                <ProjectCard key={index} data={data} />
+                <ProjectCard  openDetais={openDetails}  key={index} data={data} />
               ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-4">
               {projectsData.map((data, index) => (
-                <ProjectCardCol key={index} data={data} />
+                <ProjectCardCol openDetails={openDetails}  key={index} data={data} />
               ))}
             </div>
           )}
         </div>
       </div>
-   <ModalProject showModal={showModal} handleCloseModal={handleCloseModal} />
+   <ModalProject  showModal={showModal} handleCloseModal={handleCloseModal} />
+   <EditModalProject title={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/>
+     
    <Footer/>
  </LayoutNav>
      
