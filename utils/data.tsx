@@ -321,46 +321,65 @@ export const employeesData = [
    {
       id : 1,
       name : "Ruben Franci",
-      email : "rubenfranci@gmail.com"
+      email : "rubenfranci@gmail.com",
+      phone : "9876152431",
+      designation : "Project Manager"
    },
    {
       id : 2,
       name : "Kaylynn Press",
-      email : "kaylynnpress@gmail.com"
+      email : "kaylynnpress@gmail.com",
+      phone : "9876152431",
+      designation : "Frontend Developer"
    },
    {
       id : 3,
       name : "Corey Press",
-      email : "coreypress@gmail.com"
+      email : "coreypress@gmail.com",
+      phone : "9876152431",
+      designation : "FullStack Developer"
    },
    {
       id : 4,
       name : "Zain Carder",
-      email : "zaincarder@gmail.com"
+      email : "zaincarder@gmail.com",
+      phone : "9876152431",
+      designation : "FullStack Developer"
    },
    {
       id : 5,
       name : "Erin Donin",
-      email : "erindonin@gmail.com"
+      email : "erindonin@gmail.com",
+      phone : "9876152431",
+      designation : "Frontend Developer"
    },
    {
       id : 6,
       name : "Mira Herwitz",
-      email : "miraherwitz@gmail.com"
+      email : "miraherwitz@gmail.com",
+      phone : "9876152431",
+      designation : "Project Manager"
    },
    {
       id : 7,
       name : "Kaiya George",
-      email : "kaiyageorge@gmail.com"
+      email : "kaiyageorge@gmail.com",
+      phone : "9876152431",
+      designation : "Frontend Developer"
    },
    {
       id : 8,
       name : "Lincoln George",
-      email : "lincolngeorge@gmail.com"
+      email : "lincolngeorge@gmail.com",
+      phone : "9876152431",
+      designation : "FullStack Developer"
    },
    {
       id : 9,
       name : "Paityn Siphron",
-      email : "paitynsiphron@gmail.com"
+      email : "paitynsiphron@gmail.com",
+      phone : "9876152431",
+      designation : "Project Manager"
    }
 ]
+

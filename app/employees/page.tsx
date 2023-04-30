@@ -7,14 +7,19 @@ import { HiBars3 } from "react-icons/hi2";
 import ModalEmployee from "../../components/ModalEmployee";
 import { employeesData } from "../../utils/data";
 import EmployeesCardData from "@/components/EmployeesCardData";
+import EmployeesCardListView from "../../components/EmployeeCardListView";
+
 
 
 const manrope = Manrope({ subsets: ["latin"] });
+
+
 
 const Employees = () => {
     const myDivRef = useRef<any>(null);
     const [isScrolling, setIsScrolling] = useState(false);
     const [date, setDate] = useState<Date>(new Date());
+    const [viewMode, setViewMode] = useState(true);
   
     const handleDateChange = (date: Date) => {
       setDate(date);
@@ -41,10 +46,14 @@ const Employees = () => {
     const [isExpand, setIsExpand] = useState(false);
      const [value,setValue]=useState('progress');
      const [showModal, setShowModal] = useState(false);
+
+   
   
   function handleCloseModal(){
     setShowModal(false);
   }
+  const clickS = "bg-[#5773FF] text-white";
+const notClickS = "bg-gray-100 text-black";
   return (
     <>
      <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
@@ -59,10 +68,11 @@ const Employees = () => {
             </h1>
             <div className="flex items-center gap-4 justify-center">
             <div className="flex items-center gap-3 border-r-2 border-gray-200 pr-6">
-              <div className="p-2 rounded-full cursor-pointer bg-[#5773FF] text-xl text-white">
+              <div  onClick={() => setViewMode(true)} className={`p-2 rounded-full cursor-pointer text-xl ${viewMode ? clickS : notClickS
+                  }`}>
                 <RxDashboard/>
               </div>
-              <div className="p-2 text-xl  cursor-pointer rounded-full bg-gray-100 text-black">
+              <div  onClick={() => setViewMode(false)} className={`p-2 text-xl  cursor-pointer rounded-full ${!viewMode ? clickS : notClickS}`}>
                 <HiBars3/>
               </div>
             </div>
@@ -80,11 +90,19 @@ const Employees = () => {
      {/* Employee Cards */}
 
      <div className="px-5 py-6 ">
+     {viewMode ? (
      <div className="grid grid-cols-3 gap-5">
      {employeesData.map((item, index) => (
           <EmployeesCardData key={index} data={item} />
         ))}
      </div>
+       ) : (
+        <div className="grid grid-cols-1 gap-5">
+        {employeesData.map((item, index) => (
+             <EmployeesCardListView key={index} data={item} index={index}  />
+           ))}
+        </div>
+         )}
      </div>
 
     
