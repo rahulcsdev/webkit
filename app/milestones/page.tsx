@@ -1,4 +1,4 @@
-import LayoutNav from '@/components/LayoutNav'
+import LayoutNav from '@/app/components/LayoutNav'
 import React from 'react'
 
 const MildStone = () => {
