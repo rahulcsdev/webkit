@@ -20,6 +20,7 @@ interface employeeCartType {
   email: string;
   phone: string;
   designation: string;
+  reportingmanager : string;
 }
 
 interface Props {
@@ -42,12 +43,14 @@ const EmployeesCardListView = (props: Props) => {
     name: string,
     email: string,
     phone: string,
-    designation: string
+    designation: string,
+    reportingmanager :string
   ) => {
     localStorage.setItem("Name", name);
     localStorage.setItem("email", email);
     localStorage.setItem("Phone", phone);
     localStorage.setItem("Designation", designation);
+    localStorage.setItem("Reportingmanager",reportingmanager);
     localStorage.setItem("id", id.toString());
 
     setShowEditModal(true);
@@ -132,7 +135,8 @@ const EmployeesCardListView = (props: Props) => {
                     data.name,
                     data.email,
                     data.phone,
-                    data.designation
+                    data.designation,
+                    data.reportingmanager
                   )
                 }
               >

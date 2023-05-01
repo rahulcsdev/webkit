@@ -37,19 +37,37 @@ const { showModal, handleCloseModal } = props;
                     <div className="flex flex-row gap-2 mt-5">
                       <div className="basis-1/2">
                       <div className="flex flex-col gap-2">
-                        <label className={`text-[#01041b] font-medium text-[1.2em] `} >Phone Number</label>
-                        <input type="text" placeholder="Phone Number" className={`outline-none bg-[#F8F7F7] border-[1px] px-2 py-3 rounded-lg border-[#E0E2DB]`} />
+                        <label className={`text-[#01041b] font-medium text-[1.2em] `} >Email</label>
+                        <input type="text" placeholder="Email" className={`outline-none bg-[#F8F7F7] border-[1px] px-2 py-3 rounded-lg border-[#E0E2DB]`} />
                     </div>
                       </div>
 
                       <div className="basis-1/2">
                       <div className="flex flex-col gap-2">
-                        <label className={`text-[#01041b] font-medium text-[1.2em] `} >Email</label>
-                        <input type="text" placeholder="Email" className={`outline-none bg-[#F8F7F7] border-[1px] px-2 py-3 rounded-lg border-[#E0E2DB]`} />
+                        <label className={`text-[#01041b] font-medium text-[1.2em] `} >Phone Number</label>
+                        <input type="text" placeholder="Phone Number" className={`outline-none bg-[#F8F7F7] border-[1px] px-2 py-3 rounded-lg border-[#E0E2DB]`} />
                     </div>
                       </div>
                     </div>
-                    {/* <div className="flex flex-row gap-2 mt-5">
+
+                    <div className="flex flex-row gap-2 mt-5">
+                      <div className="basis-1/2">
+                      <div className="flex flex-col gap-2">
+                        <label className={`text-[#01041b] font-medium text-[1.2em] `} >Designation</label>
+                        <input type="text" placeholder="Designation" className={`outline-none bg-[#F8F7F7] border-[1px] px-2 py-3 rounded-lg border-[#E0E2DB]`} />
+                    </div>
+                      </div>
+
+                      <div className="basis-1/2">
+                      <div className="flex flex-col gap-2">
+                        <label className={`text-[#01041b] font-medium text-[1.2em] `} >Reporting Manager</label>
+                        <input type="text" placeholder="Reporting Manager" className={`outline-none bg-[#F8F7F7] border-[1px] px-2 py-3 rounded-lg border-[#E0E2DB]`} />
+                    </div>
+                      </div>
+                    </div>
+
+
+                    <div className="flex flex-row gap-2 mt-5">
                       <div className="basis-1/2">
                       <div className="flex flex-col gap-2">
                         <label className={`text-[#01041b] font-medium text-[1.2em] `} >Type</label>
@@ -77,7 +95,7 @@ const { showModal, handleCloseModal } = props;
                         </select>
                     </div>
                       </div>  
-                    </div> */}
+                    </div>
                     <div className="flex items-center justify-center mt-6 mb-4 gap-4 ">
                       <button className={`text-base font-normal ${roboto.className} text-white px-6 bg-[#5773FF] rounded-md py-2 border-none`}>Save</button>
                       <button className={`text-base font-normal ${roboto.className} text-white px-4 bg-[#5773FF] rounded-md py-2 border-none`}>Cancel</button>

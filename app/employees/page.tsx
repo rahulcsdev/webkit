@@ -77,7 +77,7 @@ const notClickS = "bg-gray-100 text-black";
               </div>
             </div>
              <div className="relative">
-              <button onClick={()=>setShowModal(true)} className={`bg-[#5773FF] text-white px-3 py-2 rounded-lg capitalize`} >new project</button>
+              <button onClick={()=>setShowModal(true)} className={`bg-[#5773FF] text-white px-3 py-2 rounded-lg capitalize`} >New User</button>
              </div>
             
             </div>
