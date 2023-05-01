@@ -30,8 +30,8 @@ export const navLinks=[
    },
    {
       icon:<GiStairsGoal className='text-2xl'/>,
-      name:"Mildstone",
-      link:'/mildstone'
+      name:"milestones",
+      link:'/milestones'
      },
    {
     icon:<RxCube className='text-2xl'/>,
@@ -365,5 +365,43 @@ export const projectsData=[
       percentage:40,
       btn:'high',
       people:3
+   },
+]
+
+export const employeeData=[
+   {
+      id:1,
+      name:"Rahul Pradhan",
+      role:"Full Stack Developer",
+   },
+   {
+      id:2,
+      name:"Krishna Kumar",
+      role:"Full Stack Developer",
+   },
+   {
+      id:3,
+      name:"Bhaskar",
+      role:"Full Stack Developer",
+   },
+   {
+      id:4,
+      name:"Vikalp",
+      role:"Full Stack Developer",
+   },
+   {
+      id:5,
+      name:"Mayank",
+      role:"Full Stack Developer",
+   },
+   {
+      id:6,
+      name:"Satyam",
+      role:"Full Stack Developer",
+   },
+   {
+      id:7,
+      name:"shreenidhi",
+      role:"Full Stack Developer",
    },
 ]

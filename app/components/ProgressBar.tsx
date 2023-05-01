@@ -12,7 +12,7 @@ const ProgressBar = (prop:Props) => {
     }
   return (
     <div className='h-2 relative max-w-md rounded-full overflow-hidden' >
-  <div className={`w-full h-full ${sbg?sbg:'bg-gray-200'} absolute`}></div>
+  <div className={`w-full h-full ${sbg?`${sbg}`:'bg-gray-200'} absolute`}></div>
    <div className={`h-full absolute ${color}`} style={progressStyle} ></div>
     </div>
   )
