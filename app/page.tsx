@@ -1,17 +1,17 @@
 "use client"
 import { Manrope } from "next/font/google";
-import { boxCardData, cartData, dataDev, progressData } from "../utils/data";
-import Card from "../components/Card";
+import { boxCardData, cartData, dataDev, progressData } from "./utils/data";
+import Card from "./components/Card";
 import {useState} from 'react'
-import CardPro from "../components/CardPro";
+import CardPro from "./components/CardPro";
  
-import BoxCard from "../components/BoxCard";
-import CustomCalender from "../components/CustomCalender";
-import DataCard from "../components/DataCard";
-import MyCarousal from "../components/MyCarousal";
+import BoxCard from "./components/BoxCard";
+import CustomCalender from "./components/CustomCalender";
+import DataCard from "./components/DataCard";
+import MyCarousal from "./components/MyCarousal";
  
-import LayoutNav from "@/components/LayoutNav";
-import Footer from "@/components/Footer";
+import LayoutNav from "@/app/components/LayoutNav";
+import Footer from "@/app/components/Footer";
  
 
 const manrope = Manrope({ subsets: ["latin"] });
