@@ -83,36 +83,89 @@ const Projects = () => {
           </div>
         </div>
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2 ml-6">
-          Date
-        </label>
 
-        <DatePicker
-          selected={startDate}
-          onChange={(date: any) => setStartDate(date)}
-          className="block w-1/2 ... ml-6 mb-6 p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark"
-        />
 
-        <div className="relative overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  Project
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Task
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Duration
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Activities
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+<div className="px-5 py-6">
+
+<div className="p-5 bg-white drop-shadow-md rounded-xl">
+
+<div className="mb-4">
+  <label className="block text-gray-700 text-sm font-bold mb-2 ml-6">
+    Date
+  </label>
+
+  <DatePicker
+    selected={startDate}
+    onChange={(date: any) => setStartDate(date)}
+    className="block w-1/2 ... ml-6 mb-6 p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark"
+  />
+
+  <div className="relative overflow-x-auto">
+    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" className="px-6 py-3">
+            Project
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Task
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Duration
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Activities
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <th
+            scope="row"
+            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+          >
+            <select
+              id="countries"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option selected>Choose Project </option>
+              <option value="US">United States</option>
+              <option value="CA">Canada</option>
+              <option value="FR">France</option>
+              <option value="DE">Germany</option>
+            </select>
+          </th>
+          <td className="px-6 py-4">
+            <select
+              id="countries"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option selected>Choose Task</option>
+              <option value="US">United States</option>
+              <option value="CA">Canada</option>
+              <option value="FR">France</option>
+              <option value="DE">Germany</option>
+            </select>
+          </td>
+          <td className="px-6 py-4">
+            <input
+              type="number"
+              className="px-4 py-3"
+              placeholder="enter duration"
+            />
+          </td>
+          <td className="px-6 py-4">
+            <textarea
+              id="message"
+              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Activities"
+            ></textarea>
+          </td>
+        </tr>
+
+        {entry &&
+          entry.map((item: any) => {
+            return (
               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <th
                   scope="row"
@@ -122,7 +175,7 @@ const Projects = () => {
                     id="countries"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
-                    <option selected>Choose Project </option>
+                    <option selected>Choose a Project</option>
                     <option value="US">United States</option>
                     <option value="CA">Canada</option>
                     <option value="FR">France</option>
@@ -134,7 +187,7 @@ const Projects = () => {
                     id="countries"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
-                    <option selected>Choose Task</option>
+                    <option selected>Choose a Task</option>
                     <option value="US">United States</option>
                     <option value="CA">Canada</option>
                     <option value="FR">France</option>
@@ -155,75 +208,35 @@ const Projects = () => {
                     placeholder="Activities"
                   ></textarea>
                 </td>
+                <td>
+                  <button
+                    className={`${clickS} px-3 py-2 rounded-lg capitalize ml-6`}
+                    onClick={(e) => deleteEntry(item.id)}
+                  >
+                    <FiTrash />
+                  </button>
+                </td>
               </tr>
+            );
+          })}
+      </tbody>
+    </table>
 
-              {entry &&
-                entry.map((item: any) => {
-                  return (
-                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        <select
-                          id="countries"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        >
-                          <option selected>Choose a Project</option>
-                          <option value="US">United States</option>
-                          <option value="CA">Canada</option>
-                          <option value="FR">France</option>
-                          <option value="DE">Germany</option>
-                        </select>
-                      </th>
-                      <td className="px-6 py-4">
-                        <select
-                          id="countries"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        >
-                          <option selected>Choose a Task</option>
-                          <option value="US">United States</option>
-                          <option value="CA">Canada</option>
-                          <option value="FR">France</option>
-                          <option value="DE">Germany</option>
-                        </select>
-                      </td>
-                      <td className="px-6 py-4">
-                        <input
-                          type="number"
-                          className="px-4 py-3"
-                          placeholder="enter duration"
-                        />
-                      </td>
-                      <td className="px-6 py-4">
-                        <textarea
-                          id="message"
-                          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="Activities"
-                        ></textarea>
-                      </td>
-                      <td>
-                        <button
-                          className={`${clickS} px-3 py-2 rounded-lg capitalize ml-6`}
-                          onClick={(e) => deleteEntry(item.id)}
-                        >
-                          <FiTrash />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
+    <button
+      className={`${clickS} px-3 py-2 rounded-lg capitalize ml-6 mt-2`}
+      onClick={() => addEntry()}
+    >
+      Add Time Entry
+    </button>
+  </div>
+</div>
 
-          <button
-            className={`${clickS} px-3 py-2 rounded-lg capitalize ml-6 mt-2`}
-            onClick={() => addEntry()}
-          >
-            Add Time Entry
-          </button>
-        </div>
-      </div>
+</div>
+
+</div>
+
+  
+    
       <ModalProject showModal={showModal} handleCloseModal={handleCloseModal} />
       <Footer />
     </LayoutNav>

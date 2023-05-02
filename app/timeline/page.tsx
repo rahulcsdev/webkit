@@ -52,7 +52,7 @@ const Projects = () => {
                   onClick={() => router.push('/addtimeline') }
                   className={`${clickS} px-3 py-2 rounded-lg capitalize`}
                 >
-                Add New Time 
+                 New Time Entry
 
                 </button>
               </div>
