@@ -1,101 +1,129 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../components/Navbar";
 import { Manrope } from "next/font/google";
-import { dropDown } from "../../utils/data";
+import { dropDown, projectsData } from "../utils/data";
 import { FiChevronDown, FiChevronRight } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalProject from "../../components/ModalProject";
+import ModalProject from "../components/ModalProject";
+import ProjectCard from "@/app/components/ProjectCard";
+import ProjectCardCol from "@/app/components/ProjectCardCol";
+import Footer from "@/app/components/Footer";
+import LayoutNav from "@/app/components/LayoutNav";
+import EditModalProject from "@/app/components/EditModalProject";
+ 
 const manrope = Manrope({ subsets: ["latin"] });
 const Projects = () => {
-  const myDivRef = useRef<any>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [date, setDate] = useState<Date>(new Date());
-
-  const handleDateChange = (date: Date) => {
-    setDate(date);
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const { current: myDiv } = myDivRef;
-      if (myDiv.scrollTop > 0) {
-        setIsScrolling(true);
-      } else {
-        setIsScrolling(false);
-      }
-    };
-
-    const { current: myDiv } = myDivRef;
-    myDiv.addEventListener("scroll", handleScroll);
-
-    return () => {
-      myDiv.removeEventListener("scroll", handleScroll);
-    };
-  }, [myDivRef]);
-
+ 
   const [isExpand, setIsExpand] = useState(false);
-   const [value,setValue]=useState('progress');
-   const [showModal, setShowModal] = useState(false);
+ 
+  const [showModal, setShowModal] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  
+  const [viewMode, setViewMode] = useState(true);
+  const [details, setDetails] = useState<object>([]);
+  const [selectedFeild, setSelectedFeild] = useState<string>()
+ const openDetails=(title:string)=>{
+   setSelectedFeild(title)
+   setShowModalEdit(true);
 
-function handleCloseModal(){
-  setShowModal(false);
-}
+ }
 
+  function handleCloseModal() {
+    setShowModal(false);
+  }
+  
+  function handleCloseModalEdit() {
+    setShowModalEdit(false);
+  }
+  
+  const clickS = "bg-[#5773FF] text-white";
+  const notClickS = "bg-gray-100 text-black";
   return (
-    <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
-      <Navbar isScrolling={isScrolling} />
-      <div className="px-5 py-6">
+ <LayoutNav>
+ <div className="px-5 py-6">
+        {/* Second Navbar */}
         <div className="p-5 bg-white drop-shadow-md rounded-xl">
           <div className="flex items-center justify-between">
             <h1
-              className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.className} `}
+              className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
             >
               Your Projects
             </h1>
             <div className="flex items-center gap-4 justify-center">
-
-            <div className="relative">
-              <div
-                className={`bg-gray-100 px-3 p-2  rounded-xl flex items-center gap-1 cursor-pointer`}
-                onClick={() => setIsExpand((prev) => !prev)}
-              >
-              <p className="capitalize text-sm text-[#605C8D]" > <span className="font-semibold text-base text-[#605C8D]" >Stauts</span>  : {value}</p> {!isExpand?<FiChevronRight/>:<FiChevronDown/>}
-              </div>
-              {isExpand && (
-                <div className="mt-2 absolute -bottom-28 p-3 left-0 rounded-xl flex bg-white drop-shadow-lg flex-col gap-2">
+              <div className="relative">
+                <div
+                  className={`bg-gray-100 px-3 p-2  rounded-xl flex items-center gap-1 cursor-pointer`}
+                  onClick={() => setIsExpand((prev) => !prev)}
+                >
+                  <p className="font-semibold text-base text-[#605C8D]">Status :</p>
+                  <select className={`capitalize bg-transparent border-none outline-none`} >
                   {
-                  dropDown.map((item,index)=>(
-                    <div key={index} onClick={()=>setValue(item.value)} className=" flex items-center justify-start gap-3 scale-1 delay-100 duration-150 transition-transform hover:scale-105 cursor-pointer">
-                      {item.icon}
-                      <h1 className="">{item.name}</h1>
-                    </div>
-                  ))
+                    dropDown.map((item,index)=>(
+                      <option key={index} defaultValue='progress' value={item.value} className={`px-2 py-1`} >{item.name}</option>
+                    ))
                   }
+                  </select>
+                
+                
                 </div>
-              )}
-             
-            </div>
-            <div className="flex items-center gap-3 border-r-2 border-gray-200 pr-6">
-              <div className="p-2 rounded-full cursor-pointer bg-[#5773FF] text-xl text-white">
-                <RxDashboard/>
+          
               </div>
-              <div className="p-2 text-xl  cursor-pointer rounded-full bg-gray-100 text-black">
-                <HiBars3/>
+              <div className="flex items-center gap-3 border-r-2 border-gray-200 pr-6">
+                <div
+                  onClick={() => setViewMode(true)}
+                  className={`p-2 rounded-full cursor-pointer  text-xl ${
+                    viewMode ? clickS : notClickS
+                  } `}
+                >
+                  <RxDashboard />
+                </div>
+                <div
+                  onClick={() => setViewMode(false)}
+                  className={`p-2 text-xl  cursor-pointer rounded-full ${
+                    !viewMode ? clickS : notClickS
+                  } `}
+                >
+                  <HiBars3 />
+                </div>
+              </div>
+              <div className="relative">
+                <button
+                  onClick={() => setShowModal(true)}
+                  className={`${clickS} px-3 py-2 rounded-lg capitalize`}
+                >
+                  new project
+                </button>
               </div>
             </div>
-             <div className="relative">
-              <button onClick={()=>setShowModal(true)} className={`bg-[#5773FF] text-white px-3 py-2 rounded-lg capitalize`} >new project</button>
-             </div>
-            
-            </div>
-           
           </div>
         </div>
+
+        <div className="mt-5">
+          {viewMode ? (
+            <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
+              {projectsData.map((data, index) => (
+                <ProjectCard  openDetais={openDetails}  key={index} data={data} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-4">
+              {projectsData.map((data, index) => (
+                <ProjectCardCol openDetails={openDetails}  key={index} data={data} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-      <ModalProject showModal={showModal} handleCloseModal={handleCloseModal} />
-    </div>
+   <ModalProject  showModal={showModal} handleCloseModal={handleCloseModal} />
+   <EditModalProject title={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/>
+     
+   <Footer/>
+ </LayoutNav>
+     
+
+   
   );
 };
 
