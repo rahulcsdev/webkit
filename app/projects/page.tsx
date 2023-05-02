@@ -99,13 +99,31 @@ const Projects = () => {
             </div>
           </div>
         </div>
-        
+
+        <div className="mt-5">
+          {viewMode ? (
+            <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
+              {projectsData.map((data, index) => (
+                <ProjectCard  openDetais={openDetails}  key={index} data={data} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-4">
+              {projectsData.map((data, index) => (
+                <ProjectCardCol openDetails={openDetails}  key={index} data={data} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-      <ModalProject showModal={showModal} handleCloseModal={handleCloseModal} />
+   <ModalProject  showModal={showModal} handleCloseModal={handleCloseModal} />
+   <EditModalProject title={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/>
+     
+   <Footer/>
+ </LayoutNav>
      
 
-
-    </div>
+   
   );
 };
 
