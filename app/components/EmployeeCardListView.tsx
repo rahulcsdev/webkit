@@ -8,7 +8,7 @@ import { BsPersonCheck } from "react-icons/bs";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import ModalEditEmployee from "./ModalEditEmployee";
-import { employeesData } from "@/utils/data";
+import { employeesData } from "../utils/data";
 // import { useRouter } from 'next/router';
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });

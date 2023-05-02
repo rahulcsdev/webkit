@@ -4,7 +4,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import pic1 from "../assets/picOne.jpg";
 import pic2 from "../assets/picTwo.jpg";
 import { Manrope } from "next/font/google";
-const manrope = Manrope({ subsets: ["latin"] });
+
 
 interface cardTypes {
   id: number;
@@ -19,6 +19,7 @@ interface Props {
   data: cardTypes;
 }
 
+const manrope = Manrope({ subsets: ["latin"] });
 const BoxCard = (props: Props) => {
   const {
     data: { title, desc, bg, btn, percentage, img },
@@ -43,7 +44,7 @@ const BoxCard = (props: Props) => {
           </div>
           <div className="">
             <h1
-              className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.className}`}
+              className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style}`}
             >
               {title}
             </h1>
