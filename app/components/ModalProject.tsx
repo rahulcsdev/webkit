@@ -2,31 +2,52 @@ import React, { useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
 import Multiselect from "multiselect-react-dropdown";
 import { employeeData, projectsData } from "../utils/data";
+import {
+  TextInput,
+  Checkbox,
+  Button,
+  Group,
+  Box,
+  MultiSelect,
+  NativeSelect,
+  PasswordInput,
+  Input,
+  Select,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { DatePickerInput } from "@mantine/dates";
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: any;
-  
 }
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Manrope({ weight: "400", subsets: ["latin"] });
 const ModalProject = (props: typeModal) => {
   const { showModal, handleCloseModal } = props;
   const [options, setOptions] = useState<any>([]);
- 
- 
 
   useEffect(() => {
     const getEmployeeInfo = () => {
-      const info:string[] = [];
+      const info: string[] = [];
       for (let i = 0; i < employeeData.length; i++) {
         info.push(employeeData[i].name);
       }
       setOptions(info);
     };
-    
+
     getEmployeeInfo();
   }, []);
- 
+  const form = useForm({
+    initialValues: {
+      projectName: "",
+      projectManager: "",
+      startDate: new Date(),
+      endDate: new Date(),
+      status: "",
+      type: "",
+      members: [],
+    },
+  });
   return (
     <>
       {showModal && (
@@ -47,100 +68,85 @@ const ModalProject = (props: typeModal) => {
                 </h2>
               </div>
               <div className="p-4">
-                <form action="">
-                  <div className="flex flex-col gap-2">
-                    <label className={`text-[#01041b] font-medium text-[1em] `}>
-                      Project Name*
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter project name"
-                      className={`outline-none bg-[#F8F7F7] border-[1px] px-2 py-3 rounded-lg border-[#E0E2DB]`}
-                    />
+                <form
+                  action=""
+                  onSubmit={form.onSubmit((values) => console.log(values))}
+                >
+                  <div className="relative w-full">
+                    <Input.Wrapper label="Project Name" required mx="auto">
+                      <Input
+                        required
+                        placeholder="Enter yout Project name"
+                        {...form.getInputProps("projectName")}
+                        // sx={{padding:'2px 1px',backgroundColor:'green'}}
+                      />
+                    </Input.Wrapper>
                   </div>
-                  <div className="flex flex-col gap-2 mt-4">
-                    <label className={`text-[#01041b] font-medium text-[1em] `}>
-                      Project Manager*
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter project manager name"
-                      className={`outline-none bg-[#F8F7F7] border-[1px] px-2 py-3 rounded-lg border-[#E0E2DB]`}
-                    />
+                  <div className="relative w-full">
+                    <Input.Wrapper label="Project Mamager" required mx="auto">
+                      <Input
+                        required
+                        placeholder="Enter Manager name"
+                        {...form.getInputProps("projectManager")}
+                        // sx={{padding:'2px 1px',backgroundColor:'green'}}
+                      />
+                    </Input.Wrapper>
                   </div>
                   <div className="flex flex-row gap-2 mt-4">
                     <div className="basis-1/2">
-                      <div className="flex flex-col gap-2">
-                        <label
-                          className={`text-[#01041b] font-medium text-[1em] `}
-                        >
-                          Start Date*
-                        </label>
-                        <input
-                          type="date"
-                          placeholder="Enter project name"
-                          className={` placeholder-[#605C8D] outline-none bg-[#F8F7F7] border-[1px] text-sm  pl-1 py-3 rounded-lg border-[#E0E2DB]`}
-                        />
-                      </div>
+                      <DatePickerInput
+                        mx="auto"
+                        maw={400}
+                        label="Start date"
+                        placeholder="Start date"
+                        {...form.getInputProps("startDate")}
+                      />
                     </div>
                     <div className="basis-1/2">
-                      <div className="flex flex-col gap-2">
-                        <label
-                          className={`text-[#01041b] font-medium text-[1em] `}
-                        >
-                          End Date*
-                        </label>
-                        <input
-                          type="date"
-                          placeholder="Enter project name"
-                          className={` placeholder-[#605C8D] outline-none bg-[#F8F7F7] border-[1px] text-sm  pl-1 py-3 rounded-lg border-[#E0E2DB]`}
-                        />
-                      </div>
+                      <DatePickerInput
+                        mx="auto"
+                        label="End date"
+                        placeholder="End date"
+                        {...form.getInputProps("endDate")}
+                      />
                     </div>
                   </div>
                   <div className="flex flex-row gap-2 mt-4">
                     <div className="basis-1/2">
-                      <div className="flex flex-col gap-2">
-                        <label
-                          className={`text-[#01041b] font-medium text-[1em] `}
-                        >
-                          Status*
-                        </label>
-                        <select
-                          className={` placeholder-[#605C8D] outline-none bg-[#F8F7F7] border-[1px] text-sm  pl-1 py-3 rounded-lg border-[#E0E2DB]`}
-                        >
-                          <option>options</option>
-                          <option>options</option>
-                        </select>
-                      </div>
+                    <Select
+                        label="Status"
+                        placeholder="Pick one"
+                        data={[
+                          { value: "react", label: "React" },
+                          { value: "ng", label: "Angular" },
+                          { value: "svelte", label: "Svelte" },
+                          { value: "vue", label: "Vue" },
+                        ]}
+                        {...form.getInputProps("status")}
+                      />
                     </div>
                     <div className="basis-1/2">
-                      <div className="flex flex-col gap-2">
-                        <label
-                          className={`text-[#01041b] font-medium text-[1em] `}
-                        >
-                          Project Type*
-                        </label>
-                        <select
-                          className={` placeholder-[#605C8D] outline-none bg-[#F8F7F7] border-[1px] text-sm  pl-1 py-3 rounded-lg border-[#E0E2DB]`}
-                        >
-                          <option>options</option>
-                          <option>options</option>
-                        </select>
-                      </div>
+                      <Select
+                        label="Project Type"
+                        placeholder="Pick one"
+                        data={[
+                          { value: "react", label: "React" },
+                          { value: "ng", label: "Angular" },
+                          { value: "svelte", label: "Svelte" },
+                          { value: "vue", label: "Vue" },
+                        ]}
+                        {...form.getInputProps("type")}
+                      />
                     </div>
                   </div>
-                  <div className="mt-4">
-                    <label className={`text-[#01041b] font-medium text-[1em] `}>
-                      Members
-                    </label>
-                    <Multiselect
-                      options={options}
-                      showCheckbox
-                      isObject={false}
-                      className="bg-[#F8F7F7] mt-4"
-                    />
-                  </div>
+                  <MultiSelect
+                    data={options}
+                    label="Members"
+                    mx="auto"
+                    searchable
+                    placeholder="Pick all members you like"
+                    {...form.getInputProps("members")}
+                  />
                   <div className="flex items-center justify-center mt-4 gap-4 ">
                     <button
                       type="submit"
@@ -149,9 +155,10 @@ const ModalProject = (props: typeModal) => {
                       Save
                     </button>
                     <button
+                      onClick={() => form.reset()}
                       className={`text-base font-normal ${roboto.className} text-white px-2 bg-[#5773FF] rounded-md py-1 border-none`}
                     >
-                      Cancel
+                      Reset
                     </button>
                   </div>
                 </form>
