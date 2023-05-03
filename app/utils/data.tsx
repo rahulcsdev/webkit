@@ -1,5 +1,5 @@
 import {IoHomeOutline,IoPrint} from 'react-icons/io5'
-import {BsClipboardCheck,BsPersonPlus,BsCalendarEvent,BsFolder2Open, BsInbox, BsMic,} from 'react-icons/bs'
+import {BsClipboardCheck,BsPersonPlus,BsCalendarEvent,BsFolder2Open, BsInbox, BsMic ,BsHourglass } from 'react-icons/bs'
 import {RxCube} from 'react-icons/rx'
 import { FiMessageSquare } from 'react-icons/fi'
 import { RiLinksLine } from 'react-icons/ri'
@@ -42,6 +42,11 @@ export const navLinks=[
     icon:<BsCalendarEvent className='text-2xl'/>,
     name:"calender",
     link:'/calender'
+   },
+   {
+    icon:<BsHourglass className='text-2xl'/>,
+    name:"Time Entry",
+    link:'/timeline'
    },
    // {
    //  icon:<BsFolder2Open className='text-2xl'/>,
