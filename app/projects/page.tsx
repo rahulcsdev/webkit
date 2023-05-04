@@ -22,7 +22,7 @@ const Projects = () => {
   const [showModalEdit, setShowModalEdit] = useState(false);
   
   const [viewMode, setViewMode] = useState(true);
-  const [details, setDetails] = useState<object>([]);
+ 
   const [selectedFeild, setSelectedFeild] = useState<string>()
  const openDetails=(title:string)=>{
    setSelectedFeild(title)
@@ -44,7 +44,7 @@ const Projects = () => {
  <LayoutNav>
  <div className="px-5 py-6">
         {/* Second Navbar */}
-        <div className="p-5 bg-white drop-shadow-md rounded-xl">
+        <div className="px-5 py-3 bg-white drop-shadow-md rounded-xl">
           <div className="flex items-center justify-between">
             <h1
               className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
@@ -54,11 +54,11 @@ const Projects = () => {
             <div className="flex items-center gap-4 justify-center">
               <div className="relative">
                 <div
-                  className={`bg-gray-100 px-3 p-2  rounded-xl flex items-center gap-1 cursor-pointer`}
+                  className={`bg-gray-100 px-3   rounded-xl flex items-center gap-1 cursor-pointer`}
                   onClick={() => setIsExpand((prev) => !prev)}
                 >
                   <p className="font-semibold text-base text-[#605C8D]">Status :</p>
-                  <select className={`capitalize bg-transparent border-none outline-none`} >
+                  <select className={`capitalize bg-transparent  outline-none border-none`} >
                   {
                     dropDown.map((item,index)=>(
                       <option key={index} defaultValue='progress' value={item.value} className={`px-2 py-1`} >{item.name}</option>
