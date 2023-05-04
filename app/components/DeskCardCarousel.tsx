@@ -26,7 +26,7 @@ const DeskCardCarousal = (props: Props) => {
   const arr = new Array(data.image).fill(0);
   return (
     <div
-      className={`relative bg-white drop-shadow-md rounded-xl p-5 my-2 mx-3 max-w-[400px] w-full`}
+      className={`relative bg-white drop-shadow-md rounded-xl p-5 my-2  mx-5 ...  `}
     >
       <h1
         className={`text-[1.2em] mb-3 ${manrope.className} text-[#140F49] font-semibold whitespace-nowrap`}
