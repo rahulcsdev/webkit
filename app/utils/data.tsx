@@ -1,7 +1,7 @@
 import {IoHomeOutline,IoPrint} from 'react-icons/io5'
 import {BsClipboardCheck,BsPersonPlus,BsCalendarEvent,BsFolder2Open, BsInbox, BsMic ,BsHourglass } from 'react-icons/bs'
 import {RxCube} from 'react-icons/rx'
-import { FiMessageSquare } from 'react-icons/fi'
+import { FiMessageSquare,FiLogOut ,FiEdit } from 'react-icons/fi'
 import { RiLinksLine } from 'react-icons/ri'
 import { HiOutlineMail } from 'react-icons/hi'
 import { MdOutlineFileCopy, MdWifiCalling2 } from 'react-icons/md'
@@ -55,6 +55,21 @@ export const navLinks=[
    // },
 
     
+]
+
+
+
+export const profileLinks=[
+   {
+      icon:<FiEdit  />,
+      name:"my profile",
+      link:'/profile'
+     },
+     {
+      icon:<FiLogOut />,
+      name:"logout",
+      link:'/login'
+     },
 ]
 
 export const cartData=[
