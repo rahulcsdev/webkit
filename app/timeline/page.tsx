@@ -1,16 +1,16 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
-import { dropDown, projectsData } from "../utils/data";
+import { dropDown, projectsData } from "../../utils/data";
 import { FiChevronDown, FiChevronRight } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalProject from "../components/ModalProject";
-import ProjectCard from "../components/ProjectCard";
-import ProjectCardCol from "../components/ProjectCardCol";
-import Footer from "../components/Footer";
-import LayoutNav from "../components/LayoutNav";
+import ModalProject from "../../components/ModalProject";
+import ProjectCard from "../../components/ProjectCard";
+import ProjectCardCol from "../../components/ProjectCardCol";
+import Footer from "../../components/Footer";
+import LayoutNav from "../../components/LayoutNav";
 const manrope = Manrope({ subsets: ["latin"] });
 import {useRouter} from 'next/navigation'
 const Projects = () => {

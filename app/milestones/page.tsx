@@ -1,16 +1,16 @@
 "use client";
-import LayoutNav from "@/app/components/LayoutNav";
+import LayoutNav from "@/components/LayoutNav";
 import React, { useState } from "react";
-import { dropDown, milestones } from "../utils/data";
+import { dropDown, milestones } from "../../utils/data";
 import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import TlCardCol from "../components/MsCardCol";
-import TlCardGrid from "../components/MsCardGrid";
-import ModalMs from "../components/ModalMs";
-import MsCardGrid from "../components/MsCardGrid";
-import MsCardCol from "../components/MsCardCol";
-import EditModalMs from "../components/EditModalMs";
+import TlCardCol from "../../components/MsCardCol";
+import TlCardGrid from "../../components/MsCardGrid";
+import ModalMs from "../../components/ModalMs";
+import MsCardGrid from "../../components/MsCardGrid";
+import MsCardCol from "../../components/MsCardCol";
+import EditModalMs from "../../components/EditModalMs";
 
 const manrope = Manrope({ subsets: ["latin"] });
 const MildStone = () => {
