@@ -19,14 +19,13 @@ export default function RootLayout({
 
   const pathname = usePathname();
 
-  console.log('ss',pathname)
-
   const basisWidth=pathname !== '/login' ? '4/5' : 'full'
+  const flex  =pathname !== '/login' ? 'flex flex-row' : ''
   
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="h-screen overflow-hidden flex flex-row ">
+        <div className={`h-screen overflow-hidden ${flex}` }>
         {  pathname !== '/login' &&
           <div className="basis-1/5 h-full ">
           <Sidebar />
