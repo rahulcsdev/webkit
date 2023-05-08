@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
-import Multiselect from "multiselect-react-dropdown";
+ 
 import { employeeData, projectsData } from "../utils/data";
 import {
-  TextInput,
-  Checkbox,
-  Button,
-  Group,
-  Box,
+ 
   MultiSelect,
-  NativeSelect,
-  PasswordInput,
+ 
   Input,
   Select,
 } from "@mantine/core";
@@ -21,7 +16,7 @@ interface typeModal {
   handleCloseModal: any;
 }
 const manrope = Manrope({ subsets: ["latin"] });
-const roboto = Manrope({ weight: "400", subsets: ["latin"] });
+const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const ModalProject = (props: typeModal) => {
   const { showModal, handleCloseModal } = props;
   const [options, setOptions] = useState<any>([]);
