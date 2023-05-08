@@ -2,6 +2,7 @@ import React from "react";
 import { Manrope, Roboto } from "next/font/google";
 import { useForm } from "@mantine/form";
 import { TextInput, Select, Box, Button, Textarea } from "@mantine/core";
+import { DatePickerInput } from "@mantine/dates";
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: any;
@@ -44,161 +45,6 @@ const ModalTasks = (props: typeModal) => {
                 </h2>
               </div>
               <div className="p-4 ">
-                {/* <form className="grid grid-cols-2 place-content-center  ">
-                  <div className="my-2 flex flex-col">
-                    <label htmlFor="task" className="my-2 font-semibold">
-                      Task
-                    </label>
-                    <input
-                      type="text"
-                      id="task"
-                      placeholder="Enter your task name"
-                      className="mr-4 p-3 w-[90%] rounded-2xl bg-[#eee] focus:bg-white"
-                    />
-                  </div>
-                  <div className="my-2 flex flex-col">
-                    <label htmlFor="project" className="my-2 font-semibold">
-                      Project
-                    </label>
-                    <input
-                      type="text"
-                      name=""
-                      id="project"
-                      placeholder="Project name"
-                      className="mr-4 p-3 rounded-2xl w-[90%]  bg-[#eee] focus:bg-white "
-                    />
-                  </div>
-                  <div className="col-span-2 grid grid-cols-3 gap-5 place-content-center  ">
-                    <div className="my-2 flex flex-col ">
-                      <label htmlFor="priority" className="my-2 font-semibold">
-                        Priority
-                      </label>
-                      <select
-                        defaultValue=""
-                        className={`outline-none bg-[#F8F7F7] border-[1px] px-2 py-3 rounded-2xl border-[#E0E2DB]`}
-                      >
-                        {[
-                          "urgent",
-                          "High",
-                          "medium",
-                          "No priority",
-                          "Backlog",
-                        ].map((item: any, index) => (
-                          <option
-                            disabled={item.value === ""}
-                            key={index}
-                            className={`text-sm text-[#605C8D] py-3 p-3`}
-                            value={item}
-                          >
-                            {item}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="my-2 flex flex-col">
-                      <label htmlFor="status" className="my-2 font-semibold">
-                        Status
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="status"
-                        className="rounded-2xl p-3  bg-[#eee] focus:bg-white"
-                      />
-                    </div>
-
-                    <div className="my-2 flex flex-col">
-                      <label htmlFor="task-type" className="my-2 font-semibold">
-                        Task type
-                      </label>
-                      <select
-                        defaultValue=""
-                        className={`outline-none bg-[#F8F7F7] border-[1px] px-2 py-3  border-[#E0E2DB] rounded-2xl mr-4`}
-                      >
-                        {["Frontend", "Backend", "Bug"].map(
-                          (item: any, index) => (
-                            <option
-                              disabled={item.value === ""}
-                              key={index}
-                              className={`text-sm text-[#605C8D] py-3 p-3`}
-                              value={item}
-                            >
-                              {item}
-                            </option>
-                          )
-                        )}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="my-2 flex flex-col">
-                    <label htmlFor="start-date" className="my-2 font-semibold">
-                      Start Date
-                    </label>
-                    <input
-                      type="date"
-                      name=""
-                      id="start date"
-                      placeholder="state date"
-                      className="mr-6 rounded-2xl p-3 w-[90%]  bg-[#eee] focus:bg-white"
-                    />
-                  </div>
-                  <div className="my-2 flex flex-col">
-                    <label htmlFor="end-date" className="my-2 font-semibold">
-                      End Date
-                    </label>
-                    <input
-                      type="date"
-                      placeholder="End date"
-                      className="mr-6 rounded-2xl p-3  w-[90%] bg-[#eee] focus:bg-white"
-                    />
-                  </div>
-                  <div className="my-2 flex flex-col">
-                    <label htmlFor="mileStone" className="my-2 font-semibold">
-                      mileStone
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="mileStone"
-                      className="rounded-2xl p-3 w-[90%] bg-[#eee] focus:bg-white"
-                    />
-                  </div>
-                  <div className="my-2 flex flex-col">
-                    <label
-                      htmlFor="estimate-time"
-                      className="my-2 font-semibold"
-                    >
-                      Estimate Time
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter Estimate Time"
-                      className="mr-6 rounded-2xl p-3 w-[90%] bg-[#eee] focus:bg-white"
-                    />
-                  </div>
-                  <div className="my-2 flex flex-col">
-                    <label htmlFor="description" className="my-2 font-semibold">
-                      Description
-                    </label>
-                    <textarea
-                      placeholder="Enter Description "
-                      className="rounded-2xl p-2 w-[90%]  bg-[#eee] focus:bg-white"
-                    />
-                  </div>
-                  <div className="col-span-2  flex justify-center items-center">
-                    <button
-                      type="submit"
-                      className="px-4 py-2 my-4 bg-blue-500 rounded-lg"
-                    >
-                      Save
-                    </button>
-                    <button
-                      className="px-4 py-2 mx-4 bg-blue-500 rounded-lg"
-                      onClick={handleCloseModal}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </form> */}
                 <form
                   className="grid grid-cols-2 place-content-center  gap-4 "
                   onSubmit={formData.onSubmit((values) => console.log(values))}
@@ -206,9 +52,11 @@ const ModalTasks = (props: typeModal) => {
                   <TextInput
                     label="Task"
                     placeholder="Enter your task name"
+                    radius="md"
                     {...formData.getInputProps("task")}
                   />
                   <TextInput
+                    radius="md"
                     label="Project"
                     placeholder="Enter Project name"
                     {...formData.getInputProps("project")}
@@ -217,6 +65,7 @@ const ModalTasks = (props: typeModal) => {
                     <Select
                       label="Priority"
                       placeholder="priority"
+                      radius="md"
                       data={[
                         { value: "urgent", label: "Urgent" },
                         { value: "high", label: "High" },
@@ -228,6 +77,7 @@ const ModalTasks = (props: typeModal) => {
                     <Select
                       label="Status"
                       placeholder="select status"
+                      radius="md"
                       data={[
                         { value: "active", label: "active" },
                         { value: "delay", label: "delay" },
@@ -238,6 +88,7 @@ const ModalTasks = (props: typeModal) => {
                     <Select
                       label="Task type"
                       placeholder="select task type"
+                      radius="md"
                       data={[
                         { value: "frontend", label: "Frontend" },
                         { value: "backend", label: "backend" },
@@ -246,26 +97,49 @@ const ModalTasks = (props: typeModal) => {
                       {...formData.getInputProps("task_type")}
                     />
                   </Box>
+                  <div className=" col-span-2 flex flex-row gap-2 mt-4">
+                    <div className="basis-1/2">
+                      <DatePickerInput
+                        mx="auto"
+                        maw={400}
+                        label="Start date"
+                        placeholder="Start date"
+                        {...formData.getInputProps("start_date")}
+                      />
+                    </div>
+                    <div className="basis-1/2">
+                      <DatePickerInput
+                        mx="auto"
+                        label="End date"
+                        placeholder="End date"
+                        {...formData.getInputProps("end_date")}
+                      />
+                    </div>
+                  </div>
                   <TextInput
                     label="MileStone"
                     placeholder="mileStone"
+                    radius="md"
                     {...formData.getInputProps("mileStone")}
                   />
                   <TextInput
                     label="Estimate Time"
                     placeholder="Enter Estimate time"
+                    radius="md"
                     {...formData.getInputProps("estimate_Time")}
                   />
                   <Textarea
                     label="Desciption"
                     placeholder="Enter description"
+                    radius="md"
                     {...formData.getInputProps("description")}
                   />
                   <Box className="col-span-2  flex justify-center items-center">
-                    <Button type="submit" className="bg-blue-500">
+                    <Button type="submit" radius="md" className="bg-blue-500">
                       Save
                     </Button>
                     <Button
+                      radius="md"
                       className="px-4 py-2 mx-4 bg-blue-500 "
                       onClick={handleCloseModal}
                     >

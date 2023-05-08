@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import ModalTasks from "../components/ModalTasks";
 import CardTask from "../components/CardTask";
+
 const Tasks = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);

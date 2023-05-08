@@ -1,105 +1,77 @@
-import { list } from '@keystone-6/core';
-import { text, password, select } from '@keystone-6/core/fields';
-import { allowAll } from '@keystone-6/core/access';
-import { multiselect ,relationship,timestamp} from '@keystone-6/core/fields';
+import { list } from "@keystone-6/core";
+import { text, password, select } from "@keystone-6/core/fields";
+import { allowAll } from "@keystone-6/core/access";
+import { multiselect, relationship, timestamp } from "@keystone-6/core/fields";
 
 export default list({
-    access: allowAll,
+  access: allowAll,
 
-      fields: {
+  fields: {
+    name: text(),
 
-        name: text(),
+    code: text(),
 
-        code: text(),
+    discription: text(),
 
-        discription: text(),
+    project: relationship({
+      ref: "Project",
+    }),
 
-        project: relationship({
+    priority: select({
+      defaultValue: "No priority",
 
-          ref: 'Project',
+      options: [
+        { label: "Urgent", value: "Urgent" },
 
-        }),
+        { label: "High", value: "High" },
 
+        { label: "Medium", value: "Medium" },
 
+        { label: "No priority", value: "No priority" },
 
+        { label: "Backlog", value: "Backlog" },
+      ],
+    }),
 
-        priority: select({
+    status: select({
+      defaultValue: "Open",
 
-          defaultValue: "No priority",
+      options: [
+        { label: "Open", value: "Open" },
 
-          options: [
+        { label: "Document Analysis", value: "Document Analysis" },
 
-            { label: 'Urgent', value: 'Urgent' },
+        { label: "In Progress", value: "In Progress" },
 
-            { label: 'High', value: 'High' },
+        { label: "Code Review", value: "Code Review" },
 
-            { label: 'Medium', value: 'Medium' },
+        { label: "Completed", value: "Completed" },
+      ],
+    }),
 
-            { label: 'No priority', value: 'No priority' },
+    milestone: relationship({
+      ref: "Milestone",
+    }),
 
-            { label: 'Backlog', value: 'Backlog' },
+    startDate: text(),
 
-   
+    endDate: text(),
 
-          ],
+    estimateTime: text(),
 
-        }),
+    taskType: select({
+      defaultValue: "No priority",
 
-        status: select({
+      options: [
+        { label: "Frontend", value: "Frontend" },
 
-          defaultValue: "Open",
+        { label: "Backend", value: "Backend" },
 
-          options: [
-
-            { label: 'Open', value: 'Open' },
-
-            { label: 'Document Analysis', value: 'Document Analysis' },
-
-            { label: 'In Progress', value: 'In Progress' },
-
-            { label: 'Code Review', value: 'Code Review' },
-
-            { label: 'Completed', value: 'Completed' },
-
-   
-
-          ],
-
-        }),
-
-        milestone: relationship({
-
-          ref: 'Milestone',
-
-        }),
-
-        startDate: text(),
-
-        endDate: text(),
-
-        estimateTime: text(),
-
-        taskType: select({
-
-          defaultValue: "No priority",
-
-          options: [
-
-            { label: 'Frontend', value: 'Frontend' },
-
-            { label: 'Backend', value: 'Backend' },
-
-            { label: 'Bug', value: 'Bug' },
-
-          ],
-
-        })
-
-   
-
-      }, ui: {
-
-        labelField: 'name',
-
-      },
-    })
+        { label: "Bug", value: "Bug" },
+      ],
+    }),
+  },
+  ui: {
+    labelField: "name",
+  },
+});
