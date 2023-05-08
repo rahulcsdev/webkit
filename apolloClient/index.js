@@ -10,11 +10,11 @@ const enchancedFetch = (url, init) => {
 };
 const httpLink = new createHttpLink({
   uri: "http://localhost:3000/api/graphql",
-  credentials: 'include',
-  fetchOptions: {
-    mode: 'cors',
-  },
-  fetch: enchancedFetch,
+  // credentials: 'include',
+  // fetchOptions: {
+  //   mode: 'no-cors',
+  // },
+  // fetch: enchancedFetch,
 });
 const client = new ApolloClient({
   link: httpLink,

@@ -1,4 +1,5 @@
 "use client";
+import { gql, useMutation } from '@apollo/client';
 import { rem, px } from "@mantine/core";
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
@@ -10,7 +11,36 @@ import boy from "../assets/boy.jpg";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
+// Define mutation
+const LOGIN_USER = gql`
+mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
+  authenticateUserWithPassword(email: $email, password: $password) {
+    ... on UserAuthenticationWithPasswordSuccess {
+      sessionToken
+      item {
+        name
+      }
+    }
+    ... on UserAuthenticationWithPasswordFailure {
+      message
+    }
+  }
+}
+`;
+
 const Login = () => {
+
+  const [mutateFunction, { data, loading, error }] = useMutation(LOGIN_USER);
+
+
+  console.log('mm',error,data)
+
+  const LoginUser=(values:any)=>{
+
+    mutateFunction({variables: { email: values.email ,password:values.password}} )
+
+  }
+
   const form = useForm({
     initialValues: {
       email: "",
@@ -28,7 +58,7 @@ const Login = () => {
     <div className="h-full flex items-center  justify-center ">
       <div className="p-5  rounded-xl grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-1 w-[56%] h-2/3">
         <div className="form-box bg-[#5773FF] rounded-l-[18px] p-8 ">
-          <form onSubmit={form.onSubmit((values) => console.log(values))}>
+          <form onSubmit={form.onSubmit((values) => LoginUser(values)) }>
             <h2 className="text-white mb-4 text-[34px] font-semibold"> Sign In </h2>
             <p className="text-white mb-8"> Login to stay connected </p>
 
