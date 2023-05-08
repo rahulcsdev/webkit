@@ -1,6 +1,13 @@
 import { config } from '@keystone-6/core';
 import { withAuth, session } from './auth';
 import User from './Schemas/User'
+import Project from './Schemas/Project';
+import Milestone from './Schemas/Milestone';
+import Task from './Schemas/Task';
+import TimeEntery from './Schemas/TimeEntery';
+import dotenv from "dotenv"
+dotenv.config({path:"./.env"});
+
 export default config(
     withAuth( {
       server: {
@@ -8,10 +15,14 @@ export default config(
       },
       db: {
           provider: 'postgresql',
-          url: 'postgres://postgres:Vikalp@99@localhost:5432/firstproject',
+          url: process.env.PostgressUrl||"",
       },
       lists: {
         User,
+        Project,
+        Milestone,
+        Task,
+        TimeEntery,
       },
       session,
       ui: {

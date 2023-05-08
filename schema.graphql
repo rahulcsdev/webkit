@@ -5,12 +5,20 @@ type User {
   id: ID!
   name: String
   email: String
+  code: String
   password: PasswordState
+  designation: String
+  role: [String!]
+  dateOfJoining: String
+  reportingManager: User
+  createdDate: DateTime
 }
 
 type PasswordState {
   isSet: Boolean!
 }
+
+scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
 
 input UserWhereUniqueInput {
   id: ID
@@ -24,6 +32,12 @@ input UserWhereInput {
   id: IDFilter
   name: StringFilter
   email: StringFilter
+  code: StringFilter
+  password: PasswordFilter
+  designation: StringFilter
+  dateOfJoining: StringFilter
+  reportingManager: UserWhereInput
+  createdDate: DateTimeNullableFilter
 }
 
 input IDFilter {
@@ -71,10 +85,29 @@ input NestedStringFilter {
   not: NestedStringFilter
 }
 
+input PasswordFilter {
+  isSet: Boolean!
+}
+
+input DateTimeNullableFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: DateTimeNullableFilter
+}
+
 input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
   email: OrderDirection
+  code: OrderDirection
+  designation: OrderDirection
+  dateOfJoining: OrderDirection
+  createdDate: OrderDirection
 }
 
 enum OrderDirection {
@@ -85,7 +118,19 @@ enum OrderDirection {
 input UserUpdateInput {
   name: String
   email: String
+  code: String
   password: String
+  designation: String
+  role: [String!]
+  dateOfJoining: String
+  reportingManager: UserRelateToOneForUpdateInput
+  createdDate: DateTime
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
 }
 
 input UserUpdateArgs {
@@ -96,7 +141,405 @@ input UserUpdateArgs {
 input UserCreateInput {
   name: String
   email: String
+  code: String
   password: String
+  designation: String
+  role: [String!]
+  dateOfJoining: String
+  reportingManager: UserRelateToOneForCreateInput
+  createdDate: DateTime
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+type Project {
+  id: ID!
+  name: String
+  member(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
+  memberCount(where: UserWhereInput! = {}): Int
+  projectManager: User
+  code: String
+  status: String
+  projectType: String
+  projectDiscription: String
+  startDate: String
+  endDate: String
+}
+
+input ProjectWhereUniqueInput {
+  id: ID
+}
+
+input ProjectWhereInput {
+  AND: [ProjectWhereInput!]
+  OR: [ProjectWhereInput!]
+  NOT: [ProjectWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  member: UserManyRelationFilter
+  projectManager: UserWhereInput
+  code: StringFilter
+  status: StringNullableFilter
+  projectType: StringNullableFilter
+  projectDiscription: StringFilter
+  startDate: StringFilter
+  endDate: StringFilter
+}
+
+input UserManyRelationFilter {
+  every: UserWhereInput
+  some: UserWhereInput
+  none: UserWhereInput
+}
+
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+}
+
+input NestedStringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringNullableFilter
+}
+
+input ProjectOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  code: OrderDirection
+  status: OrderDirection
+  projectType: OrderDirection
+  projectDiscription: OrderDirection
+  startDate: OrderDirection
+  endDate: OrderDirection
+}
+
+input ProjectUpdateInput {
+  name: String
+  member: UserRelateToManyForUpdateInput
+  projectManager: UserRelateToOneForUpdateInput
+  code: String
+  status: String
+  projectType: String
+  projectDiscription: String
+  startDate: String
+  endDate: String
+}
+
+input UserRelateToManyForUpdateInput {
+  disconnect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input ProjectUpdateArgs {
+  where: ProjectWhereUniqueInput!
+  data: ProjectUpdateInput!
+}
+
+input ProjectCreateInput {
+  name: String
+  member: UserRelateToManyForCreateInput
+  projectManager: UserRelateToOneForCreateInput
+  code: String
+  status: String
+  projectType: String
+  projectDiscription: String
+  startDate: String
+  endDate: String
+}
+
+input UserRelateToManyForCreateInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+type Milestone {
+  id: ID!
+  name: String
+  project: Project
+  code: String
+  status: String
+  startDate: String
+  endDate: String
+}
+
+input MilestoneWhereUniqueInput {
+  id: ID
+}
+
+input MilestoneWhereInput {
+  AND: [MilestoneWhereInput!]
+  OR: [MilestoneWhereInput!]
+  NOT: [MilestoneWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  project: ProjectWhereInput
+  code: StringFilter
+  status: StringNullableFilter
+  startDate: StringFilter
+  endDate: StringFilter
+}
+
+input MilestoneOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  code: OrderDirection
+  status: OrderDirection
+  startDate: OrderDirection
+  endDate: OrderDirection
+}
+
+input MilestoneUpdateInput {
+  name: String
+  project: ProjectRelateToOneForUpdateInput
+  code: String
+  status: String
+  startDate: String
+  endDate: String
+}
+
+input ProjectRelateToOneForUpdateInput {
+  create: ProjectCreateInput
+  connect: ProjectWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MilestoneUpdateArgs {
+  where: MilestoneWhereUniqueInput!
+  data: MilestoneUpdateInput!
+}
+
+input MilestoneCreateInput {
+  name: String
+  project: ProjectRelateToOneForCreateInput
+  code: String
+  status: String
+  startDate: String
+  endDate: String
+}
+
+input ProjectRelateToOneForCreateInput {
+  create: ProjectCreateInput
+  connect: ProjectWhereUniqueInput
+}
+
+type Task {
+  id: ID!
+  name: String
+  code: String
+  discription: String
+  project: Project
+  priority: String
+  status: String
+  milestone: Milestone
+  startDate: String
+  endDate: String
+  estimateTime: String
+  taskType: String
+}
+
+input TaskWhereUniqueInput {
+  id: ID
+}
+
+input TaskWhereInput {
+  AND: [TaskWhereInput!]
+  OR: [TaskWhereInput!]
+  NOT: [TaskWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  code: StringFilter
+  discription: StringFilter
+  project: ProjectWhereInput
+  priority: StringNullableFilter
+  status: StringNullableFilter
+  milestone: MilestoneWhereInput
+  startDate: StringFilter
+  endDate: StringFilter
+  estimateTime: StringFilter
+  taskType: StringNullableFilter
+}
+
+input TaskOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  code: OrderDirection
+  discription: OrderDirection
+  priority: OrderDirection
+  status: OrderDirection
+  startDate: OrderDirection
+  endDate: OrderDirection
+  estimateTime: OrderDirection
+  taskType: OrderDirection
+}
+
+input TaskUpdateInput {
+  name: String
+  code: String
+  discription: String
+  project: ProjectRelateToOneForUpdateInput
+  priority: String
+  status: String
+  milestone: MilestoneRelateToOneForUpdateInput
+  startDate: String
+  endDate: String
+  estimateTime: String
+  taskType: String
+}
+
+input MilestoneRelateToOneForUpdateInput {
+  create: MilestoneCreateInput
+  connect: MilestoneWhereUniqueInput
+  disconnect: Boolean
+}
+
+input TaskUpdateArgs {
+  where: TaskWhereUniqueInput!
+  data: TaskUpdateInput!
+}
+
+input TaskCreateInput {
+  name: String
+  code: String
+  discription: String
+  project: ProjectRelateToOneForCreateInput
+  priority: String
+  status: String
+  milestone: MilestoneRelateToOneForCreateInput
+  startDate: String
+  endDate: String
+  estimateTime: String
+  taskType: String
+}
+
+input MilestoneRelateToOneForCreateInput {
+  create: MilestoneCreateInput
+  connect: MilestoneWhereUniqueInput
+}
+
+type TimeEntery {
+  id: ID!
+  project: Project
+  task: Task
+  activities: String
+  code: String
+  duration: String
+  projectType: String
+  projectManager: String
+  userName: User
+  reviewStatus: String
+  remarks: String
+  reviewedBy: User
+  reviewedAt: String
+  date: String
+}
+
+input TimeEnteryWhereUniqueInput {
+  id: ID
+}
+
+input TimeEnteryWhereInput {
+  AND: [TimeEnteryWhereInput!]
+  OR: [TimeEnteryWhereInput!]
+  NOT: [TimeEnteryWhereInput!]
+  id: IDFilter
+  project: ProjectWhereInput
+  task: TaskWhereInput
+  activities: StringFilter
+  code: StringFilter
+  duration: StringFilter
+  projectType: StringNullableFilter
+  projectManager: StringFilter
+  userName: UserWhereInput
+  reviewStatus: StringNullableFilter
+  remarks: StringFilter
+  reviewedBy: UserWhereInput
+  reviewedAt: StringFilter
+  date: StringFilter
+}
+
+input TimeEnteryOrderByInput {
+  id: OrderDirection
+  activities: OrderDirection
+  code: OrderDirection
+  duration: OrderDirection
+  projectType: OrderDirection
+  projectManager: OrderDirection
+  reviewStatus: OrderDirection
+  remarks: OrderDirection
+  reviewedAt: OrderDirection
+  date: OrderDirection
+}
+
+input TimeEnteryUpdateInput {
+  project: ProjectRelateToOneForUpdateInput
+  task: TaskRelateToOneForUpdateInput
+  activities: String
+  code: String
+  duration: String
+  projectType: String
+  projectManager: String
+  userName: UserRelateToOneForUpdateInput
+  reviewStatus: String
+  remarks: String
+  reviewedBy: UserRelateToOneForUpdateInput
+  reviewedAt: String
+  date: String
+}
+
+input TaskRelateToOneForUpdateInput {
+  create: TaskCreateInput
+  connect: TaskWhereUniqueInput
+  disconnect: Boolean
+}
+
+input TimeEnteryUpdateArgs {
+  where: TimeEnteryWhereUniqueInput!
+  data: TimeEnteryUpdateInput!
+}
+
+input TimeEnteryCreateInput {
+  project: ProjectRelateToOneForCreateInput
+  task: TaskRelateToOneForCreateInput
+  activities: String
+  code: String
+  duration: String
+  projectType: String
+  projectManager: String
+  userName: UserRelateToOneForCreateInput
+  reviewStatus: String
+  remarks: String
+  reviewedBy: UserRelateToOneForCreateInput
+  reviewedAt: String
+  date: String
+}
+
+input TaskRelateToOneForCreateInput {
+  create: TaskCreateInput
+  connect: TaskWhereUniqueInput
 }
 
 """
@@ -111,6 +554,30 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
+  createProject(data: ProjectCreateInput!): Project
+  createProjects(data: [ProjectCreateInput!]!): [Project]
+  updateProject(where: ProjectWhereUniqueInput!, data: ProjectUpdateInput!): Project
+  updateProjects(data: [ProjectUpdateArgs!]!): [Project]
+  deleteProject(where: ProjectWhereUniqueInput!): Project
+  deleteProjects(where: [ProjectWhereUniqueInput!]!): [Project]
+  createMilestone(data: MilestoneCreateInput!): Milestone
+  createMilestones(data: [MilestoneCreateInput!]!): [Milestone]
+  updateMilestone(where: MilestoneWhereUniqueInput!, data: MilestoneUpdateInput!): Milestone
+  updateMilestones(data: [MilestoneUpdateArgs!]!): [Milestone]
+  deleteMilestone(where: MilestoneWhereUniqueInput!): Milestone
+  deleteMilestones(where: [MilestoneWhereUniqueInput!]!): [Milestone]
+  createTask(data: TaskCreateInput!): Task
+  createTasks(data: [TaskCreateInput!]!): [Task]
+  updateTask(where: TaskWhereUniqueInput!, data: TaskUpdateInput!): Task
+  updateTasks(data: [TaskUpdateArgs!]!): [Task]
+  deleteTask(where: TaskWhereUniqueInput!): Task
+  deleteTasks(where: [TaskWhereUniqueInput!]!): [Task]
+  createTimeEntery(data: TimeEnteryCreateInput!): TimeEntery
+  createTimeEnteries(data: [TimeEnteryCreateInput!]!): [TimeEntery]
+  updateTimeEntery(where: TimeEnteryWhereUniqueInput!, data: TimeEnteryUpdateInput!): TimeEntery
+  updateTimeEnteries(data: [TimeEnteryUpdateArgs!]!): [TimeEntery]
+  deleteTimeEntery(where: TimeEnteryWhereUniqueInput!): TimeEntery
+  deleteTimeEnteries(where: [TimeEnteryWhereUniqueInput!]!): [TimeEntery]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -137,6 +604,18 @@ type Query {
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
+  projects(where: ProjectWhereInput! = {}, orderBy: [ProjectOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProjectWhereUniqueInput): [Project!]
+  project(where: ProjectWhereUniqueInput!): Project
+  projectsCount(where: ProjectWhereInput! = {}): Int
+  milestones(where: MilestoneWhereInput! = {}, orderBy: [MilestoneOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MilestoneWhereUniqueInput): [Milestone!]
+  milestone(where: MilestoneWhereUniqueInput!): Milestone
+  milestonesCount(where: MilestoneWhereInput! = {}): Int
+  tasks(where: TaskWhereInput! = {}, orderBy: [TaskOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TaskWhereUniqueInput): [Task!]
+  task(where: TaskWhereUniqueInput!): Task
+  tasksCount(where: TaskWhereInput! = {}): Int
+  timeEnteries(where: TimeEnteryWhereInput! = {}, orderBy: [TimeEnteryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TimeEnteryWhereUniqueInput): [TimeEntery!]
+  timeEntery(where: TimeEnteryWhereUniqueInput!): TimeEntery
+  timeEnteriesCount(where: TimeEnteryWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
