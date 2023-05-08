@@ -67,7 +67,7 @@ const ProjectCard = (props: Props) => {
       <div className="mt-4 flex justify-between items-center">
         <div className="flex gap-px items-center">
           {arr.slice(0,3).map((item, index) => (
-            <div
+            <div key={index}
               className={`text-white text-sm px-2 py-1 rounded-md ${
                 index % 2 == 0
                   ? "bg-sky-400 "
