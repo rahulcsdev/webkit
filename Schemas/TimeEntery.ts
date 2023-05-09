@@ -5,63 +5,74 @@ import { multiselect ,relationship,timestamp} from '@keystone-6/core/fields';
 
 export default list({
     access: allowAll,
-
-          fields: {
+      fields: {
     
-  project:relationship({ ref: 'Project', }),
-         task: relationship({ ref: 'Task',}),
+  project:relationship({ref: 'Project',}),
+         task: relationship({ref: 'Task',}),
           activities: text(),
     
-          code:text(),
+     code:text(),
     
-          duration: text(),
+     duration: text(),
     
-          projectType:    select({
+     projectType: select({
     
-           options: [
+    options: [
     
-             { label: 'Internal project', value: 'Internal project' },
+{ label: 'Internal project', value: 'Internal project' },
     
-             { label: 'Hourly cost project', value: 'Hourly cost project' },
+    { label: 'Hourly cost project', value: 'Hourly cost project' },
     
-             { label: 'Fixed cost project', value: 'Fixed cost project' },
+    { label: 'Fixed cost project', value: 'Fixed cost project' },
     
-           ],
+    ],
     
-         }),        
+    }), 
     
-          projectManager: text(),
+     projectManager: text(),
     
-          userName:relationship({ ref: 'User',}),
+     userName:relationship({ref: 'User',}), reviewStatus: select({
     
-          reviewStatus: select({
+    options: [
     
-           options: [
+    { label: 'Approved', value: 'Approved' },
     
-             { label: 'Approved', value: 'Approved' },
+    { label: 'Pending', value: 'Pending' },
     
-             { label: 'Pending', value: 'Pending' },
+    { label: 'Rejected', value: 'Rejected' },
     
-             { label: 'Rejected', value: 'Rejected' },
+    ],
     
-           ],
+    }),
+     remarks: text(),
     
-         }),
+  reviewedBy:relationship({
     
-          remarks: text(),
+    ref: 'User',
     
-           reviewedBy:relationship({
+    }),
     
-             ref: 'User',
+    reviewedAt:text(),
     
-           }),
+    date:text(),
     
-           reviewedAt:text(),
+     },
     
-           date:text(),
+   hooks:{
+  resolveInput: async({ resolvedData,context }) => {
+    const taskId= resolvedData.task.connect.id
+    const task = await context.db.Task.findOne({
+        where: { id: taskId },
+      });
+      const count=await context.db.TimeEntery.count({});   
+      if(task){
+        var taskCode= task.code;
+      }
+      return {
+        ...resolvedData,
+        code: `${taskCode}-TSE00${count+1}`
+      }
+  }
+}, 
     
-          },
-    
-         
-    
-       })
+})

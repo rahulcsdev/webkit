@@ -5,101 +5,98 @@ import { multiselect ,relationship,timestamp} from '@keystone-6/core/fields';
 
 export default list({
     access: allowAll,
+     fields: {
 
-      fields: {
+ name: text(),
 
-        name: text(),
+ code: text(),
 
-        code: text(),
+ discription: text(),
 
-        discription: text(),
+ project: relationship({
 
-        project: relationship({
+ ref: 'Project',
 
-          ref: 'Project',
-
-        }),
-
+ }),
 
 
 
-        priority: select({
+ priority: select({
 
-          defaultValue: "No priority",
+ defaultValue: "No priority",
 
-          options: [
+ options: [
 
-            { label: 'Urgent', value: 'Urgent' },
+ { label: 'Urgent', value: 'Urgent' },
 
-            { label: 'High', value: 'High' },
+ { label: 'High', value: 'High' },
 
-            { label: 'Medium', value: 'Medium' },
+ { label: 'Medium', value: 'Medium' },
 
-            { label: 'No priority', value: 'No priority' },
+ { label: 'No priority', value: 'No priority' },
 
-            { label: 'Backlog', value: 'Backlog' },
+ { label: 'Backlog', value: 'Backlog' },
 
-   
 
-          ],
 
-        }),
+],
+ }),
+  status: select({ defaultValue: "Open", options: [
 
-        status: select({
+ { label: 'Open', value: 'Open' },
 
-          defaultValue: "Open",
+ { label: 'Document Analysis', value: 'Document Analysis' },
 
-          options: [
+ { label: 'In Progress', value: 'In Progress' },
 
-            { label: 'Open', value: 'Open' },
+ { label: 'Code Review', value: 'Code Review' },
 
-            { label: 'Document Analysis', value: 'Document Analysis' },
+ { label: 'Completed', value: 'Completed' },
 
-            { label: 'In Progress', value: 'In Progress' },
 
-            { label: 'Code Review', value: 'Code Review' },
 
-            { label: 'Completed', value: 'Completed' },
+ ], }),
+  milestone: relationship({
+ ref: 'Milestone',
 
-   
+ }),
 
-          ],
+ startDate: text(),
 
-        }),
+ endDate: text(),
+ estimateTime: text(),
+ taskType: select({
 
-        milestone: relationship({
+ defaultValue: "No priority",
+options: [
+ { label: 'Frontend', value: 'Frontend' },
+ { label: 'Backend', value: 'Backend' },
+ { label: 'Bug', value: 'Bug' },
+ ],
 
-          ref: 'Milestone',
+ })
 
-        }),
 
-        startDate: text(),
+},
+hooks:{
+  resolveInput: async({ resolvedData,context }) => {
+    const milestoneId= resolvedData.milestone?.connect.id
+    const milestone = await context.db.Milestone.findOne({
+        where: { id: milestoneId },
+      });
+      const count=await context.db.Task.count({});   
+      if(milestone){
+        var milestoneCode= milestone.code;
+      }
+      return {
+        ...resolvedData,
+        code: `${milestoneCode}-TSK000${count+1}`
+      }
+  }
+},
+ ui: {
 
-        endDate: text(),
+ labelField: 'name',
 
-        estimateTime: text(),
-
-        taskType: select({
-
-          defaultValue: "No priority",
-
-          options: [
-
-            { label: 'Frontend', value: 'Frontend' },
-
-            { label: 'Backend', value: 'Backend' },
-
-            { label: 'Bug', value: 'Bug' },
-
-          ],
-
-        })
-
-   
-
-      }, ui: {
-
-        labelField: 'name',
-
-      },
-    })
+ },
+ })
