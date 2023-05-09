@@ -9,48 +9,49 @@ export default list({
       name: text(),
      email:  text({ validation: { isRequired: true }, isIndexed: 'unique' }),
      code:text(),
+     password: password(),
       
-          password: password(),
       
-       
+designation: text(),
       
-          designation: text(),
+role: multiselect({
       
-          role: multiselect({
+    options: [
       
-            options: [
+       { label: 'Admin', value: 'admin' },
       
-              { label: 'Admin', value: 'admin' },
+       { label: 'User Management', value: 'userManagement' },
       
-              { label: 'User Management', value: 'userManagement' },
+       { label: 'Project Management', value: 'projectManagement' },
+       { label: 'Task Management', value: 'taskManagement' },
       
-              { label: 'Project Management', value: 'projectManagement' },
+       { label: 'Milestone Management', value: 'milestoneManagement' },
       
-              { label: 'Task Management', value: 'taskManagement' },
+       { label: 'Time Entry Management', value: 'timeEntryManagement' },
       
-              { label: 'Milestone Management', value: 'milestoneManagement' },
       
-              { label: 'Time Entry Management', value: 'timeEntryManagement' },
       
-             
+   ],
       
-            ],
+}),
+  
+       dateOfJoining: text(),
       
-          }),
+reportingManager:relationship({
       
-       
+    ref: 'User',
       
-          dateOfJoining: text(),
+}),
+       createdDate: timestamp({ defaultValue: new Date().toISOString() })
       
-          reportingManager:relationship({
-      
-            ref: 'User',
-      
-          }),
-      
-          createdDate: timestamp({ defaultValue: new Date().toISOString() })
-      
-          },
-      
-       
+},
+hooks:{
+  resolveInput: async({ resolvedData,context }) => {
+    const count = await context.db.User.count({});
+    return {
+      ...resolvedData,
+      code: `USRO${count+1}`
+    }
+  }
+},
 });

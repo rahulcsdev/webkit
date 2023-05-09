@@ -22,7 +22,7 @@ model User {
   dateOfJoining               String       @default("")
   reportingManager            User?        @relation("User_reportingManager", fields: [reportingManagerId], references: [id])
   reportingManagerId          String?      @map("reportingManager")
-  createdDate                 DateTime?    @default("2023-05-08T06:33:02.984Z")
+  createdDate                 DateTime?    @default("2023-05-09T10:03:15.716Z")
   from_User_reportingManager  User[]       @relation("User_reportingManager")
   from_Project_member         Project[]    @relation("Project_member")
   from_Project_projectManager Project[]    @relation("Project_projectManager")
