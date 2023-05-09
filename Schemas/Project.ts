@@ -60,9 +60,9 @@ export default list({
 
  projectDiscription: text(),
 
- startDate: text(),
+ startDate: timestamp({ defaultValue: new Date().toISOString() }),
 
- endDate: text(), }, ui: {
+ endDate: timestamp({ defaultValue: new Date().toISOString() }), }, ui: {
 
  labelField: 'name', },
 hooks:{
