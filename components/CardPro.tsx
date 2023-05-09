@@ -1,9 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import ProgressBar from './ProgressBar'
-import pic1 from "../assets/picOne.jpg";
-import pic2 from "../assets/picTwo.jpg";
-import pic3 from "../assets/pic3.jpg";
+ 
 
 interface dataType{
     
@@ -33,21 +31,21 @@ const CardPro = (props:Props) => {
       </div>
       <div className="flex">
         <Image
-          src={pic1}
+          src="/assets/picTwo.jpg"
           height={30}
           width={30}
           alt="image"
           className={`rounded-full -mr-3`}
         />
         <Image
-          src={pic2}
+          src="/assets/picTwo.jpg"
           height={30}
           width={30}
           alt="image"
           className={`rounded-full -mr-3`}
         />
         <Image
-          src={pic3}
+          src="/assets/picTwo.jpg"
           height={30}
           width={30}
           alt="image"

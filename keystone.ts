@@ -15,7 +15,7 @@ export default config(
       },
       db: {
           provider: 'postgresql',
-          url: process.env.PostgressUrl||"",
+          url: process.env.DATABASE_URL||"",
       },
       lists: {
         User,
@@ -26,7 +26,7 @@ export default config(
       },
       session,
       ui: {
-        isAccessAllowed: (context) => !!context.session?.data,
+        isAccessAllowed: (context:any) => !!context.session?.data,
       },
     })
   );

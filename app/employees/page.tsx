@@ -1,13 +1,13 @@
 "use client"
 import React, { useEffect, useRef, useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalEmployee from "../components/ModalEmployee";
-import { employeesData } from "../utils/data";
-import EmployeesCardData from "../components/EmployeesCardData";
-import EmployeesCardListView from "../components/EmployeeCardListView";
+import ModalEmployee from "../../components/ModalEmployee";
+import { employeesData } from "../../utils/data";
+import EmployeesCardData from "../../components/EmployeesCardData";
+import EmployeesCardListView from "../../components/EmployeeCardListView";
 
 
 

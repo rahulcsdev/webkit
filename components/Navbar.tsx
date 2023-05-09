@@ -9,31 +9,14 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { FiChevronDown } from "react-icons/fi";
 import Image from "next/image";
-import girl from "../../public/assets/girl.jpg"
+import girl from "../public/assets/girl.jpg";
 import { Popover, Button } from "@mantine/core";
-import { profileLinks } from "../../utils/data";
-import client from "../../apolloClient";
+import { profileLinks } from "../utils/data";
+import client from "@/apolloClient/index";
+import { getspecficUser } from "@/services";
 
-const GET_AUTHENTICATED_USER = gql`
-  query AuthenticatedItem {
-    authenticatedItem {
-      ... on User {
-        email
-        name
-        id
-      }
-    }
-  }
-`;
 
-const GET_USER = gql`
-  query User($id: ID!) {
-    user(where: { id: $id }) {
-      id
-      name
-    }
-  }
-`;
+
 
 const manrope = Manrope({ subsets: ["latin"] });
 interface Props {
@@ -42,33 +25,52 @@ interface Props {
 const Navbar = (props: Props) => {
   const [isExpand, setIsExpand] = useState(false);
   const router = useRouter();
+  const [reload,setReload] = useState(false);
   const [user, setUser] = useState<{ [key: string]: any }>({});
 
   const { isScrolling } = props;
 
-  const getUserData = async (id: any) => {
-    // const data = await client.query(GET_USER, {
-    //   id: id,
-    // });
+  const getUserData = async (id: string) => {
+    const data = await client.query({
+      query: getspecficUser,
+      variables: {
+        id: id,
+      },
+    });
 
-    // console.log("s", data);
+    return data;
+  };
 
-    // return data;
+  const navigateToPage = (item: any) => {
+    if (item.link === "/login") {
+      console.log('jjj')
+        localStorage.removeItem("userId")
+        setReload(!reload)
+    } else {
+      router.push(item.link);
+    }
   };
 
   useEffect(() => {
+    console.log("in nav");
     const id = localStorage.getItem("userId");
     if (id) {
       const data = getUserData(id);
 
-      data.then((res: any) => {
-        if (res) {
-          setUser(res.user);
-          console.log(res);
-        }
-      });
+      data
+        .then((res: any) => {
+          if (res) {
+            setUser(res.data.user);
+            console.log(res);
+          }
+        })
+        .catch((err) => {
+          console.log("error");
+        });
+    } else {
+      router.push("/login");
     }
-  }, []);
+  }, [reload]);
 
   return (
     <div
@@ -131,7 +133,7 @@ const Navbar = (props: Props) => {
                 {profileLinks.map((item, index) => (
                   <div
                     key={index}
-                    onClick={() => router.push(item.link)}
+                    onClick={() => navigateToPage(item)}
                     className="p-1 ... flex items-center justify-start gap-3 scale-1 delay-100 duration-150 transition-transform hover:scale-105 cursor-pointer"
                   >
                     {item.icon}

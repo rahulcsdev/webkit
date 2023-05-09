@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
-import { dropDown } from "../utils/data";
-import { deskDropDown, deskCarousalData } from "../utils/data";
+import { dropDown } from "../../utils/data";
+import { deskDropDown, deskCarousalData } from "../../utils/data";
 import { Popover, Button } from "@mantine/core";
 
 import {
@@ -14,9 +14,9 @@ import {
 
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalProject from "../components/ModalProject";
-import DeskCarousal from "../components/DeskCarousel";
-import DeskCardCarousal from "../components/DeskCardCarousel";
+import ModalProject from "../../components/ModalProject";
+import DeskCarousal from "../../components/DeskCarousel";
+import DeskCardCarousal from "../../components/DeskCardCarousel";
 
 const manrope = Manrope({ subsets: ["latin"] });
 const Desk = () => {

@@ -1,71 +1,47 @@
 "use client";
-import { gql } from "graphql-request";
 import { rem, px } from "@mantine/core";
+import { gql } from "@apollo/client";
 import React, { useEffect, useRef, useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
 import { TextInput, Checkbox, Button, Group, Box, Input } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Image from "next/image";
-import boy from "../assets/boy.jpg";
+import boy from "../../public/assets/boy.jpg";
 import { useRouter } from "next/navigation";
-import client from "../../apolloClient/graphql";
-
-
+import client from "../../apolloClient/index";
+import { UserLogin} from "@/services";
 const manrope = Manrope({ subsets: ["latin"] });
 
-// Define mutation
-const LOGIN_USER = gql`
-  mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
-    authenticateUserWithPassword(email: $email, password: $password) {
-      ... on UserAuthenticationWithPasswordSuccess {
-        sessionToken
-        item {
-          name
-          id
-        }
-      }
-      ... on UserAuthenticationWithPasswordFailure {
-        message
-      }
-    }
-  }
-`;
 
 const Login = () => {
-
-  const router = useRouter()
-  // const [mutateFunction, { data, loading, error }] = useMutation(LOGIN_USER);
-
-  // console.log("mm", error, data);
+  const router = useRouter();
 
 
-
-  const LoginUser = async(values: any) => {
-      const variables = {
+  const LoginUser = async (values: any) => {
+    const { data } = await client.mutate({
+      mutation: UserLogin,
+      variables: {
         email: values.email,
         password: values.password,
-      };
-  
-      const data:any = await client.request(LOGIN_USER, variables);
-  
-      if (data?.authenticateUserWithPassword.message) {
-        return alert("invalid credentials");
-      }
-  
-      if (data?.authenticateUserWithPassword.item) {
-        // localStorage.setItem('userToken',data.authenticateUserWithPassword.sessionToken)
-        localStorage.setItem('userId',data.authenticateUserWithPassword.item.id)
-  
-        router.push("/");
-        return setTimeout(() => {
-          router.refresh();
-        }, 1000);
-      }
-      console.log(data);
+      },
+    });
 
+    if (data?.authenticateUserWithPassword.message) {
+      return alert("invalid credentials");
     }
 
+    if (data?.authenticateUserWithPassword.item) {
+      // localStorage.setItem('userToken',data.authenticateUserWithPassword.sessionToken)
+      localStorage.setItem("userId", data.authenticateUserWithPassword.item.id);
+
+      router.push("/");
+      return setTimeout(() => {
+        router.refresh();
+      }, 1000);
+    }
+    console.log(data);
+  };
 
   const form = useForm({
     initialValues: {

@@ -1,79 +1,78 @@
 import { list } from '@keystone-6/core';
 import { text, password, select } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
-import { multiselect ,relationship,timestamp} from '@keystone-6/core/fields';
+import { multiselect ,relationship,timestamp } from '@keystone-6/core/fields';
 
 export default list({
-    access: allowAll,
+    access: allowAll, fields: {
+   name: text(),
 
-      fields: {
+    member: relationship({
 
-        name: text(),
+  ref: 'User',
 
-        member: relationship({
+  many: true,
 
-          ref: 'User',
+ }),
 
-          many: true,
+ projectManager: relationship({
 
-        }),
+  ref: 'User',
 
-        projectManager: relationship({
+ ui: {
 
-          ref: 'User',
+  hideCreate: true,
 
-          ui: {
+  },
 
-            hideCreate: true,
+ }),
 
-          },
+ code: text(),
 
-        }),
+ status: select({
 
-        code: text(),
+  defaultValue: "New",
+  options: [
 
-        status: select({
+  { label: 'New', value: 'New' },
 
-          defaultValue: "New",
+  { label: 'Design Developement', value: 'Design Developement' },
 
-          options: [
+  { label: 'In Progress', value: 'In Progress' },
 
-            { label: 'New', value: 'New' },
+  { label: 'Testing', value: 'Testing' },
 
-            { label: 'Design Developement', value: 'Design Developement' },
+  { label: 'Completed', value: 'Completed' },
 
-            { label: 'In Progress', value: 'In Progress' },
+ ],
 
-            { label: 'Testing', value: 'Testing' },
+ }),
 
-            { label: 'Completed', value: 'Completed' },
+ projectType: select({
 
-          ],
+  options: [{ label: 'Internal project', value: 'Internal project' },
 
-        }),
+  { label: 'Hourly cost project', value: 'Hourly cost project' },
 
-        projectType: select({
+  { label: 'Fixed cost project', value: 'Fixed cost project' }]
 
-          options: [{ label: 'Internal project', value: 'Internal project' },
+ }),
 
-          { label: 'Hourly cost project', value: 'Hourly cost project' },
+ projectDiscription: text(),
 
-          { label: 'Fixed cost project', value: 'Fixed cost project' }]
+ startDate: text(),
 
-        }),
+ endDate: text(), }, ui: {
 
-        projectDiscription: text(),
-
-        startDate: text(),
-
-        endDate: text(),
-
-      },
-
-      ui: {
-
-        labelField: 'name',
-
-      },
-
-    })
+ labelField: 'name', },
+hooks:{
+    resolveInput: async({ resolvedData,context }) => {
+      const count = await context.db.Project.count({});
+      
+      return {
+        ...resolvedData,
+        code: `PROO${count+1}`
+      }
+    }
+  },
+})

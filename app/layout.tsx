@@ -1,14 +1,11 @@
-"use client";
-import Sidebar from "./components/Sidebar";
+"use client"
+import Sidebar from "../components/Sidebar";
 import "./globals.css";
 import { gql,useQuery } from "@apollo/client";
 import { Inter } from "next/font/google";
-import { useEffect,useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });
 import { Context } from "./context/context";
-
-
 
 export default function RootLayout({
   children,

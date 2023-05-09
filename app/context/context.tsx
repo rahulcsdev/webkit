@@ -1,4 +1,5 @@
 //@ts-nocheck comment at the top of the file.
+"use client"
 import React from 'react';
 
 import {  useState } from "react";

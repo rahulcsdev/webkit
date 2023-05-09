@@ -4,57 +4,23 @@ import { useForm } from "@mantine/form";
 import DatePicker from "react-datepicker";
 import { Textarea, NumberInput, Select, Button } from "@mantine/core";
 import "react-datepicker/dist/react-datepicker.css";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { randomId } from "@mantine/hooks";
 import { Manrope } from "next/font/google";
-import { dropDown, projectsData } from "../utils/data";
+import { dropDown, projectsData } from "../../utils/data";
 import { FiChevronDown, FiChevronRight, FiTrash } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalProject from "../components/ModalProject";
-import ProjectCard from "../components/ProjectCard";
-import ProjectCardCol from "../components/ProjectCardCol";
-import Footer from "../components/Footer";
-import LayoutNav from "../components/LayoutNav";
+import ModalProject from "../../components/ModalProject";
+import ProjectCard from "../../components/ProjectCard";
+import ProjectCardCol from "../../components/ProjectCardCol";
+import Footer from "../../components/Footer";
+import LayoutNav from "../../components/LayoutNav";
 import { useRouter } from "next/navigation";
 import { gql, useQuery, useMutation } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
-
-const GET_TASKS = gql`
-  query Query {
-    tasks {
-      name
-      id
-    }
-  }
-`;
-
-const GET_PROJECTS = gql`
-  query Projects {
-    projects {
-      name
-      id
-    }
-  }
-`;
-
-const Add_TIMELINES = gql`
-  mutation Mutation($data: [TimeEnteryCreateInput!]!) {
-    createTimeEnteries(data: $data) {
-      activities
-      project {
-        id
-        name
-      }
-      task {
-        id
-        name
-      }
-      duration
-      date
-    }
-  }
-`;
+import client from "../../apolloClient/index";
+import { getProjects,getTasks,addTimesheets } from "@/services";
 
 const Projects = () => {
   const myDivRef = useRef<any>(null);
@@ -69,48 +35,49 @@ const Projects = () => {
   const [tasks, setTasks] = useState<Array<string>>([]);
   const router = useRouter();
 
-  const [mutateFunction, { data: data3, loading, error }] =
-    useMutation(Add_TIMELINES);
+  const getDropDownsData = async () => {
+    await client
+      .query({
+        query: getProjects,
+      })
+      .then((res: any) => {
+        console.log("res", res);
+        setProjects(
+          res.data.projects.map((item: any) => {
+            return {
+              value: item.id,
+              label: item.name,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
 
-  const { data: data1 } = useQuery(GET_PROJECTS);
-
-  const { data: data2 } = useQuery(GET_TASKS);
-
-
-  useEffect(()=>{
-
-    if(data3){
-      console.log('data added',data3)
-    }
-
-  },data3)
+    await client
+      .query({
+        query: getTasks,
+      })
+      .then((res: any) => {
+        console.log("res", res);
+        setTasks(
+          res.data.tasks.map((item: any) => {
+            return {
+              value: item.id,
+              label: item.name,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
 
   useEffect(() => {
-    if (data1) {
-      console.log(data1);
-      setProjects(
-        data1.projects.map((item: any) => {
-          return {
-            value: item.id,
-            label: item.name,
-          };
-        })
-      );
-    }
-    if (data2) {
-      console.log(data1);
-      setTasks(
-        data2.tasks.map((item: any) => {
-          return {
-            value: item.id,
-            label: item.name,
-          };
-        })
-      );
-    }
-  }, [data1, data2]);
-
-  console.log(data1);
+    getDropDownsData();
+  }, []);
 
   const form = useForm({
     initialValues: {
@@ -156,13 +123,30 @@ const Projects = () => {
     // setEntries([...entry, name]);
   };
 
-  const saveAll = () => {
+  const saveAll = async() => {
     console.log("here are all entries", form.values);
 
-    const isEmpty  = form.values.entries.filter((item)=>item.task === '')
+    const isEmptyTask = form.values.entries.filter((item) => item.task === "");
 
-    if(isEmpty.length > 0){
-      return alert('please select all fields')
+    const isEmptyProject = form.values.entries.filter((item) => item.project === "");
+
+    const isEmptyActivity = form.values.entries.filter((item) => item.activity === "");
+
+    const isDurationZero = form.values.entries.filter((item) => item.duration === 0);
+
+    if (isEmptyTask.length > 0) {
+      return alert("please select task");
+    }
+
+    if (isEmptyProject.length > 0) {
+      return alert("please select all project");
+    }
+
+    if (isEmptyActivity.length > 0) {
+      return alert("please select activity");
+    }
+    if (isDurationZero.length > 0) {
+      return alert("duration can notbe zero");
     }
 
     const Mutatedata = form.values.entries.map((item) => {
@@ -183,11 +167,22 @@ const Projects = () => {
       };
     });
 
-    mutateFunction({
-      variables: {
-        data: Mutatedata
-      },
-    });
+    
+    await client
+      .mutate({
+        mutation: addTimesheets,
+         variables:{
+         data:Mutatedata
+       }
+      })
+      .then((res: any) => {
+        console.log("timelines added", res);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+
+  
   };
 
   function handleCloseModal() {
