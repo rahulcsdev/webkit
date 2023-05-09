@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Skeleton } from '@mantine/core';
 import { useQuery, gql } from "@apollo/client";
 import { Manrope } from "next/font/google";
 import { HiOutlineSearch } from "react-icons/hi";
@@ -9,14 +10,31 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { FiChevronDown } from "react-icons/fi";
 import Image from "next/image";
-import girl from "../public/assets/girl.jpg";
+import girl from "../../public/assets/girl.jpg"
 import { Popover, Button } from "@mantine/core";
-import { profileLinks } from "../utils/data";
-import client from "@/apolloClient/index";
-import { getspecficUser } from "@/services";
+import { profileLinks } from "../../utils/data";
+import client from "../../apolloClient";
 
+const GET_AUTHENTICATED_USER = gql`
+  query AuthenticatedItem {
+    authenticatedItem {
+      ... on User {
+        email
+        name
+        id
+      }
+    }
+  }
+`;
 
-
+const GET_USER = gql`
+  query User($id: ID!) {
+    user(where: { id: $id }) {
+      id
+      name
+    }
+  }
+`;
 
 const manrope = Manrope({ subsets: ["latin"] });
 interface Props {
@@ -25,52 +43,33 @@ interface Props {
 const Navbar = (props: Props) => {
   const [isExpand, setIsExpand] = useState(false);
   const router = useRouter();
-  const [reload,setReload] = useState(false);
   const [user, setUser] = useState<{ [key: string]: any }>({});
 
   const { isScrolling } = props;
 
-  const getUserData = async (id: string) => {
-    const data = await client.query({
-      query: getspecficUser,
-      variables: {
-        id: id,
-      },
-    });
+  const getUserData = async (id: any) => {
+    // const data = await client.query(GET_USER, {
+    //   id: id,
+    // });
 
-    return data;
-  };
+    // console.log("s", data);
 
-  const navigateToPage = (item: any) => {
-    if (item.link === "/login") {
-      console.log('jjj')
-        localStorage.removeItem("userId")
-        setReload(!reload)
-    } else {
-      router.push(item.link);
-    }
+    // return data;
   };
 
   useEffect(() => {
-    console.log("in nav");
     const id = localStorage.getItem("userId");
     if (id) {
       const data = getUserData(id);
 
-      data
-        .then((res: any) => {
-          if (res) {
-            setUser(res.data.user);
-            console.log(res);
-          }
-        })
-        .catch((err) => {
-          console.log("error");
-        });
-    } else {
-      router.push("/login");
+      data.then((res: any) => {
+        if (res) {
+          setUser(res.user);
+          console.log(res);
+        }
+      });
     }
-  }, [reload]);
+  }, []);
 
   return (
     <div
@@ -117,7 +116,7 @@ const Navbar = (props: Props) => {
             />
             <h6 className={`text-base font-normal text-[#605C8D]`}>
               {" "}
-              {user && user.name}{" "}
+              {<Skeleton height={8} width={8} radius="xl" />}{" "}
             </h6>
 
             <Popover opened={isExpand} onChange={setIsExpand} withinPortal>
@@ -133,7 +132,7 @@ const Navbar = (props: Props) => {
                 {profileLinks.map((item, index) => (
                   <div
                     key={index}
-                    onClick={() => navigateToPage(item)}
+                    onClick={() => router.push(item.link)}
                     className="p-1 ... flex items-center justify-start gap-3 scale-1 delay-100 duration-150 transition-transform hover:scale-105 cursor-pointer"
                   >
                     {item.icon}
