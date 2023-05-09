@@ -1,5 +1,5 @@
 import { list } from '@keystone-6/core';
-import { text, password, select } from '@keystone-6/core/fields';
+import { text, password, select   } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
 import { multiselect ,relationship,timestamp} from '@keystone-6/core/fields';
 
@@ -40,7 +40,7 @@ export default list({
       
        
       
-          dateOfJoining: text(),
+          dateOfJoining: timestamp(),
       
           reportingManager:relationship({
       

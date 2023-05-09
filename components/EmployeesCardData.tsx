@@ -8,7 +8,7 @@ import { BsTelephone } from "react-icons/bs";
 import { BsPersonCheck } from "react-icons/bs";
 import { BsPersonLinesFill } from "react-icons/bs";
 import { gql } from "@apollo/client";
-import client from '../../apolloClient/index';
+import client from '../apolloClient/index';
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const manrope = Manrope({ weight: "500", subsets: ["latin"] });

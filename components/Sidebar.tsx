@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import logo from "../assets/logo.svg";
+ 
 import Image from "next/image";
 import { Manrope,Roboto } from "next/font/google";
 import { navLinks } from "../utils/data";
@@ -21,7 +21,7 @@ const router=useRouter();
     <div className="bg-white drop-shadow-sm  h-full py-3">
       {/* Logo */}
       <div className="flex items-center py-3 justify-center gap-3 sticky top-0 z-10 bg-white ">
-        <Image src={logo} height={30} alt="logo" />
+        <Image src="/assets/logo.svg" height={30} width={30} alt="logo" />
         <h3
           className={`text-3xl font-extrabold  text-[#140F49] ${manrope.className} `}
         >

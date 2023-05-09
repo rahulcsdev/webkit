@@ -26,7 +26,7 @@ export default config(
       },
       session,
       ui: {
-        isAccessAllowed: (context) => !!context.session?.data,
+        isAccessAllowed: (context:any) => !!context.session?.data,
       },
     })
   );

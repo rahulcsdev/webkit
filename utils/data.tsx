@@ -639,3 +639,41 @@ export const employeeData=[
       role:"Full Stack Developer",
    },
 ]
+
+export const milestones=[
+   {
+      name:"Hundred One",
+      project:"Webkit",
+      startDate:"Thu May 04 2023 00:00:00 GMT+0530 (India Standard Time)",
+      endDate:"Thu May 11 2023 00:00:00 GMT+0530 (India Standard Time)",
+      status:"completed"
+   },
+   {
+      name:"Hundred Two",
+      project:"E Commerce",
+      startDate:"Thu May 04 2023 00:00:00 GMT+0530 (India Standard Time)",
+      endDate:"Thu May 11 2023 00:00:00 GMT+0530 (India Standard Time)",
+      status:"completed"
+   },
+   {
+      name:"Hundred Three",
+      project:"Fintech",
+      startDate:"Thu May 04 2023 00:00:00 GMT+0530 (India Standard Time)",
+      endDate:"Thu May 11 2023 00:00:00 GMT+0530 (India Standard Time)",
+      status:"completed"
+   },
+   {
+      name:"Hundred four",
+      project:"Disnip Hotstar",
+      startDate:"Thu May 04 2023 00:00:00 GMT+0530 (India Standard Time)",
+      endDate:"Thu May 11 2023 00:00:00 GMT+0530 (India Standard Time)",
+      status:"completed"
+   },
+   {
+      name:"Hundred Five",
+      project:"Google Chrome",
+      startDate:"Thu May 04 2023 00:00:00 GMT+0530 (India Standard Time)",
+      endDate:"Thu May 11 2023 00:00:00 GMT+0530 (India Standard Time)",
+      status:"completed"
+   },
+]

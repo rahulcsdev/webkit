@@ -3,8 +3,7 @@ import {Manrope,Roboto} from 'next/font/google'
 import { BiTask } from 'react-icons/bi'
 import ProgressBar from './ProgressBar'
 import Image from 'next/image'
-import pic1 from "../assets/picOne.jpg";
-import pic2 from "../assets/picTwo.jpg";
+ 
 const manrope=Manrope({subsets:['latin']})
 const roboto=Roboto({weight:'400',subsets:['latin']})
 interface cardType{
@@ -42,7 +41,7 @@ const CardCarousal = (props:Props) => {
             {arr.map((item, index) => (
               <Image
                 key={index}
-                src={index % 2 == 0 ? pic1 : pic2}
+                src={index % 2 == 0 ? "/assets/picTwo.jpg" : "/assets/picTwo.jpg"}
                 height={30}
                 width={30}
                 alt="image"
