@@ -15,7 +15,7 @@ export default config(
       },
       db: {
           provider: 'postgresql',
-          url: process.env.DATABASE_URL||"",
+          url: process.env.PostgressUrl||"",
       },
       lists: {
         User,
