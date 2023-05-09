@@ -1,9 +1,14 @@
-import React from "react";
+"use client"
+
+import {useState , useEffect} from "react";
 import { Roboto, Manrope } from "next/font/google";
 import { IoMailOpenOutline } from "react-icons/io5";
 import { BiMessageRounded } from "react-icons/bi";
 import { BsTelephone } from "react-icons/bs";
 import { BsPersonCheck } from "react-icons/bs";
+import { BsPersonLinesFill } from "react-icons/bs";
+import { gql } from "@apollo/client";
+import client from '../../apolloClient/index';
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const manrope = Manrope({ weight: "500", subsets: ["latin"] });
@@ -16,12 +21,53 @@ interface employeeCartType {
   designation: string;
 }
 
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  code: string;
+  designation: string;
+  role:string;
+  dateOfJoining:string;
+}
+
+
 interface Props {
   data: employeeCartType;
+  user: UserData;
 }
 
 const EmployeesCardData = (props: Props) => {
-  const { data } = props;
+  const {  user } = props;
+
+  // const [datas, setData] = useState<UserData[]>([]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const { data } = await client.query({
+  //       query: gql`
+  //         query Query {
+  //           users {
+  //             id
+  //             name
+  //             email
+  //             code
+  //             designation
+  //             role
+  //             dateOfJoining
+  //           }
+  //         }
+  //       `,
+  //     });
+  //     setData(data.users);
+  //     console.log(data.users);
+      
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+
   return (
     <>
       {/* <div className={`p-5 max-w-md bg-white drop-shadow-md rounded-xl ${roboto.className}`}>
@@ -50,7 +96,7 @@ const EmployeesCardData = (props: Props) => {
           </div>
           <div className="mt-2">
             <h4 className={`mb-3 text-2xl text-center ${manrope.className}`}>
-              {data.name}
+              {user.name}
             </h4>
           </div>
         </div>
@@ -63,7 +109,7 @@ const EmployeesCardData = (props: Props) => {
           </div>
           <div className="mt-2">
             <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-              {data.email}
+              {user.email}
             </p>
           </div>
         </div>
@@ -76,7 +122,7 @@ const EmployeesCardData = (props: Props) => {
           </div>
           <div className="mt-2">
             <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-              {data.phone}
+              {user.code}
             </p>
           </div>
         </div>
@@ -89,7 +135,20 @@ const EmployeesCardData = (props: Props) => {
           </div>
           <div className="mt-2">
             <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-              {data.designation}
+              {user.designation}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-1">
+          <div>
+            <div className="p-2 rounded-full cursor-pointer bg-[#5776ff] text-xl text-white mr-4">
+              <BsPersonLinesFill />
+            </div>
+          </div>
+          <div className="mt-2">
+            <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
+              {user.role}
             </p>
           </div>
         </div>

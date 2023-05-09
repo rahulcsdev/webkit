@@ -11,11 +11,11 @@ dotenv.config({path:"./.env"});
 export default config(
     withAuth( {
       server: {
-        cors: { origin: ['http://localhost:3001'], credentials: true }
+        cors: { origin: ['http://localhost:4000'], credentials: true }
       },
       db: {
           provider: 'postgresql',
-          url: process.env.PostgressUrl||"",
+          url: process.env.PostgressUrl || "",
       },
       lists: {
         User,

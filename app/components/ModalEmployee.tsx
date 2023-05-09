@@ -1,4 +1,4 @@
-import React from "react";
+import React  , { useState , useEffect} from "react";
 import { Manrope, Roboto } from "next/font/google";
 import { type, role } from "../utils/data";
 import {
@@ -12,8 +12,12 @@ import {
   Select,
   Grid,
   Flex,
+  MultiSelect
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { DateInput } from '@mantine/dates';
+import { gql } from "@apollo/client/core";
+import index from '../../apolloClient/';
 
 interface typeModal {
   showModal: Boolean;
@@ -26,22 +30,36 @@ const roboto = Manrope({ weight: "400", subsets: ["latin"] });
 const ModalEmployee = (props: typeModal) => {
   const { showModal, handleCloseModal } = props;
 
+  const data = [
+    { value: 'react', label: 'React' },
+    { value: 'ng', label: 'Angular' },
+    { value: 'svelte', label: 'Svelte' },
+    { value: 'vue', label: 'Vue' },
+    { value: 'riot', label: 'Riot' },
+    { value: 'next', label: 'Next.js' },
+    { value: 'blitz', label: 'Blitz.js' },
+  ];
+
   const form = useForm({
     initialValues: {
+      name: "",
       email: "",
-      fullname: "",
-      phone: "",
+      password: "",
+      code: "",
       designation: "",
-      reportingmanager: "",
-      type: "",
       role: "",
-      termsOfService: false,
+      dateofjoining: "",
+      reportingmanager: "",
+      date: new Date(),
     },
 
     // validate: {
     //   email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
     // },
   });
+
+
+  const [value, setValue] = useState<Date | null>(null);
 
   return (
     <>
@@ -153,7 +171,7 @@ const ModalEmployee = (props: typeModal) => {
                           },
                         }}
                         //   style={{ width: "400px" }}
-                        {...form.getInputProps("fullname")}
+                        {...form.getInputProps("name")}
                       />
                     </Grid.Col>
 
@@ -177,8 +195,8 @@ const ModalEmployee = (props: typeModal) => {
                     <Grid.Col span={6}>
                       <TextInput
                         variant="filled"
-                        label="Phone Number"
-                        placeholder="Phone Number"
+                        label="Password"
+                        placeholder="Password"
                         radius="md"
                         size="lg"
                         labelProps={{
@@ -187,7 +205,7 @@ const ModalEmployee = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
-                        {...form.getInputProps("phone")}
+                        {...form.getInputProps("password")}
                       />
                     </Grid.Col>
 
@@ -209,48 +227,8 @@ const ModalEmployee = (props: typeModal) => {
                     </Grid.Col>
 
                     <Grid.Col span={6}>
-                      <TextInput
-                        variant="filled"
+                      <Select
                         label="Reporting Manager"
-                        placeholder="Reporting Manager"
-                        radius="md"
-                        size="lg"
-                        labelProps={{
-                          style: {
-                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
-                            fontSize: "1.2rem", // increase label font size
-                          },
-                        }}
-                        {...form.getInputProps("reportingmanager")}
-                      />
-                    </Grid.Col>
-
-                    <Grid.Col span={6}>
-                      <Select
-                        label="Type"
-                        variant="filled"
-                        placeholder="Type"
-                        radius="md"
-                        size="lg"
-                        labelProps={{
-                          style: {
-                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
-                            fontSize: "1.2rem", // increase label font size
-                          },
-                        }}
-                        data={[
-                          { value: "", label: "Type" },
-                          { value: "employee", label: "Employee" },
-                          // { value: 'svelte', label: 'Svelte' },
-                          // { value: 'vue', label: 'Vue' },
-                        ]}
-                        {...form.getInputProps("type")}
-                      />
-                    </Grid.Col>
-
-                    <Grid.Col span={6}>
-                      <Select
-                        label="Role"
                         variant="filled"
                         placeholder="Role"
                         radius="md"
@@ -262,13 +240,52 @@ const ModalEmployee = (props: typeModal) => {
                           },
                         }}
                         data={[
-                          { value: "", label: "Role" },
-                          { value: "designer", label: "Designer" },
-                          { value: "developer", label: "Developer" },
-                          { value: "manager", label: "Manager" },
+                          { value: "", label: "Reporting Manager" },
+                          { value: "usermanagement", label: "User Management" },
+                          { value: 'projectmanagement', label: 'Project Management' },
+                          { value: 'taskmanagement', label: 'Task Management' },
+                          { value: "milestonemanagement", label: "Milestone Management" },
+                          { value: 'timeentrymanagement', label: 'TimeEntry Management' },
                         ]}
                         {...form.getInputProps("role")}
                       />
+                    </Grid.Col>
+
+                    <Grid.Col span={6}>
+                     
+                    <DateInput
+                        value={value}
+                        onChange={setValue}
+                        label="Date of Joining"
+                        placeholder="Date of Joining"
+                        maw={400}
+                        mx="auto"
+                        radius="md"
+                        size="lg"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
+                      />
+                    </Grid.Col>
+
+                    <Grid.Col span={6}>
+                    <MultiSelect
+                      data={data}
+                      label="Role"
+                      placeholder="Role"
+                      radius="md"
+                        size="lg"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
+                        {...form.getInputProps("role")}
+                    />
                     </Grid.Col>
 
                     {/* <Checkbox

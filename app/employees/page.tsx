@@ -8,10 +8,23 @@ import ModalEmployee from "../components/ModalEmployee";
 import { employeesData } from "../utils/data";
 import EmployeesCardData from "../components/EmployeesCardData";
 import EmployeesCardListView from "../components/EmployeeCardListView";
+import { gql } from "@apollo/client";
+import client from '../../apolloClient/index';
+
 
 
 
 const manrope = Manrope({ subsets: ["latin"] });
+
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  code: string;
+  designation: string;
+  role:string;
+  dateOfJoining:string;
+}
 
 
 
@@ -20,6 +33,9 @@ const Employees = () => {
     const [isScrolling, setIsScrolling] = useState(false);
     const [date, setDate] = useState<Date>(new Date());
     const [viewMode, setViewMode] = useState(true);
+
+
+
   
     const handleDateChange = (date: Date) => {
       setDate(date);
@@ -54,6 +70,37 @@ const Employees = () => {
   }
   const clickS = "bg-[#5773FF] text-white";
 const notClickS = "bg-gray-100 text-black";
+
+
+
+const [datas, setData] = useState<UserData[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await client.query({
+        query: gql`
+          query Query {
+            users {
+              id
+              name
+              email
+              code
+              designation
+              role
+              dateOfJoining
+            }
+          }
+        `,
+      });
+      setData(data.users);
+      console.log(data.users);
+      
+    };
+
+    fetchData();
+  }, []);
+
+
   return (
     <>
      <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
@@ -91,9 +138,9 @@ const notClickS = "bg-gray-100 text-black";
 
      <div className="px-5 py-6 ">
      {viewMode ? (
-     <div className="grid grid-cols-3 gap-5">
-     {employeesData.map((item, index) => (
-          <EmployeesCardData key={index} data={item} />
+     <div className="grid grid-cols-3  gap-5">
+     {datas.map((item, index) => (
+          <EmployeesCardData key={index} user={item} />
         ))}
      </div>
        ) : (

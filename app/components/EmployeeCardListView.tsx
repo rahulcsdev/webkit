@@ -145,9 +145,9 @@ const EmployeesCardListView = (props: Props) => {
             </div>
 
             <div>
-              <div className="p-2 rounded-full cursor-pointer  bg-[#ff7957] text-xl text-white mr-4">
+              {/* <div className="p-2 rounded-full cursor-pointer  bg-[#ff7957] text-xl text-white mr-4">
                 <RiDeleteBin5Line />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
