@@ -7,7 +7,7 @@ import { HiBars3 } from "react-icons/hi2";
 import ModalEmployee from "../../components/ModalEmployee";
 import { employeesData } from "../../utils/data";
 import EmployeesCardData from "../../components/EmployeesCardData";
-import EmployeesCardListView from "../components/EmployeeCardListView";
+import EmployeesCardListView from "../../components/EmployeeCardListView";
 import { gql } from "@apollo/client";
 import client from '../../apolloClient/index';
 

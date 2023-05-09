@@ -16,19 +16,48 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DateInput } from '@mantine/dates';
-import { gql } from "@apollo/client/core";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import index from '../apolloClient/index';
+
 
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: any;
 }
 
+const finduserRole=gql`query($where: UserWhereUniqueInput!){
+  user(where: $where){
+    id
+    name
+    role
+  }
+}`
+
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Manrope({ weight: "400", subsets: ["latin"] });
 
 const ModalEmployee = (props: typeModal) => {
   const { showModal, handleCloseModal } = props;
+
+  const [roles, setRoles] = useState<Array<string>>([]);
+
+  const { data: data1 } = useQuery(finduserRole);
+
+  useEffect(() => {
+    if (data1) {
+      console.log(data1);
+      setRoles(
+        data1.roles.map((item: any) => {
+          return {
+            value: item.id,
+            label: item.name,
+          };
+        })
+      );
+    }
+  }, [data1]);
+
+  console.log(data1);
 
   const data = [
     { value: 'react', label: 'React' },
@@ -42,12 +71,13 @@ const ModalEmployee = (props: typeModal) => {
 
   const form = useForm({
     initialValues: {
+      entries: [{ roles:"", key: 0 }],
       name: "",
       email: "",
       password: "",
       code: "",
       designation: "",
-      role: "",
+      // role: "",
       dateofjoining: "",
       reportingmanager: "",
       date: new Date(),

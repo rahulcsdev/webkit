@@ -2,6 +2,8 @@
 import Sidebar from "../components/Sidebar";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import Apps from  '../app/pages/Apps';
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Apps>
         <div className="h-screen overflow-hidden flex flex-row">
           <div className="basis-1/5 h-full ">
             <Sidebar />
@@ -27,6 +30,7 @@ export default function RootLayout({
             
           </div>
         </div>
+        </Apps>
       </body>
     </html>
   );
