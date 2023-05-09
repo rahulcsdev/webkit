@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Skeleton } from '@mantine/core';
 import { useQuery, gql } from "@apollo/client";
 import { Manrope } from "next/font/google";
 import { HiOutlineSearch } from "react-icons/hi";
@@ -116,8 +117,9 @@ const Navbar = (props: Props) => {
               className={`rounded-full h-12 w-12`}
             />
             <h6 className={`text-base font-normal text-[#605C8D]`}>
-              {" "}
-              {user && user.name}{" "}
+              {   
+                  user.name ? user.name : <Skeleton height={22} width={42}  />
+              }
             </h6>
 
             <Popover opened={isExpand} onChange={setIsExpand} withinPortal>

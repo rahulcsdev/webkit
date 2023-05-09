@@ -15,7 +15,7 @@ export default function RootLayout({
   const pathname = usePathname();
 
   const router = useRouter()
-  const basisWidth = pathname !== "/login" ? "4/5" : "full";
+  const basisWidth = pathname !== "/login" ? "basis-4/5" : "basis-full";
   const flex = pathname !== "/login" ? "flex flex-row" : "";
 
 
@@ -29,7 +29,7 @@ export default function RootLayout({
               <Sidebar />
             </div>
           )}
-          <div className={`basis-${basisWidth} h-full bg-[#F8F7F7]`}>
+          <div className={`${basisWidth} h-full bg-[#F8F7F7]`}>
             <Context>
                {children}
             </Context>
