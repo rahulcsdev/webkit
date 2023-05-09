@@ -165,8 +165,8 @@ type Project {
   status: String
   projectType: String
   projectDiscription: String
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
 }
 
 input ProjectWhereUniqueInput {
@@ -185,8 +185,8 @@ input ProjectWhereInput {
   status: StringNullableFilter
   projectType: StringNullableFilter
   projectDiscription: StringFilter
-  startDate: StringFilter
-  endDate: StringFilter
+  startDate: DateTimeNullableFilter
+  endDate: DateTimeNullableFilter
 }
 
 input UserManyRelationFilter {
@@ -243,8 +243,8 @@ input ProjectUpdateInput {
   status: String
   projectType: String
   projectDiscription: String
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
 }
 
 input UserRelateToManyForUpdateInput {
@@ -267,8 +267,8 @@ input ProjectCreateInput {
   status: String
   projectType: String
   projectDiscription: String
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
 }
 
 input UserRelateToManyForCreateInput {

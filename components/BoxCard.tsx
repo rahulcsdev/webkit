@@ -1,8 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import pic1 from "../assets/picOne.jpg";
-import pic2 from "../assets/picTwo.jpg";
+ 
 import { Manrope } from "next/font/google";
 
 
@@ -56,7 +55,7 @@ const BoxCard = (props: Props) => {
             {arr.map((item, index) => (
               <Image
                 key={index}
-                src={index % 2 == 0 ? pic1 : pic2}
+                src={index % 2 == 0 ? "/assets/picOne.jpg" : "/assets/picTwo.jpg"}
                 height={30}
                 width={30}
                 alt="image"

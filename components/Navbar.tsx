@@ -7,7 +7,7 @@ import {MdOutlineEmail} from 'react-icons/md'
 import {IoNotificationsOutline} from 'react-icons/io5'
 import {FiChevronDown} from 'react-icons/fi'
 import Image from 'next/image'
-import girl from '../assets/girl.jpg'
+ 
 const manrope=Manrope({subsets:['latin']})
 interface Props{
   isScrolling:Boolean
@@ -38,7 +38,7 @@ const {isScrolling}=props;
           </div>
        
           <div className="px-5 flex items-center gap-3 cursor-pointer">
-         <Image src={girl} alt='image' className={`rounded-full h-12 w-12`} />
+         <Image src={"/assets/picTwo.jpg"} alt='image' height={50} width={50} className={`rounded-full h-12 w-12`} />
          <h6 className={ `  text-base font-normal text-[#605C8D]`} >
          Savannah Nguyen
          </h6>
