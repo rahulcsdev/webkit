@@ -141,6 +141,12 @@ const ModalTasks = (props: typeModal) => {
                     radius="md"
                     {...formData.getInputProps("estimate_Time")}
                   />
+                  <TextInput
+                    label="Project Manager"
+                    placeholder="Project Manager"
+                    radius="md"
+                    {...formData.getInputProps("estimate_Time")}
+                  />
                   <Textarea
                     label="Desciption"
                     placeholder="Enter description"
