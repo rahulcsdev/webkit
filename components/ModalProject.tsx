@@ -22,15 +22,19 @@ const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const ModalProject = (props: typeModal) => {
   const { showModal, handleCloseModal } = props;
   const [options, setOptions] = useState<any>([]);
-   const [users, setUsers] = useState([])
-   const managerOp=[];
-   const getManagerOptions=()=>{
-    for(let i=0;i<users.length;i++){
-      managerOp.push({value:users[i].id,lable:users[i].name})
-    }
-    return managerOp;
-   }
-
+   const [users, setUsers] = useState<any>([])
+   const [showManager, setShowManager] = useState(false)
+   const managerOp=[
+    { value: "", label: "Choose One",disabled: true  },
+  ];
+ 
+const managerOptions=(users:any)=>{
+  console.log(users);
+  for (let i = 0; i < users?.length; i++) {
+    managerOp.push({value: users[i]?.id,label:users[i].name,disabled:false});
+  }
+  setUsers(managerOp);
+}
 
   useEffect(() => {
     const getEmployeeInfo = async() => {
@@ -46,10 +50,12 @@ const ModalProject = (props: typeModal) => {
         `
         });
         // console.log(data)
-        setUsers(data.users)
+ 
+        managerOptions(data.users);
       for (let i = 0; i < data?.users?.length; i++) {
         info.push(data?.users[i]?.name);
       }
+      
       setOptions(info);
     };
 
@@ -80,14 +86,53 @@ interface formTypes{
   code:string
 }
 const createProject=async(formData:formTypes)=>{
- 
+ console.log(formData)
+
+let membersObj=[{id:formData.members[0]}];
+
+for(let i=1;i<formData.members.length;i++){
+   membersObj.push({id:formData.members[i]})
+}
+// console.log(membersObj)
+// console.log(JSON.stringify(membersObj))
   try {
-    
+    const {data}=await client.mutate({
+      mutation:gql`
+      mutation Mutation($data: ProjectCreateInput!) {
+        createProject(data: $data) {
+          id
+          member {
+            id
+          }
+        }
+      }
+      `,
+      variables:{
+        data: {
+          "name": formData.projectName,
+          "projectManager": {
+            "connect": {
+              "id": formData.projectManager
+            }
+          },
+          "startDate": formData.startDate.toISOString(),
+          "projectType": formData.type,
+          "status": formData.status,
+          "endDate": formData.endDate.toISOString(),
+          "projectDiscription": formData.desc,
+          
+          "member": {
+            "connect":membersObj
+          }
+        }
+      }
+    });
+    console.log(data)
   } catch (error) {
-    
+    console.log(error);
   }
 }
-
+//  console.log(form.getInputProps('type').value)
   return (
     <>
       {showModal && (
@@ -122,16 +167,7 @@ const createProject=async(formData:formTypes)=>{
                       />
                     </Input.Wrapper>
                   </div>
-                  <div className="relative w-full">
-                   
-                    <Select
-                        label="Project Manager"
-                        placeholder="Pick one"
-                        data={getManagerOptions}
-                        {...form.getInputProps("projectManager")}
-                      />
-                  
-                  </div>
+          
                   <div className="flex flex-row gap-2 mt-4">
                     <div className="basis-1/2">
                       <DateInput 
@@ -182,18 +218,25 @@ const createProject=async(formData:formTypes)=>{
                           { label: "Fixed cost project", value: "Fixed cost project" },
                         ]}
                         {...form.getInputProps("type")}
+                      
                       />
                     </div>
                   </div>
-                  <MultiSelect
-                    data={options}
-                    label="Members"
-                    mx="auto"
-                    searchable
-                    placeholder="Pick all members you like"
-                    {...form.getInputProps("members")}
-                  />
-                    <Input.Wrapper label="Project Description" required mx="auto">
+                  {
+                    form.getInputProps('type').value!=='Internal project' &&   <div className="relative w-full">
+                   
+                    <Select
+                        label="Project Manager"
+                        placeholder="Pick one"
+                        data={users}
+                        {...form.getInputProps("projectManager")}
+                        
+                        
+                      />
+                  
+                  </div>
+                  }
+                     <Input.Wrapper label="Project Description" required mx="auto">
                       <Input
                         required
                         placeholder="Enter your Project description"
@@ -201,14 +244,16 @@ const createProject=async(formData:formTypes)=>{
                         // sx={{padding:'2px 1px',backgroundColor:'green'}}
                       />
                     </Input.Wrapper>
-                    <Input.Wrapper label="Project Code" required mx="auto">
-                      <Input
-                        required
-                        placeholder="Enter your Project Code Link"
-                        {...form.getInputProps("code")}
-                        // sx={{padding:'2px 1px',backgroundColor:'green'}}
-                      />
-                    </Input.Wrapper>
+                  <MultiSelect
+                    data={users}
+                    label="Members"
+                    mx="auto"
+                    searchable
+                    placeholder="Pick all members you like"
+                    {...form.getInputProps("members")}
+                  />
+               
+               
                   <div className="flex items-center justify-center mt-4 gap-4 ">
                     <button
                       type="submit"
