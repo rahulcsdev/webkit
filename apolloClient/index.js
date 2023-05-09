@@ -4,15 +4,15 @@ const enchancedFetch = (url, init) => {
     ...init,
     headers: {
       ...init.headers,
-      'Access-Control-Allow-Origin': '*',
+      "Access-Control-Allow-Origin": "*",
     },
-  }).then(response => response);
+  }).then((response) => response);
 };
 const httpLink = new createHttpLink({
   uri: "http://localhost:3000/api/graphql",
-  credentials: 'include',
+  credentials: "include",
   fetchOptions: {
-    mode: 'cors',
+    mode: "cors",
   },
   fetch: enchancedFetch,
 });

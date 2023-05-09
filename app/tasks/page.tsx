@@ -3,6 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../../components/Navbar";
 import ModalTasks from "../../components/ModalTasks";
 import CardTask from "../../components/CardTask";
+
+import { gql } from "@apollo/client";
+import client from "@/apolloClient";
 const Tasks = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -35,6 +38,49 @@ const Tasks = () => {
   function handleCloseModal() {
     setShowModal(false);
   }
+  const Taskquery = async () => {
+    const { data } = await client.query({
+      query: gql`
+        query Query {
+          tasks {
+            code
+            endDate
+            discription
+            estimateTime
+            id
+            name
+            priority
+            startDate
+            status
+            taskType
+            project {
+              code
+              endDate
+              id
+              name
+              projectType
+              startDate
+              status
+            }
+            milestone {
+              code
+              endDate
+              name
+              id
+
+              startDate
+              status
+            }
+          }
+        }
+      `,
+    });
+    console.log(data);
+  };
+
+  useEffect(() => {
+    Taskquery();
+  });
 
   return (
     <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
