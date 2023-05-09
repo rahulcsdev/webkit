@@ -13,6 +13,8 @@ const Tasks = () => {
   const [isExpand, setIsExpand] = useState(false);
   const [value, setValue] = useState("progress");
   const [showModal, setShowModal] = useState(false);
+  const [projectList, setProjectList] = useState([]);
+  const [milestoneList, setMileStoneList] = useState([]);
   const handleDateChange = (date: Date) => {
     setDate(date);
   };
@@ -78,9 +80,28 @@ const Tasks = () => {
     console.log(data);
   };
 
+  const lists = async () => {
+    const { data } = await client.query({
+      query: gql`
+        query Query {
+          milestones {
+            name
+          }
+          projects {
+            name
+          }
+        }
+      `,
+    });
+    setMileStoneList(data?.milestones);
+    setProjectList(data?.projects);
+  };
   useEffect(() => {
     Taskquery();
-  });
+    lists();
+  }, []);
+  console.log("projectlist", projectList);
+  console.log("milestones", milestoneList);
 
   return (
     <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
@@ -96,7 +117,12 @@ const Tasks = () => {
           </button>
         </div>
       </div>
-      <ModalTasks showModal={showModal} handleCloseModal={handleCloseModal} />
+      <ModalTasks
+        showModal={showModal}
+        handleCloseModal={handleCloseModal}
+        project={projectList}
+        milestones={milestoneList}
+      />
 
       <div className="bg-white p-4 mt-4 shadow-md w-[95%] mx-auto rounded-3xl">
         <CardTask heading="heading" />
