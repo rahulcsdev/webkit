@@ -9,7 +9,6 @@ export default list({
     name: text(),
     email: text({ validation: { isRequired: true }, isIndexed: "unique" }),
     code: text(),
-
     password: password(),
 
     designation: text(),
@@ -21,7 +20,6 @@ export default list({
         { label: "User Management", value: "userManagement" },
 
         { label: "Project Management", value: "projectManagement" },
-
         { label: "Task Management", value: "taskManagement" },
 
         { label: "Milestone Management", value: "milestoneManagement" },
@@ -30,12 +28,20 @@ export default list({
       ],
     }),
 
-    dateOfJoining: text(),
+    dateOfJoining: timestamp(),
 
     reportingManager: relationship({
       ref: "User",
     }),
-
     createdDate: timestamp({ defaultValue: new Date().toISOString() }),
+  },
+  hooks: {
+    resolveInput: async ({ resolvedData, context }) => {
+      const count = await context.db.User.count({});
+      return {
+        ...resolvedData,
+        code: `USRO${count + 1}`,
+      };
+    },
   },
 });

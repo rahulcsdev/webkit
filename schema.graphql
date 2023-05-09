@@ -9,7 +9,7 @@ type User {
   password: PasswordState
   designation: String
   role: [String!]
-  dateOfJoining: String
+  dateOfJoining: DateTime
   reportingManager: User
   createdDate: DateTime
 }
@@ -35,7 +35,7 @@ input UserWhereInput {
   code: StringFilter
   password: PasswordFilter
   designation: StringFilter
-  dateOfJoining: StringFilter
+  dateOfJoining: DateTimeNullableFilter
   reportingManager: UserWhereInput
   createdDate: DateTimeNullableFilter
 }
@@ -122,7 +122,7 @@ input UserUpdateInput {
   password: String
   designation: String
   role: [String!]
-  dateOfJoining: String
+  dateOfJoining: DateTime
   reportingManager: UserRelateToOneForUpdateInput
   createdDate: DateTime
 }
@@ -145,7 +145,7 @@ input UserCreateInput {
   password: String
   designation: String
   role: [String!]
-  dateOfJoining: String
+  dateOfJoining: DateTime
   reportingManager: UserRelateToOneForCreateInput
   createdDate: DateTime
 }

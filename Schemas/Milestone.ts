@@ -6,49 +6,55 @@ import { multiselect ,relationship,timestamp} from '@keystone-6/core/fields';
 export default list({
     access: allowAll,
 
-        fields: {
+ fields: { name: text(), project: relationship({ref: 'Project',
     
-          name: text(),
+    }),
+    code:text(),
+    status:select({
     
-          project: relationship({
+    defaultValue: "New",
     
-           ref: 'Project',
+    options: [
     
-     
+    { label: 'New', value: 'New' },
     
-         }),
+    { label: 'Design Developement', value: 'Design Developement' },
     
-         code:text(),
+    { label: 'In Progress', value: 'In Progress' },
     
-         status:select({
+    { label: 'Testing', value: 'Testing' },
     
-           defaultValue: "New",
+    { label: 'Completed', value: 'Completed' },
     
-           options: [
+    ],
+}),
+startDate:text(),
+endDate:text() },
+hooks:{
+    resolveInput: async({ resolvedData,context }) => {
+       
+      const {id} =  resolvedData.project.connect
+       console.log(id)
+        const project = await context.db.Project.findOne({
+            where: { id: id },
+          });
+          if(project){
+            var projectCode= project.code;
+            console.log(projectCode)
+          }
+      
+          const count = await context.db.Milestone.count({});  
     
-             { label: 'New', value: 'New' },
+          return {
+            ...resolvedData,
+            code: `${projectCode}-MST00${count+1}`
+          }
+  },
+},
+     ui: {
     
-             { label: 'Design Developement', value: 'Design Developement' },
+      labelField: 'name',
     
-             { label: 'In Progress', value: 'In Progress' },
+     },
     
-             { label: 'Testing', value: 'Testing' },
-    
-             { label: 'Completed', value: 'Completed' },
-    
-           ],
-    
-         }),
-    
-         startDate:text(),
-    
-         endDate:text(),
-    
-        },
-    
-        ui: {
-    
-          labelField: 'name',
-    
-        },
-    })
+})
