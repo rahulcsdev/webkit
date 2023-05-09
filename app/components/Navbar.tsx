@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useQuery, gql } from "@apollo/client";
 import { Manrope } from "next/font/google";
 import { HiOutlineSearch } from "react-icons/hi";
 import { MdOutlineEmail } from "react-icons/md";
@@ -11,15 +12,63 @@ import Image from "next/image";
 import girl from "../assets/girl.jpg";
 import { Popover, Button } from "@mantine/core";
 import { profileLinks } from "../utils/data";
+import client from "@/apolloClient/graphql";
+
+const GET_AUTHENTICATED_USER = gql`
+  query AuthenticatedItem {
+    authenticatedItem {
+      ... on User {
+        email
+        name
+        id
+      }
+    }
+  }
+`;
+
+const GET_USER = gql`
+  query User($id: ID!) {
+    user(where: { id: $id }) {
+      id
+      name
+    }
+  }
+`;
+
 const manrope = Manrope({ subsets: ["latin"] });
 interface Props {
   isScrolling: Boolean;
 }
 const Navbar = (props: Props) => {
   const [isExpand, setIsExpand] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
+  const [user, setUser] = useState<{ [key: string]: any }>({});
 
   const { isScrolling } = props;
+
+  const getUserData = async (id: any) => {
+    const data = await client.request(GET_USER, {
+      id: id,
+    });
+
+    console.log("s", data);
+
+    return data;
+  };
+
+  useEffect(() => {
+    const id = localStorage.getItem("userId");
+    if (id) {
+      const data = getUserData(id);
+
+      data.then((res: any) => {
+        if (res) {
+          setUser(res.user);
+          console.log(res);
+        }
+      });
+    }
+  }, []);
 
   return (
     <div
@@ -64,8 +113,9 @@ const Navbar = (props: Props) => {
               alt="image"
               className={`rounded-full h-12 w-12`}
             />
-            <h6 className={`  text-base font-normal text-[#605C8D]`}>
-              Savannah Nguyen
+            <h6 className={`text-base font-normal text-[#605C8D]`}>
+              {" "}
+              {user && user.name}{" "}
             </h6>
 
             <Popover opened={isExpand} onChange={setIsExpand} withinPortal>
@@ -81,7 +131,7 @@ const Navbar = (props: Props) => {
                 {profileLinks.map((item, index) => (
                   <div
                     key={index}
-                    onClick={()=>router.push(item.link)}
+                    onClick={() => router.push(item.link)}
                     className="p-1 ... flex items-center justify-start gap-3 scale-1 delay-100 duration-150 transition-transform hover:scale-105 cursor-pointer"
                   >
                     {item.icon}

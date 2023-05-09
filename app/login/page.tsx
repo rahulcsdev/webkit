@@ -1,5 +1,5 @@
 "use client";
-import { gql, useMutation } from '@apollo/client';
+import { gql } from "graphql-request";
 import { rem, px } from "@mantine/core";
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
@@ -8,38 +8,64 @@ import { TextInput, Checkbox, Button, Group, Box, Input } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Image from "next/image";
 import boy from "../assets/boy.jpg";
+import { useRouter } from "next/navigation";
+import client from "../../apolloClient/graphql";
+
 
 const manrope = Manrope({ subsets: ["latin"] });
 
 // Define mutation
 const LOGIN_USER = gql`
-mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
-  authenticateUserWithPassword(email: $email, password: $password) {
-    ... on UserAuthenticationWithPasswordSuccess {
-      sessionToken
-      item {
-        name
+  mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
+    authenticateUserWithPassword(email: $email, password: $password) {
+      ... on UserAuthenticationWithPasswordSuccess {
+        sessionToken
+        item {
+          name
+          id
+        }
+      }
+      ... on UserAuthenticationWithPasswordFailure {
+        message
       }
     }
-    ... on UserAuthenticationWithPasswordFailure {
-      message
-    }
   }
-}
 `;
 
 const Login = () => {
 
-  const [mutateFunction, { data, loading, error }] = useMutation(LOGIN_USER);
+  const router = useRouter()
+  // const [mutateFunction, { data, loading, error }] = useMutation(LOGIN_USER);
+
+  // console.log("mm", error, data);
 
 
-  console.log('mm',error,data)
 
-  const LoginUser=(values:any)=>{
+  const LoginUser = async(values: any) => {
+      const variables = {
+        email: values.email,
+        password: values.password,
+      };
+  
+      const data:any = await client.request(LOGIN_USER, variables);
+  
+      if (data?.authenticateUserWithPassword.message) {
+        return alert("invalid credentials");
+      }
+  
+      if (data?.authenticateUserWithPassword.item) {
+        // localStorage.setItem('userToken',data.authenticateUserWithPassword.sessionToken)
+        localStorage.setItem('userId',data.authenticateUserWithPassword.item.id)
+  
+        router.push("/");
+        return setTimeout(() => {
+          router.refresh();
+        }, 1000);
+      }
+      console.log(data);
 
-    mutateFunction({variables: { email: values.email ,password:values.password}} )
+    }
 
-  }
 
   const form = useForm({
     initialValues: {
@@ -50,7 +76,8 @@ const Login = () => {
 
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      password: (value) => (value.length !== 0 ? null : "please enter password"),
+      password: (value) =>
+        value.length !== 0 ? null : "please enter password",
     },
   });
 
@@ -58,8 +85,11 @@ const Login = () => {
     <div className="h-full flex items-center  justify-center ">
       <div className="p-5  rounded-xl grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-1 w-[56%] h-2/3">
         <div className="form-box bg-[#5773FF] rounded-l-[18px] p-8 ">
-          <form onSubmit={form.onSubmit((values) => LoginUser(values)) }>
-            <h2 className="text-white mb-4 text-[34px] font-semibold"> Sign In </h2>
+          <form onSubmit={form.onSubmit((values) => LoginUser(values))}>
+            <h2 className="text-white mb-4 text-[34px] font-semibold">
+              {" "}
+              Sign In{" "}
+            </h2>
             <p className="text-white mb-8"> Login to stay connected </p>
 
             <div className="mb-6">
@@ -82,7 +112,7 @@ const Login = () => {
                 radius="md"
                 className="rounded"
                 placeholder="Password"
-                type ="password" 
+                type="password"
                 styles={(theme) => ({
                   input: {
                     padding: "22px !important",
@@ -100,7 +130,10 @@ const Login = () => {
                 type="checkbox"
                 className="mr-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
-              <label className="checkbox text-white mb-2 -translate-y-1"> Remember me </label>
+              <label className="checkbox text-white mb-2 -translate-y-1">
+                {" "}
+                Remember me{" "}
+              </label>
             </div>
 
             <Group position="left" mt="md">
@@ -112,7 +145,6 @@ const Login = () => {
                 Sign in{" "}
               </button>
             </Group>
-            
 
             <h6 className="text-white mt-4"> create an Account Signup </h6>
           </form>

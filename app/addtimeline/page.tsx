@@ -17,7 +17,45 @@ import ProjectCardCol from "../components/ProjectCardCol";
 import Footer from "../components/Footer";
 import LayoutNav from "../components/LayoutNav";
 import { useRouter } from "next/navigation";
+import { gql, useQuery, useMutation } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
+
+const GET_TASKS = gql`
+  query Query {
+    tasks {
+      name
+      id
+    }
+  }
+`;
+
+const GET_PROJECTS = gql`
+  query Projects {
+    projects {
+      name
+      id
+    }
+  }
+`;
+
+const Add_TIMELINES = gql`
+  mutation Mutation($data: [TimeEnteryCreateInput!]!) {
+    createTimeEnteries(data: $data) {
+      activities
+      project {
+        id
+        name
+      }
+      task {
+        id
+        name
+      }
+      duration
+      date
+    }
+  }
+`;
+
 const Projects = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -27,7 +65,52 @@ const Projects = () => {
   const [viewMode, setViewMode] = useState(true);
   const [entry, setEntries] = useState<Array<object>>([]);
   const [selectValue, setSelectValue] = useState<Array<string>>([]);
+  const [projects, setProjects] = useState<Array<string>>([]);
+  const [tasks, setTasks] = useState<Array<string>>([]);
   const router = useRouter();
+
+  const [mutateFunction, { data: data3, loading, error }] =
+    useMutation(Add_TIMELINES);
+
+  const { data: data1 } = useQuery(GET_PROJECTS);
+
+  const { data: data2 } = useQuery(GET_TASKS);
+
+
+  useEffect(()=>{
+
+    if(data3){
+      console.log('data added',data3)
+    }
+
+  },data3)
+
+  useEffect(() => {
+    if (data1) {
+      console.log(data1);
+      setProjects(
+        data1.projects.map((item: any) => {
+          return {
+            value: item.id,
+            label: item.name,
+          };
+        })
+      );
+    }
+    if (data2) {
+      console.log(data1);
+      setTasks(
+        data2.tasks.map((item: any) => {
+          return {
+            value: item.id,
+            label: item.name,
+          };
+        })
+      );
+    }
+  }, [data1, data2]);
+
+  console.log(data1);
 
   const form = useForm({
     initialValues: {
@@ -56,7 +139,7 @@ const Projects = () => {
   const addEntry = () => {
     // // console.log('form',form.values)
 
-    console.log("form");
+    console.log("form", form.values);
     form.insertListItem("entries", {
       project: "",
       task: "",
@@ -75,6 +158,36 @@ const Projects = () => {
 
   const saveAll = () => {
     console.log("here are all entries", form.values);
+
+    const isEmpty  = form.values.entries.filter((item)=>item.task === '')
+
+    if(isEmpty.length > 0){
+      return alert('please select all fields')
+    }
+
+    const Mutatedata = form.values.entries.map((item) => {
+      return {
+        activities: item.activity,
+        duration: item.duration.toString(),
+        task: {
+          connect: {
+            id: item.task,
+          },
+        },
+        date: form.values.date,
+        project: {
+          connect: {
+            id: item.project,
+          },
+        },
+      };
+    });
+
+    mutateFunction({
+      variables: {
+        data: Mutatedata
+      },
+    });
   };
 
   function handleCloseModal() {
@@ -160,7 +273,7 @@ const Projects = () => {
                           className="z-40 ..."
                           searchable
                           nothingFound="No options"
-                          data={["React", "Angular", "Svelte", "Vue"]}
+                          data={projects}
                           dropdownPosition="top"
                           withinPortal
                           {...form.getInputProps(`entries.${0}.project`)}
@@ -173,7 +286,7 @@ const Projects = () => {
                           dropdownPosition="top"
                           withinPortal
                           nothingFound="No options"
-                          data={["React", "Angular", "Svelte", "Vue"]}
+                          data={tasks}
                           {...form.getInputProps(`entries.${0}.task`)}
                         />
                       </td>
@@ -208,7 +321,7 @@ const Projects = () => {
                                   placeholder="choose project"
                                   searchable
                                   nothingFound="No options"
-                                  data={["React", "Angular", "Svelte", "Vue"]}
+                                  data={projects}
                                   {...form.getInputProps(
                                     `entries.${index}.project`
                                   )}
@@ -219,7 +332,7 @@ const Projects = () => {
                                   placeholder="choose Task"
                                   searchable
                                   nothingFound="No options"
-                                  data={["React", "Angular", "Svelte", "Vue"]}
+                                  data={tasks}
                                   {...form.getInputProps(
                                     `entries.${index}.task`
                                   )}
