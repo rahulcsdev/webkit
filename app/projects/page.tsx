@@ -12,10 +12,45 @@ import ProjectCardCol from "@/components/ProjectCardCol";
 import Footer from "@/components/Footer";
 import LayoutNav from "@/components/LayoutNav";
 import EditModalProject from "@/components/EditModalProject";
- 
+import client from '../../apolloClient/index'
+import { gql } from "@apollo/client";
+
+
+
 const manrope = Manrope({ subsets: ["latin"] });
 const Projects = () => {
+  const [projects, setProjects] = useState([])
+  const fetchProjects=async()=>{
+    const {data}=await client.query({
+      query:gql`
+      query Query {
+        projects {
+          status
+          startDate
+          projectType
+          projectManager {
+            name
+            id
+          }
+          projectDiscription
+          name
+          memberCount
+          member {
+            id
+            name
+          }
+          id
+          endDate
+        }
+      }
+      `
+    });
+    setProjects(data.projects)
+  }
  
+  useEffect(()=>{
+    fetchProjects();
+  },[]);
   const [isExpand, setIsExpand] = useState(false);
  
   const [showModal, setShowModal] = useState(false);
@@ -103,13 +138,13 @@ const Projects = () => {
         <div className="mt-5">
           {viewMode ? (
             <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
-              {projectsData.map((data, index) => (
+              {projects.map((data, index) => (
                 <ProjectCard  openDetais={openDetails}  key={index} data={data} />
               ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-4">
-              {projectsData.map((data, index) => (
+              {projects.map((data, index) => (
                 <ProjectCardCol openDetails={openDetails}  key={index} data={data} />
               ))}
             </div>
