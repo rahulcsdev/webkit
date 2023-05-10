@@ -115,12 +115,7 @@ const CardTask = (props: any) => {
             >
               Desciption
             </label>
-            <p className="mt-4">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error
-              maiores, dolorum aliquid ipsum fuga, corrupti sint illum amet
-              doloribus aut excepturi deleniti expedita voluptate provident
-              ratione nisi! Vitae, facilis voluptatibus?
-            </p>
+            <p className="mt-4">{data?.discription}</p>
           </div>
         </div>
       )}

@@ -3,6 +3,9 @@ import { Manrope, Roboto } from "next/font/google";
 import { useForm } from "@mantine/form";
 import { TextInput, Select, Box, Button, Textarea } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
+import { useMutation } from "@apollo/client";
+import { addTask } from "../services";
+
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: any;
@@ -11,9 +14,23 @@ interface typeModal {
 }
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Manrope({ weight: "400", subsets: ["latin"] });
+
 const ModalTasks = (props: typeModal) => {
   const { showModal, handleCloseModal, milestones, project } = props;
-  console.log("milestone", milestones);
+  const [createTask, { data, error, loading }] = useMutation(addTask);
+  const mileStoneArr = milestones?.map((item: any) => {
+    return {
+      value: item?.id,
+      label: item?.name,
+    };
+  });
+  const ProjectArr = project?.map((item: any) => {
+    return {
+      value: item?.id,
+      label: item?.name,
+    };
+  });
+
   const formData = useForm({
     initialValues: {
       task: "",
@@ -21,13 +38,45 @@ const ModalTasks = (props: typeModal) => {
       priority: "",
       status: "",
       task_type: "",
-      state_date: "",
+      start_date: "",
       end_date: "",
       mileStone: "",
       estimate_Time: "",
       description: " ",
     },
   });
+
+  console.log(ProjectArr);
+  const formSubmitHandler = (value: any) => {
+    console.log(value);
+    createTask({
+      variables: {
+        data: {
+          name: value?.task,
+          discription: value?.description,
+
+          estimateTime: value?.estimate_Time,
+          project: {
+            connect: {
+              id: value?.project,
+            },
+          },
+          priority: value?.priority,
+          status: value?.status,
+          milestone: {
+            connect: {
+              id: value?.mileStone,
+            },
+          },
+          endDate: value?.end_date,
+          startDate: value?.start_date,
+          taskType: value?.task_type,
+        },
+      },
+    });
+  };
+  // console.log("form data", formData);
+
   return (
     <>
       {showModal && (
@@ -50,7 +99,7 @@ const ModalTasks = (props: typeModal) => {
               <div className="p-4 ">
                 <form
                   className="grid grid-cols-2 place-content-center  gap-4 "
-                  onSubmit={formData.onSubmit((values) => console.log(values))}
+                  onSubmit={formData.onSubmit(formSubmitHandler)}
                 >
                   <TextInput
                     label="Task"
@@ -60,19 +109,10 @@ const ModalTasks = (props: typeModal) => {
                   />
                   <Select
                     label="Project"
-                    placeholder="Enter Project Name"
+                    placeholder="select Project "
                     radius="md"
-                    // data={project?.map((item: any, index: number) => {
-                    //   value: item?.name,
-                    //   label:item?.name
-                    // })}
-                    data={[
-                      { value: "urgent", label: "Urgent" },
-                      { value: "high", label: "High" },
-                      { value: "no priority", label: "No Priority" },
-                      { value: "backlog", label: "BackLog" },
-                    ]}
-                    {...formData.getInputProps("priority")}
+                    data={ProjectArr}
+                    {...formData.getInputProps("project")}
                   />
                   <Box className="col-span-2 grid grid-cols-3 gap-5 place-content-center">
                     <Select
@@ -80,10 +120,15 @@ const ModalTasks = (props: typeModal) => {
                       placeholder="priority"
                       radius="md"
                       data={[
-                        { value: "urgent", label: "Urgent" },
-                        { value: "high", label: "High" },
-                        { value: "no priority", label: "No Priority" },
-                        { value: "backlog", label: "BackLog" },
+                        { label: "Urgent", value: "Urgent" },
+
+                        { label: "High", value: "High" },
+
+                        { label: "Medium", value: "Medium" },
+
+                        { label: "No priority", value: "No priority" },
+
+                        { label: "Backlog", value: "Backlog" },
                       ]}
                       {...formData.getInputProps("priority")}
                     />
@@ -92,9 +137,16 @@ const ModalTasks = (props: typeModal) => {
                       placeholder="select status"
                       radius="md"
                       data={[
-                        { value: "active", label: "active" },
-                        { value: "delay", label: "delay" },
-                        { value: "close", label: "close" },
+                        { label: "Open", value: "Open" },
+                        {
+                          label: "Document Analysis",
+                          value: "Document Analysis",
+                        },
+                        { label: "In Progress", value: "In Progress" },
+
+                        { label: "Code Review", value: "Code Review" },
+
+                        { label: "Completed", value: "Completed" },
                       ]}
                       {...formData.getInputProps("status")}
                     />
@@ -103,9 +155,9 @@ const ModalTasks = (props: typeModal) => {
                       placeholder="select task type"
                       radius="md"
                       data={[
-                        { value: "frontend", label: "Frontend" },
-                        { value: "backend", label: "backend" },
-                        { value: "bug", label: "bug" },
+                        { value: "Frontend", label: "Frontend" },
+                        { value: "Backend", label: "Backend" },
+                        { value: "Bug", label: "Bug" },
                       ]}
                       {...formData.getInputProps("task_type")}
                     />
@@ -129,10 +181,11 @@ const ModalTasks = (props: typeModal) => {
                       />
                     </div>
                   </div>
-                  <TextInput
+                  <Select
                     label="MileStone"
-                    placeholder="mileStone"
+                    placeholder="select MileStone "
                     radius="md"
+                    data={mileStoneArr}
                     {...formData.getInputProps("mileStone")}
                   />
                   <TextInput
@@ -141,12 +194,7 @@ const ModalTasks = (props: typeModal) => {
                     radius="md"
                     {...formData.getInputProps("estimate_Time")}
                   />
-                  <TextInput
-                    label="Project Manager"
-                    placeholder="Project Manager"
-                    radius="md"
-                    {...formData.getInputProps("estimate_Time")}
-                  />
+
                   <Textarea
                     label="Desciption"
                     placeholder="Enter description"

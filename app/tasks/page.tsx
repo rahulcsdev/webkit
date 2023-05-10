@@ -54,9 +54,11 @@ const Tasks = () => {
       query: gql`
         query Query {
           milestones {
+            id
             name
           }
           projects {
+            id
             name
           }
         }
@@ -94,8 +96,6 @@ const Tasks = () => {
         {tasklist.map((item: any, index: number) => (
           <CardTask data={item} key={index} />
         ))}
-        {/* <CardTask heading="heading" />
-        <CardTask heading="heading" /> */}
       </div>
     </div>
   );
