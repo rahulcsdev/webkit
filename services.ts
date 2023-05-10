@@ -2,9 +2,12 @@ import { gql } from '@apollo/client';
 
 
 export const addProject=gql` 
- mutation ($data: ProjectCreateInput!) {
+mutation Mutation($data: ProjectCreateInput!) {
   createProject(data: $data) {
     id
+    member {
+      id
+    }
   }
 }`
 
@@ -88,25 +91,28 @@ export const Login = gql`
   }
 `;
 
-export const  getProjectList=gql`
-query ($where:ProjectWhereInput , $take: Int, $skip: Int, $orderBy: [ProjectOrderByInput!]) {
-  projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
-    id
-   name
-   status
-   projectType
-    code
+export const  getProjectList= gql`
+query Query {
+  projects {
+    status
     startDate
-    endDate
-    member{
+    projectType
+    projectManager {
+      name
+      id
+    }
+    projectDiscription
+    name
+    memberCount
+    member {
+      id
       name
     }
-   projectManager{
     id
-    name
+    endDate
   }
-    }
-  }`
+}
+`;
 
 export const getUser=gql`
 query ($where:UserWhereInput , $take: Int, $skip: Int, $orderBy: [UserOrderByInput!]) {
@@ -158,22 +164,25 @@ query ($where:UserWhereInput , $take: Int, $skip: Int, $orderBy: [UserOrderByInp
     }`  
 
     export const getProjectDetail=gql`
-    query($where: ProjectWhereUniqueInput!){
-      project(where: $where){
-        id
-        name
-        member{
-          id
-          name
-        }
-        projectManager{
-        id
-        name
-        }
+    query getProject($where: ProjectWhereUniqueInput!) {
+      project(where: $where) {
+        status
+        startDate
         projectType
-       status
-       startDate
-       endDate
+        projectManager {
+          name
+          id
+        }
+        projectDiscription
+        name
+        memberCount
+        member {
+          name
+          id
+        }
+        id
+        endDate
+        code
       }
     }`
     export const getTaskDetails=gql`query($where: TaskWhereUniqueInput!){

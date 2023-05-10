@@ -14,38 +14,19 @@ import LayoutNav from "@/components/LayoutNav";
 import EditModalProject from "@/components/EditModalProject";
 import client from '../../apolloClient/index'
 import { gql } from "@apollo/client";
-
-
-
+import { getProjectList } from "@/services";
 const manrope = Manrope({ subsets: ["latin"] });
+
+
+
 const Projects = () => {
   const [projects, setProjects] = useState([])
   const fetchProjects=async()=>{
     const {data}=await client.query({
-      query:gql`
-      query Query {
-        projects {
-          status
-          startDate
-          projectType
-          projectManager {
-            name
-            id
-          }
-          projectDiscription
-          name
-          memberCount
-          member {
-            id
-            name
-          }
-          id
-          endDate
-        }
-      }
-      `
+      query:getProjectList
     });
-    setProjects(data.projects)
+    setProjects(data.projects);
+    console.log(data.projects)
   }
  
   useEffect(()=>{
@@ -58,7 +39,7 @@ const Projects = () => {
   
   const [viewMode, setViewMode] = useState(true);
  
-  const [selectedFeild, setSelectedFeild] = useState<string>()
+  const [selectedFeild, setSelectedFeild] = useState<string | null >()
  const openDetails=(title:string)=>{
    setSelectedFeild(title)
    setShowModalEdit(true);
@@ -67,10 +48,12 @@ const Projects = () => {
 
   function handleCloseModal() {
     setShowModal(false);
+   
   }
   
   function handleCloseModalEdit() {
     setShowModalEdit(false);
+    setSelectedFeild(null);
   }
   
   const clickS = "bg-[#5773FF] text-white";
@@ -151,8 +134,8 @@ const Projects = () => {
           )}
         </div>
       </div>
-   <ModalProject  showModal={showModal} handleCloseModal={handleCloseModal} />
-   <EditModalProject title={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/>
+   <ModalProject fetchProjects={fetchProjects}  showModal={showModal} handleCloseModal={handleCloseModal} />
+  {selectedFeild && <EditModalProject id={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/> } 
      
    <Footer/>
  </LayoutNav>

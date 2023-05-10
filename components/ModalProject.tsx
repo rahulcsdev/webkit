@@ -13,14 +13,16 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DateInput  } from "@mantine/dates";
+import { addProject, getProjectList, getUser } from "@/services";
 interface typeModal {
   showModal: Boolean;
-  handleCloseModal: any;
+  handleCloseModal: ()=>void;
+  fetchProjects:()=>void;
 }
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const ModalProject = (props: typeModal) => {
-  const { showModal, handleCloseModal } = props;
+  const { showModal, handleCloseModal,fetchProjects } = props;
   const [options, setOptions] = useState<any>([]);
    const [users, setUsers] = useState<any>([])
    const [showManager, setShowManager] = useState(false)
@@ -40,14 +42,7 @@ const managerOptions=(users:any)=>{
     const getEmployeeInfo = async() => {
       const info: string[] = [];
       const {data}=await client.query({
-        query:gql`
-        query Query {
-         users {
-           id
-           name
-         }
-       }
-        `
+        query:getUser
         });
         // console.log(data)
  
@@ -58,7 +53,7 @@ const managerOptions=(users:any)=>{
       
       setOptions(info);
     };
-
+    
     getEmployeeInfo();
   }, []);
   const form = useForm({
@@ -93,41 +88,58 @@ let membersObj=[{id:formData.members[0]}];
 for(let i=1;i<formData.members.length;i++){
    membersObj.push({id:formData.members[i]})
 }
-// console.log(membersObj)
-// console.log(JSON.stringify(membersObj))
+ 
+const withManager={
+  "name": formData.projectName,
+  "projectManager": {
+    "connect": {
+      "id": formData.projectManager 
+    }
+  },
+  "startDate": formData.startDate.toISOString(),
+  "projectType": formData.type,
+  "status": formData.status,
+  "endDate": formData.endDate.toISOString(),
+  "projectDiscription": formData.desc,
+  
+  "member": {
+    "connect":membersObj
+  }
+}
+const withOutManager={
+  "name": formData.projectName,
+  "startDate": formData.startDate.toISOString(),
+  "projectType": formData.type,
+  "status": formData.status,
+  "endDate": formData.endDate.toISOString(),
+  "projectDiscription": formData.desc,
+  
+  "member": {
+    "connect":membersObj
+  }
+}
   try {
     const {data}=await client.mutate({
-      mutation:gql`
-      mutation Mutation($data: ProjectCreateInput!) {
-        createProject(data: $data) {
-          id
-          member {
-            id
-          }
-        }
-      }
-      `,
+      mutation:addProject,
       variables:{
-        data: {
-          "name": formData.projectName,
-          "projectManager": {
-            "connect": {
-              "id": formData.projectManager
-            }
-          },
-          "startDate": formData.startDate.toISOString(),
-          "projectType": formData.type,
-          "status": formData.status,
-          "endDate": formData.endDate.toISOString(),
-          "projectDiscription": formData.desc,
-          
-          "member": {
-            "connect":membersObj
-          }
-        }
+        data:formData.projectManager===''?withOutManager:withManager
+      },
+      refetchQueries:[{query:getProjectList}],
+      update:(cache,{data})=>{
+        const newProject = data.createProject;
+        const {projects}=cache.readQuery({query:getProjectList})
+        const updatedProjects=[...projects,newProject]
+        cache.writeQuery({
+          query: getProjectList,
+          data: { projects: updatedProjects },
+        });
+        // console.log(updatedProjects)
       }
+     
     });
-    console.log(data)
+    // console.log(data);
+    fetchProjects();
+    handleCloseModal();
   } catch (error) {
     console.log(error);
   }
