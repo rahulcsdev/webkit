@@ -5,7 +5,6 @@ import { multiselect, relationship, timestamp } from "@keystone-6/core/fields";
 
 export default list({
   access: allowAll,
-
   fields: {
     name: text(),
 
@@ -32,10 +31,8 @@ export default list({
         { label: "Backlog", value: "Backlog" },
       ],
     }),
-
     status: select({
       defaultValue: "Open",
-
       options: [
         { label: "Open", value: "Open" },
 
@@ -48,7 +45,6 @@ export default list({
         { label: "Completed", value: "Completed" },
       ],
     }),
-
     milestone: relationship({
       ref: "Milestone",
     }),
@@ -56,20 +52,31 @@ export default list({
     startDate: text(),
 
     endDate: text(),
-
     estimateTime: text(),
-
     taskType: select({
       defaultValue: "No priority",
-
       options: [
         { label: "Frontend", value: "Frontend" },
-
         { label: "Backend", value: "Backend" },
-
         { label: "Bug", value: "Bug" },
       ],
     }),
+  },
+  hooks: {
+    resolveInput: async ({ resolvedData, context }) => {
+      const milestoneId = resolvedData.milestone?.connect.id;
+      const milestone = await context.db.Milestone.findOne({
+        where: { id: milestoneId },
+      });
+      const count = await context.db.Task.count({});
+      if (milestone) {
+        var milestoneCode = milestone.code;
+      }
+      return {
+        ...resolvedData,
+        code: `${milestoneCode}-TSK000${count + 1}`,
+      };
+    },
   },
   ui: {
     labelField: "name",

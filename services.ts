@@ -120,9 +120,6 @@ export const getProjectList = gql`
         id
         name
       }
-      ... on UserAuthenticationWithPasswordFailure {
-        message
-      }
     }
   }
 `;
