@@ -148,7 +148,7 @@ const EmployeesCardData = (props: Props) => {
           </div>
           <div className="mt-2">
             <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-              {user.role}
+              {user.role} <br/>
             </p>
           </div>
         </div>

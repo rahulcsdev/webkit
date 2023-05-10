@@ -49,25 +49,17 @@ query Query {
   }
 }`;
 
-const CREATE_USER_MUTATION = gql`
-mutation Mutation($data: UserCreateInput!) {
-  createUser(data: $data) {
-    id
-    name
-    email
-    password {
-      isSet
-    }
-    designation
-    role
-    dateOfJoining
-    reportingManager {
-      id
-      name
-    }
-  }
-}
-`;
+interface formTypes {
+  // id: string;
+  name: string;
+  email: string;
+  password:string;
+  designation: string;
+  role: string;
+  dateofjoining: Date;
+  reportingmanager: string;
+};
+
 
 
 
@@ -78,17 +70,56 @@ const roboto = Manrope({ weight: "400", subsets: ["latin"] });
 const ModalEmployee = (props: typeModal) => {
   const { showModal, handleCloseModal  } = props;
 
-  const [roles, setRoles] = useState<Array<string>>([]);
+  const [users, setUsers] = useState<any>([])
+  const [options, setOptions] = useState<any>([]);
+
+  const reportManager=[
+    { value: "", label: "Choose One",disabled: true  },
+  ];
+
+  const reportingManagerOptions=(users:any)=>{
+    console.log(users);
+    for (let i = 0; i < users?.length; i++) {
+      reportManager.push({value: users[i]?.id,label:users[i].name,disabled:false});
+    }
+    setUsers(reportManager);
+  }
+  
+    useEffect(() => {
+      const getReportingReportingManger = async() => {
+        const info: string[] = [];
+        const {data}=await client.query({
+          query:gql`
+          query Query {
+           users {
+             id
+             name
+           }
+         }
+          `
+          });
+          // console.log(data)
+   
+          reportingManagerOptions(data.users);
+        for (let i = 0; i < data?.users?.length; i++) {
+          info.push(data?.users[i]?.name);
+        }
+        
+        setOptions(info);
+      };
+  
+      getReportingReportingManger();
+    }, []);
 
  
-  const data1=[
-        { value: "", label: "Reporting Manager" },
-        { value: "usermanagement", label: "User Management" },
-        { value: 'projectmanagement', label: 'Project Management' },
-        { value: 'taskmanagement', label: 'Task Management' },
-        { value: "milestonemanagement", label: "Milestone Management" },
-        { value: 'timeentrymanagement', label: 'TimeEntry Management' },
-      ]
+  // const data1=[
+  //       { value: "", label: "Reporting Manager" },
+  //       { value: "usermanagement", label: "User Management" },
+  //       { value: 'projectmanagement', label: 'Project Management' },
+  //       { value: 'taskmanagement', label: 'Task Management' },
+  //       { value: "milestonemanagement", label: "Milestone Management" },
+  //       { value: 'timeentrymanagement', label: 'TimeEntry Management' },
+  //     ]
   
 
   const form = useForm({
@@ -99,7 +130,7 @@ const ModalEmployee = (props: typeModal) => {
       password: "",
       designation: "",
       role: "",
-      dateofjoining: "",
+      dateofjoining: new Date(),
       reportingmanager: "",
     },
 
@@ -110,25 +141,75 @@ const ModalEmployee = (props: typeModal) => {
     // },
   });
 
-
-  const [value, setValue] = useState<Date | null>(null);
-
-  const {  data } = useQuery(finduserRole, {
-    client,
+  const createUser = async(formData:formTypes) =>{
+    console.log(formData);
+    try{
+      const {data}= await client.mutate({
+        mutation:gql`
+        mutation Mutation($data: UserCreateInput!) {
+          createUser(data: $data) {
+            id
+            name
+            email
+            password {
+              isSet
+            }
+            designation
+            role
+            reportingManager {
+              id
+              name
+            }
+          }
+        }
+        `,
+        variables:{
+          data : {
+            "name": formData.name,
+            "email": formData.email,
+            "password":formData.password,
+            "designation": formData.designation,
+            "role": formData.role,
+            "dateOfJoining": formData.dateofjoining.toISOString(),
+            "reportingManager": {
+              "connect": {
+                "id": formData.reportingmanager
+              }
+            },
+          }
+    }
+    
   });
+  console.log(data)
+} catch (error) {
+  console.log(error);
+}
+  }
 
-  const options = data?.users.map((user: User) => ({
-    value: user.id,
-    label: `${user.name}`,
-  }));
+
+  // const [value, setValue] = useState<Date | null>(null);
+
+  // const {  data } = useQuery(finduserRole, {
+  //   client,
+  // });
+
+  // const options = data?.users.map((user: User) => ({
+  //   value: user.id,
+  //   label: `${user.name}`,
+  // }));
+
+  // // if (loading) return <p>Loading...</p>;
+  // // if (error) return <p>Error :</p>;
+
+  // const [createUser ,  { loading, error } ] = useMutation(CREATE_USER_MUTATION);
 
   // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error :</p>;
+  // if (error) return <p>Error: {error.message}</p>;
 
-  const [createUser ,  { loading, error } ] = useMutation(CREATE_USER_MUTATION);
+ 
+ 
+  
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
 
 
  
@@ -155,7 +236,7 @@ const ModalEmployee = (props: typeModal) => {
               </div>
               <div className="p-4">
 
-                <form onSubmit={form.onSubmit((values) => createUser({ variables: { data: values } }))}>
+                <form onSubmit={form.onSubmit((values) =>createUser(values))}>
                   <Grid>
                     <Grid.Col span={12}>
                       <TextInput
@@ -230,7 +311,7 @@ const ModalEmployee = (props: typeModal) => {
                       <Select
                         label="Reporting Manager"
                         variant="filled"
-                        placeholder="Role"
+                        placeholder="Reporting Manager"
                         radius="md"
                         size="lg"
                         labelProps={{
@@ -239,8 +320,8 @@ const ModalEmployee = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
-                        data={[{ value: "", label: "Reporting Manager" }, ...options]}
-                        {...form.getInputProps("role")}
+                        data={users}
+                        {...form.getInputProps("reportingmanager")}
                       />
                     </Grid.Col>
 
@@ -267,10 +348,22 @@ const ModalEmployee = (props: typeModal) => {
 
                     <Grid.Col span={6}>
                     <MultiSelect
-                      data={data1}
+                      data={[
+                        { label: 'Admin', value: 'admin' },
+      
+                        { label: 'User Management', value: 'userManagement' },
+                       
+                        { label: 'Project Management', value: 'projectManagement' },
+                        { label: 'Task Management', value: 'taskManagement' },
+                       
+                        { label: 'Milestone Management', value: 'milestoneManagement' },
+                       
+                        { label: 'Time Entry Management', value: 'timeEntryManagement' },
+                      ]}
                      
                       label="Role"
                       placeholder="Role"
+                      searchable
                       radius="md"
                         size="lg"
                         labelProps={{
