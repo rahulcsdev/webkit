@@ -88,10 +88,28 @@ hooks:{
       if(milestone){
         var milestoneCode= milestone.code;
       }
-      return {
-        ...resolvedData,
-        code: `${milestoneCode}-TSK000${count+1}`
+      const tasks=await context.db.Task.findMany({}) 
+      if(tasks.length===0){
+        return {
+          ...resolvedData,
+          code: `${milestoneCode}-TSKOOO1`
+        }
       }
+      const lastTask= tasks[tasks.length-1];
+          const lastCode =lastTask.code;
+          let splitCode = lastCode.split("-")
+          const taskCode= splitCode[splitCode.length-1]
+          let matches = taskCode.match(/^([a-zA-Z]+)(\d+)$/);
+      if (matches) {
+        let prefix = matches[1];
+        let number = parseInt(matches[2]);
+        number++;
+        var newCode = prefix + number.toString().padStart(matches[2].length, '0');
+      }
+          return {
+            ...resolvedData,
+            code: `${milestoneCode}-${newCode}`
+          }
   }
 },
  ui: {

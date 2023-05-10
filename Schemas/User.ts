@@ -48,10 +48,21 @@ reportingManager:relationship({
 hooks:{
   resolveInput: async({ resolvedData,context }) => {
     const count = await context.db.User.count({});
-    return {
-      ...resolvedData,
-      code: `USRO${count+1}`
-    }
+    const Users=await context.db.User.findMany({})
+    const lastUser = Users[Users.length-1]
+    let  lastCode = lastUser?.code
+    console.log(lastCode)
+    let matches = lastCode.match(/^([a-zA-Z]+)(\d+)$/);
+if (matches) {
+  let prefix = matches[1];
+  let number = parseInt(matches[2]);
+  number++;
+  var newCode = prefix + number.toString().padStart(matches[2].length, '0');
+}
+      return {
+        ...resolvedData,
+        code: newCode
+      }
   }
 },
 });

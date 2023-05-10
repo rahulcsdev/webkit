@@ -68,10 +68,28 @@ export default list({
       if(task){
         var taskCode= task.code;
       }
-      return {
-        ...resolvedData,
-        code: `${taskCode}-TSE00${count+1}`
+      const timeEnteries=await context.db.TimeEntery.findMany({}) 
+      if(timeEnteries.length===0){
+        return {
+          ...resolvedData,
+          code: `${taskCode}-TSEOO1`
+        }
       }
+      const lastTimeEntry= timeEnteries[timeEnteries.length-1];
+          const lastCode =lastTimeEntry?.code;
+          let splitCode = lastCode.split("-")
+          const timeEnteryCode= splitCode[splitCode.length-1]
+          let matches = timeEnteryCode.match(/^([a-zA-Z]+)(\d+)$/);
+      if (matches) {
+        let prefix = matches[1];
+        let number = parseInt(matches[2]);
+        number++;
+        var newCode = prefix + number.toString().padStart(matches[2].length, '0');
+      }
+          return {
+            ...resolvedData,
+            code: `${taskCode}-${newCode}`
+          }
   }
 }, 
     

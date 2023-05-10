@@ -42,12 +42,28 @@ hooks:{
             var projectCode= project.code;
             console.log(projectCode)
           }
-      
-          const count = await context.db.Milestone.count({});  
-    
+          const milestone=await context.db.Milestone.findMany({}) 
+          if(milestone.length===0){
+            return {
+              ...resolvedData,
+              code: `${projectCode}-MST001`
+            }
+          }
+
+          const lastMilestone= milestone[milestone.length-1];
+          const lastCode =lastMilestone.code;
+          let splitCode = lastCode.split("-")
+          const milestoneCode= splitCode[splitCode.length-1]
+          let matches = milestoneCode.match(/^([a-zA-Z]+)(\d+)$/);
+      if (matches) {
+        let prefix = matches[1];
+        let number = parseInt(matches[2]);
+        number++;
+        var newCode = prefix + number.toString().padStart(matches[2].length, '0');
+      }
           return {
             ...resolvedData,
-            code: `${projectCode}-MST00${count+1}`
+            code: `${projectCode}-${newCode}`
           }
   },
 },

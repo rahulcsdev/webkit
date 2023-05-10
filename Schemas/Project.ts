@@ -68,15 +68,15 @@ export default list({
  labelField: 'name', },
 hooks:{
     resolveInput: async({ resolvedData,context }) => {
-      const Users=await context.db.Project.findMany({})
-      if(Users.length===0){
+      const Projects=await context.db.Project.findMany({})
+      if(Projects.length===0){
         return {
           ...resolvedData,
           code: 'PROO1'
         }
       }
-      const lastUser = Users[Users.length-1]
-      let  lastCode = lastUser?.code
+      const lastProject = Projects[Projects.length-1]
+      let  lastCode = lastProject?.code
     let matches = lastCode.match(/^([a-zA-Z]+)(\d+)$/);
 if (matches) {
   let prefix = matches[1];
