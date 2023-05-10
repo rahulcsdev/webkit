@@ -1,11 +1,8 @@
 import { gql } from "@apollo/client";
 
-
-export const addProject=gql` 
-mutation Mutation($data: ProjectCreateInput!) {
-  createProject(data: $data) {
-    id
-    member {
+export const addProject = gql`
+  mutation ($data: ProjectCreateInput!) {
+    createProject(data: $data) {
       id
     }
   }
@@ -101,29 +98,44 @@ mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
 }
 `;
 
-
-
-export const  getProjectList= gql`
-query Query {
-  projects {
-    status
-    startDate
-    projectType
-    projectManager {
-      name
-      id
-    }
-    projectDiscription
-    name
-    memberCount
-    member {
+export const getProjectList = gql`
+  query (
+    $where: ProjectWhereInput
+    $take: Int
+    $skip: Int
+    $orderBy: [ProjectOrderByInput!]
+  ) {
+    projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
       id
       name
+      status
+      projectType
+      code
+      startDate
+      endDate
+      member {
+        name
+      }
+      projectManager {
+        id
+        name
+      }
     }
-    id
-    endDate
   }
-}
+`;
+
+export const getUser = gql`
+  query (
+    $where: UserWhereInput
+    $take: Int
+    $skip: Int
+    $orderBy: [UserOrderByInput!]
+  ) {
+    users(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
+      id
+      name
+    }
+  }
 `;
 
 export const getMilestone = gql`
@@ -173,12 +185,9 @@ export const getTask = gql`
       endDate
       taskType
       estimateTime
-      
-      }
-    }`  
- 
- 
- 
+    }
+  }
+`;
 
 export const getProjectDetail = gql`
   query ($where: ProjectWhereUniqueInput!) {
