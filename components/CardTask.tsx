@@ -2,18 +2,19 @@ import React, { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 const CardTask = (props: any) => {
   const [show, setShow] = useState(false);
+  const { data } = props;
   return (
     <div className="mb-6 ">
       <div className="border rounded-3xl p-4 flex justify-between items-center cursor-pointer hover:bg-[#eee]">
         <div className="flex items-center">
           <div className="border-2 border-[#b4b4b4] w-4 h-4 rounded-full mr-4" />
           <h1 className="text-[1.3rem] font-semibold capitalize">
-            {props.heading}
+            {data.name}
           </h1>
         </div>
         <div className="flex items-center   ">
           <button className="px-4 py-2 text-orange-800 bg-orange-200 rounded-3xl mx-4  ">
-            Design
+            {data.status}
           </button>
           <button
             className="px-2 py-2 text-orange-800 bg-orange-400 rounded-xl cursor-pointer  "
@@ -34,7 +35,7 @@ const CardTask = (props: any) => {
             </div>
             <div>
               <button className="px-4 py-2 text-orange-800 bg-orange-400 rounded-3xl mx-4  ">
-                Design
+                {data?.status}
               </button>
             </div>
           </div>

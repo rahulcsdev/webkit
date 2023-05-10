@@ -17,7 +17,11 @@ import ProjectCardCol from "../../components/ProjectCardCol";
 import Footer from "../../components/Footer";
 import LayoutNav from "../../components/LayoutNav";
 import { useRouter } from "next/navigation";
+import { gql, useQuery, useMutation } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
+import client from "../../apolloClient/index";
+import { getProjects,getTasks,addTimesheets } from "@/services";
+
 const Projects = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -27,7 +31,53 @@ const Projects = () => {
   const [viewMode, setViewMode] = useState(true);
   const [entry, setEntries] = useState<Array<object>>([]);
   const [selectValue, setSelectValue] = useState<Array<string>>([]);
+  const [projects, setProjects] = useState<Array<string>>([]);
+  const [tasks, setTasks] = useState<Array<string>>([]);
   const router = useRouter();
+
+  const getDropDownsData = async () => {
+    await client
+      .query({
+        query: getProjects,
+      })
+      .then((res: any) => {
+        console.log("res", res);
+        setProjects(
+          res.data.projects.map((item: any) => {
+            return {
+              value: item.id,
+              label: item.name,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+
+    await client
+      .query({
+        query: getTasks,
+      })
+      .then((res: any) => {
+        console.log("res", res);
+        setTasks(
+          res.data.tasks.map((item: any) => {
+            return {
+              value: item.id,
+              label: item.name,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
+  useEffect(() => {
+    getDropDownsData();
+  }, []);
 
   const form = useForm({
     initialValues: {
@@ -56,7 +106,7 @@ const Projects = () => {
   const addEntry = () => {
     // // console.log('form',form.values)
 
-    console.log("form");
+    console.log("form", form.values);
     form.insertListItem("entries", {
       project: "",
       task: "",
@@ -73,8 +123,66 @@ const Projects = () => {
     // setEntries([...entry, name]);
   };
 
-  const saveAll = () => {
+  const saveAll = async() => {
     console.log("here are all entries", form.values);
+
+    const isEmptyTask = form.values.entries.filter((item) => item.task === "");
+
+    const isEmptyProject = form.values.entries.filter((item) => item.project === "");
+
+    const isEmptyActivity = form.values.entries.filter((item) => item.activity === "");
+
+    const isDurationZero = form.values.entries.filter((item) => item.duration === 0);
+
+    if (isEmptyTask.length > 0) {
+      return alert("please select task");
+    }
+
+    if (isEmptyProject.length > 0) {
+      return alert("please select all project");
+    }
+
+    if (isEmptyActivity.length > 0) {
+      return alert("please select activity");
+    }
+    if (isDurationZero.length > 0) {
+      return alert("duration can notbe zero");
+    }
+
+    const Mutatedata = form.values.entries.map((item) => {
+      return {
+        activities: item.activity,
+        duration: item.duration.toString(),
+        task: {
+          connect: {
+            id: item.task,
+          },
+        },
+        date: form.values.date,
+        project: {
+          connect: {
+            id: item.project,
+          },
+        },
+      };
+    });
+
+    
+    await client
+      .mutate({
+        mutation: addTimesheets,
+         variables:{
+         data:Mutatedata
+       }
+      })
+      .then((res: any) => {
+        console.log("timelines added", res);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+
+  
   };
 
   function handleCloseModal() {
@@ -160,7 +268,7 @@ const Projects = () => {
                           className="z-40 ..."
                           searchable
                           nothingFound="No options"
-                          data={["React", "Angular", "Svelte", "Vue"]}
+                          data={projects}
                           dropdownPosition="top"
                           withinPortal
                           {...form.getInputProps(`entries.${0}.project`)}
@@ -173,7 +281,7 @@ const Projects = () => {
                           dropdownPosition="top"
                           withinPortal
                           nothingFound="No options"
-                          data={["React", "Angular", "Svelte", "Vue"]}
+                          data={tasks}
                           {...form.getInputProps(`entries.${0}.task`)}
                         />
                       </td>
@@ -208,7 +316,7 @@ const Projects = () => {
                                   placeholder="choose project"
                                   searchable
                                   nothingFound="No options"
-                                  data={["React", "Angular", "Svelte", "Vue"]}
+                                  data={projects}
                                   {...form.getInputProps(
                                     `entries.${index}.project`
                                   )}
@@ -219,7 +327,7 @@ const Projects = () => {
                                   placeholder="choose Task"
                                   searchable
                                   nothingFound="No options"
-                                  data={["React", "Angular", "Svelte", "Vue"]}
+                                  data={tasks}
                                   {...form.getInputProps(
                                     `entries.${index}.task`
                                   )}

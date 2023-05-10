@@ -3,8 +3,8 @@ import { Manrope, Roboto } from "next/font/google";
 import { BiTask } from "react-icons/bi";
 import ProgressBar from "./ProgressBar";
 import Image from "next/image";
-import pic1 from "../assets/picOne.jpg";
-import pic2 from "../assets/picTwo.jpg";
+import pic1 from "../public/assets/picOne.jpg";
+import pic2 from "../public/assets/picTwo.jpg";
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 interface cardType {

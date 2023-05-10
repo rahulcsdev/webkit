@@ -19,11 +19,10 @@ model User {
   password                    String?
   designation                 String       @default("")
   role                        Json         @default("[]")
-  dateOfJoining               String       @default("")
+  dateOfJoining               DateTime?
   reportingManager            User?        @relation("User_reportingManager", fields: [reportingManagerId], references: [id])
   reportingManagerId          String?      @map("reportingManager")
-  createdDate                 DateTime?    @default("2023-05-08T07:44:51.902Z")
-  createdDate                 DateTime?    @default("2023-05-08T07:32:14.445Z")
+  createdDate                 DateTime?    @default("2023-05-10T06:04:28.835Z")
   from_User_reportingManager  User[]       @relation("User_reportingManager")
   from_Project_member         Project[]    @relation("Project_member")
   from_Project_projectManager Project[]    @relation("Project_projectManager")
@@ -43,8 +42,8 @@ model Project {
   status                  String?      @default("New")
   projectType             String?
   projectDiscription      String       @default("")
-  startDate               String       @default("")
-  endDate                 String       @default("")
+  startDate               DateTime?    @default("2023-05-10T06:04:28.836Z")
+  endDate                 DateTime?    @default("2023-05-10T06:04:28.836Z")
   from_Milestone_project  Milestone[]  @relation("Milestone_project")
   from_Task_project       Task[]       @relation("Task_project")
   from_TimeEntery_project TimeEntery[] @relation("TimeEntery_project")

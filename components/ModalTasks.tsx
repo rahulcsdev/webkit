@@ -6,11 +6,14 @@ import { DatePickerInput } from "@mantine/dates";
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: any;
+  project?: Array<{}>;
+  milestones?: Array<{}>;
 }
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Manrope({ weight: "400", subsets: ["latin"] });
 const ModalTasks = (props: typeModal) => {
-  const { showModal, handleCloseModal } = props;
+  const { showModal, handleCloseModal, milestones, project } = props;
+  console.log("milestone", milestones);
   const formData = useForm({
     initialValues: {
       task: "",
@@ -55,11 +58,21 @@ const ModalTasks = (props: typeModal) => {
                     radius="md"
                     {...formData.getInputProps("task")}
                   />
-                  <TextInput
-                    radius="md"
+                  <Select
                     label="Project"
-                    placeholder="Enter Project name"
-                    {...formData.getInputProps("project")}
+                    placeholder="Enter Project Name"
+                    radius="md"
+                    // data={project?.map((item: any, index: number) => {
+                    //   value: item?.name,
+                    //   label:item?.name
+                    // })}
+                    data={[
+                      { value: "urgent", label: "Urgent" },
+                      { value: "high", label: "High" },
+                      { value: "no priority", label: "No Priority" },
+                      { value: "backlog", label: "BackLog" },
+                    ]}
+                    {...formData.getInputProps("priority")}
                   />
                   <Box className="col-span-2 grid grid-cols-3 gap-5 place-content-center">
                     <Select
@@ -125,6 +138,12 @@ const ModalTasks = (props: typeModal) => {
                   <TextInput
                     label="Estimate Time"
                     placeholder="Enter Estimate time"
+                    radius="md"
+                    {...formData.getInputProps("estimate_Time")}
+                  />
+                  <TextInput
+                    label="Project Manager"
+                    placeholder="Project Manager"
                     radius="md"
                     {...formData.getInputProps("estimate_Time")}
                   />
