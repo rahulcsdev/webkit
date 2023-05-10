@@ -7,6 +7,8 @@ import Task from './Schemas/Task';
 import TimeEntery from './Schemas/TimeEntery';
 import dotenv from "dotenv"
 dotenv.config({path:"./.env"});
+import { superAdminData } from './seed';
+import type { Context } from '.keystone/types';
 
 export default config(
     withAuth( {
@@ -16,7 +18,11 @@ export default config(
       db: {
           provider: 'postgresql',
           url: process.env.PostgressUrl||"",
+          onConnect: async (context: Context) => {
+            await superAdminData(context);
+          },
       },
+      
       lists: {
         User,
         Project,

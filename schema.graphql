@@ -160,6 +160,7 @@ type Project {
   name: String
   member(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   memberCount(where: UserWhereInput! = {}): Int
+  createAt: DateTime
   projectManager: User
   code: String
   status: String
@@ -180,6 +181,7 @@ input ProjectWhereInput {
   id: IDFilter
   name: StringFilter
   member: UserManyRelationFilter
+  createAt: DateTimeNullableFilter
   projectManager: UserWhereInput
   code: StringFilter
   status: StringNullableFilter
@@ -227,6 +229,7 @@ input NestedStringNullableFilter {
 input ProjectOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  createAt: OrderDirection
   code: OrderDirection
   status: OrderDirection
   projectType: OrderDirection
@@ -238,6 +241,7 @@ input ProjectOrderByInput {
 input ProjectUpdateInput {
   name: String
   member: UserRelateToManyForUpdateInput
+  createAt: DateTime
   projectManager: UserRelateToOneForUpdateInput
   code: String
   status: String
@@ -262,6 +266,7 @@ input ProjectUpdateArgs {
 input ProjectCreateInput {
   name: String
   member: UserRelateToManyForCreateInput
+  createAt: DateTime
   projectManager: UserRelateToOneForCreateInput
   code: String
   status: String
