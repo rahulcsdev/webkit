@@ -94,7 +94,12 @@ const Tasks = () => {
 
       <div className="bg-white p-4 mt-4 shadow-md w-[95%] mx-auto rounded-3xl">
         {tasklist.map((item: any, index: number) => (
-          <CardTask data={item} key={index} />
+          <CardTask
+            item={item}
+            key={index}
+            projects={projectList}
+            milestones={milestoneList}
+          />
         ))}
       </div>
     </div>

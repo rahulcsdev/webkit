@@ -46,7 +46,6 @@ const ModalTasks = (props: typeModal) => {
     },
   });
 
-  console.log(ProjectArr);
   const formSubmitHandler = (value: any) => {
     console.log(value);
     createTask({
