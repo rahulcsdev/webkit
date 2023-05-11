@@ -14,50 +14,27 @@ import { employeesData } from "../utils/data";
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const manrope = Manrope({ weight: "500", subsets: ["latin"] });
 
-interface employeeCartType {
-  id: number;
+interface UserData {
+  id: string;
   name: string;
   email: string;
-  phone: string;
+  password:string;
   designation: string;
-  reportingmanager : string;
+  role: string;
+  code: string;
+  dateofjoining: Date;
+  reportingmanager: string;
 }
 
 interface Props {
-  data: employeeCartType;
-  index?: number; // Define index here
+  
+  data: UserData;
+  openDetails:any
 }
 
 const EmployeesCardListView = (props: Props) => {
-  const { data, index = 0 } = props;
-  // const router = useRouter();
-
-  const [showEditModal, setShowEditModal] = useState(false);
-
-  function handleCloseModal() {
-    setShowEditModal(false);
-  }
-
-  const handleEdit = (
-    id: number,
-    name: string,
-    email: string,
-    phone: string,
-    designation: string,
-    reportingmanager :string
-  ) => {
-    localStorage.setItem("Name", name);
-    localStorage.setItem("email", email);
-    localStorage.setItem("Phone", phone);
-    localStorage.setItem("Designation", designation);
-    localStorage.setItem("Reportingmanager",reportingmanager);
-    localStorage.setItem("id", id.toString());
-
-    setShowEditModal(true);
-    console.log(index);
-
-    console.log(designation);
-  };
+  const { data:{id , name , email ,code , designation , role  } , openDetails } = props;
+ 
 
   return (
     <>
@@ -73,7 +50,7 @@ const EmployeesCardListView = (props: Props) => {
             </div>
             <div className="mt-2">
               <h4 className={`mb-3 text-2xl text-center ${manrope.className}`}>
-                {data.name}
+                {name}
               </h4>
             </div>
           </div>
@@ -86,7 +63,7 @@ const EmployeesCardListView = (props: Props) => {
             </div>
             <div className="mt-2">
               <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-                {data.email}
+                {email}
               </p>
             </div>
           </div>
@@ -99,11 +76,23 @@ const EmployeesCardListView = (props: Props) => {
             </div>
             <div className="mt-2">
               <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-                {data.phone}
+                {code}
               </p>
             </div>
           </div>
 
+          <div className="flex items-center space-x-1 w-[20%]">
+            <div>
+              <div className="p-2 rounded-full cursor-pointer bg-[grey] text-xl text-white mr-4">
+                <BsPersonCheck />
+              </div>
+            </div>
+            <div className="mt-2">
+              <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
+                {designation}
+              </p>
+            </div>
+          </div>
           <div className="flex items-center space-x-1 w-[25%]">
             <div>
               <div className="p-2 rounded-full cursor-pointer bg-[grey] text-xl text-white mr-4">
@@ -112,12 +101,12 @@ const EmployeesCardListView = (props: Props) => {
             </div>
             <div className="mt-2">
               <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-                {data.designation}
+                {role}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-1 w-[10%]">
+          <div className="flex items-center space-x-1 w-[5%]">
             <div>
               {/* {
              employeesData.map((item , index)=>(
@@ -129,16 +118,8 @@ const EmployeesCardListView = (props: Props) => {
 
               <div
                 className="p-2 rounded-full cursor-pointer bg-[#5776ff] text-xl text-white mr-4 "
-                onClick={() =>
-                  handleEdit(
-                    data.id,
-                    data.name,
-                    data.email,
-                    data.phone,
-                    data.designation,
-                    data.reportingmanager
-                  )
-                }
+               
+                onClick={()=>openDetails(id)}
               >
                 <MdOutlineModeEditOutline />
               </div>
@@ -152,11 +133,9 @@ const EmployeesCardListView = (props: Props) => {
           </div>
         </div>
       </div>
-      <ModalEditEmployee
-        showEditModal={showEditModal}
-        handleCloseModal={handleCloseModal}
-        employee={employeesData[index]}
-      />
+
+      
+     
     </>
   );
 };

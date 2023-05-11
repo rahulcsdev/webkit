@@ -13,32 +13,34 @@ import client from '../apolloClient/index';
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const manrope = Manrope({ weight: "500", subsets: ["latin"] });
 
-interface employeeCartType {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  designation: string;
-}
+// interface employeeCartType {
+//   id: number;
+//   name: string;
+//   email: string;
+//   phone: string;
+//   designation: string;
+// }
 
 interface UserData {
   id: string;
   name: string;
   email: string;
-  code: string;
+  password:string;
   designation: string;
-  role:string;
-  dateOfJoining:string;
+  code:string;
+  role: string;
+  dateofjoining: Date;
+  reportingmanager: string;
 }
 
 
 interface Props {
-  data: employeeCartType;
-  user: UserData;
+  // data: employeeCartType;
+  data: UserData;
 }
 
 const EmployeesCardData = (props: Props) => {
-  const {  user } = props;
+  const { data } = props;
 
   // const [datas, setData] = useState<UserData[]>([]);
 
@@ -96,7 +98,7 @@ const EmployeesCardData = (props: Props) => {
           </div>
           <div className="mt-2">
             <h4 className={`mb-3 text-2xl text-center ${manrope.className}`}>
-              {user.name}
+              {data.name}
             </h4>
           </div>
         </div>
@@ -109,7 +111,7 @@ const EmployeesCardData = (props: Props) => {
           </div>
           <div className="mt-2">
             <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-              {user.email}
+              {data.email}
             </p>
           </div>
         </div>
@@ -122,7 +124,7 @@ const EmployeesCardData = (props: Props) => {
           </div>
           <div className="mt-2">
             <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-              {user.code}
+              {data.code}
             </p>
           </div>
         </div>
@@ -135,7 +137,7 @@ const EmployeesCardData = (props: Props) => {
           </div>
           <div className="mt-2">
             <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-              {user.designation}
+              {data.designation}
             </p>
           </div>
         </div>
@@ -148,7 +150,7 @@ const EmployeesCardData = (props: Props) => {
           </div>
           <div className="mt-2">
             <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-              {user.role} <br/>
+              {data.role} <br/>
             </p>
           </div>
         </div>

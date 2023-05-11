@@ -18,12 +18,14 @@ import { useForm } from "@mantine/form";
 import { DateInput } from '@mantine/dates';
 import { gql, useQuery, useMutation } from "@apollo/client";
 import client from '../apolloClient/index';
+import { addNewUser , getUser, getUserDetails, getspecficUser } from '../services';
 // import { finduserRole } from '../services';
 
 
 interface typeModal {
   showModal: Boolean;
-  handleCloseModal: any;
+  handleCloseModal: ()=>void;
+  fetchUser:()=>void;
 }
 
 interface UserData {
@@ -39,6 +41,11 @@ interface User {
   name: string;
   role: string;
 }
+
+interface QueryData {
+  users: User[];
+}
+
 
 const finduserRole =gql`
 query Query {
@@ -68,7 +75,7 @@ const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Manrope({ weight: "400", subsets: ["latin"] });
 
 const ModalEmployee = (props: typeModal) => {
-  const { showModal, handleCloseModal  } = props;
+  const { fetchUser ,showModal, handleCloseModal   } = props;
 
   const [users, setUsers] = useState<any>([])
   const [options, setOptions] = useState<any>([]);
@@ -89,14 +96,7 @@ const ModalEmployee = (props: typeModal) => {
       const getReportingReportingManger = async() => {
         const info: string[] = [];
         const {data}=await client.query({
-          query:gql`
-          query Query {
-           users {
-             id
-             name
-           }
-         }
-          `
+          query:getUser
           });
           // console.log(data)
    
@@ -111,16 +111,6 @@ const ModalEmployee = (props: typeModal) => {
       getReportingReportingManger();
     }, []);
 
- 
-  // const data1=[
-  //       { value: "", label: "Reporting Manager" },
-  //       { value: "usermanagement", label: "User Management" },
-  //       { value: 'projectmanagement', label: 'Project Management' },
-  //       { value: 'taskmanagement', label: 'Task Management' },
-  //       { value: "milestonemanagement", label: "Milestone Management" },
-  //       { value: 'timeentrymanagement', label: 'TimeEntry Management' },
-  //     ]
-  
 
   const form = useForm({
     initialValues: {
@@ -141,73 +131,48 @@ const ModalEmployee = (props: typeModal) => {
     // },
   });
 
-  const createUser = async(formData:formTypes) =>{
+
+ 
+ 
+  const createUser = async (formData: formTypes) => {
     console.log(formData);
-    try{
-      const {data}= await client.mutate({
-        mutation:gql`
-        mutation Mutation($data: UserCreateInput!) {
-          createUser(data: $data) {
-            id
-            name
-            email
-            password {
-              isSet
-            }
-            designation
-            role
-            reportingManager {
-              id
-              name
-            }
-          }
-        }
-        `,
-        variables:{
-          data : {
-            "name": formData.name,
-            "email": formData.email,
-            "password":formData.password,
-            "designation": formData.designation,
-            "role": formData.role,
-            "dateOfJoining": formData.dateofjoining.toISOString(),
-            "reportingManager": {
-              "connect": {
-                "id": formData.reportingmanager
+    try {
+      const { data } = await client.mutate({
+        mutation: addNewUser,
+        variables: {
+          data: {
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+            designation: formData.designation,
+            role: formData.role,
+            dateOfJoining: formData.dateofjoining.toISOString(),
+            reportingManager: {
+              connect: {
+                id: formData.reportingmanager
               }
-            },
+            }
           }
+        },
+        refetchQueries: [{ query: getUserDetails }],
+        update: (cache, { data }) => {
+          const newEmployee = data.createUser;
+          const { users } = cache.readQuery({ query: getUserDetails });
+          const updatedUsers = [...users, newEmployee];
+          cache.writeQuery({
+            query: getUserDetails,
+            data: { users: updatedUsers },
+          });
+        }
+      });
+  
+      console.log(data);
+      fetchUser();
+      handleCloseModal();
+    } catch (error) {
+      console.log(error);
     }
-    
-  });
-  console.log(data)
-} catch (error) {
-  console.log(error);
-}
   }
-
-
-  // const [value, setValue] = useState<Date | null>(null);
-
-  // const {  data } = useQuery(finduserRole, {
-  //   client,
-  // });
-
-  // const options = data?.users.map((user: User) => ({
-  //   value: user.id,
-  //   label: `${user.name}`,
-  // }));
-
-  // // if (loading) return <p>Loading...</p>;
-  // // if (error) return <p>Error :</p>;
-
-  // const [createUser ,  { loading, error } ] = useMutation(CREATE_USER_MUTATION);
-
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error.message}</p>;
-
- 
- 
   
 
 
@@ -390,8 +355,8 @@ const ModalEmployee = (props: typeModal) => {
                         <Button type="submit" size="lg" className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none">
                           Save
                         </Button>
-                        <Button type="submit" size="lg" className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none">
-                          Cancel
+                        <Button type="submit" size="lg" className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none"  onClick={() => form.reset()} >
+                          Reset
                         </Button>
                       </Group>
                     </Grid.Col>

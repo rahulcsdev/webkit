@@ -1,6 +1,26 @@
 import { gql } from '@apollo/client';
 
 
+export const addNewUser=gql`
+mutation Mutation($data: UserCreateInput!) {
+  createUser(data: $data) {
+    id
+    name
+    email
+    password {
+      isSet
+    }
+    designation
+    role
+    reportingManager {
+      id
+      name
+    }
+  }
+}
+`;
+
+
 export const addProject=gql` 
  mutation ($data: ProjectCreateInput!) {
   createProject(data: $data) {
@@ -115,6 +135,22 @@ query ($where:UserWhereInput , $take: Int, $skip: Int, $orderBy: [UserOrderByInp
     name
     }
   }`
+
+export const getUserDetails=gql`
+query Query {
+  users {
+    id
+    name
+    email
+    code
+    designation
+    role
+    dateOfJoining
+  }
+}
+`;
+
+
 
 
     export const getMilestone=gql`

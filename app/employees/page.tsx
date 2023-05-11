@@ -10,6 +10,9 @@ import EmployeesCardData from "../../components/EmployeesCardData";
 import EmployeesCardListView from "../../components/EmployeeCardListView";
 import { gql } from "@apollo/client";
 import client from '../../apolloClient/index';
+import { getUserDetails } from "@/services";
+import ModalEditEmployee from "@/components/ModalEditEmployee";
+
 
 
 
@@ -20,10 +23,12 @@ interface UserData {
   id: string;
   name: string;
   email: string;
-  code: string;
+  password:string;
   designation: string;
-  role:string;
-  dateOfJoining:string;
+  code:string;
+  role: string;
+  dateofjoining: Date;
+  reportingmanager: string;
 }
 
 
@@ -62,12 +67,30 @@ const Employees = () => {
     const [isExpand, setIsExpand] = useState(false);
      const [value,setValue]=useState('progress');
      const [showModal, setShowModal] = useState(false);
+     const [showModalEdit, setShowModalEdit] = useState(false);
+  
+
+     const [selectedFeild, setSelectedFeild] = useState<string | null >()
+     const openDetails=(id:string)=>{
+       setSelectedFeild(id)
+       setShowModalEdit(true);
+      //  console.log(id);
+       
+    
+     }
 
    
   
   function handleCloseModal(){
     setShowModal(false);
   }
+
+  function handleCloseModalEdit() {
+    setShowModalEdit(false);
+    setSelectedFeild(null);
+  }
+
+
   const clickS = "bg-[#5773FF] text-white";
 const notClickS = "bg-gray-100 text-black";
 
@@ -75,29 +98,17 @@ const notClickS = "bg-gray-100 text-black";
 
 const [datas, setData] = useState<UserData[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await client.query({
-        query: gql`
-          query Query {
-            users {
-              id
-              name
-              email
-              code
-              designation
-              role
-              dateOfJoining
-            }
-          }
-        `,
-      });
-      setData(data.users);
-      console.log(data.users);
-      
-    };
+const fetchUser = async () => {
+  const { data } = await client.query({
+    query: getUserDetails
+  });
+  setData(data.users);
+  console.log(data.users);
+  
+};
 
-    fetchData();
+  useEffect(() => {
+    fetchUser();
   }, []);
 
 
@@ -132,7 +143,7 @@ const [datas, setData] = useState<UserData[]>([]);
           </div>
         </div>
       </div>
-      <ModalEmployee showModal={showModal} handleCloseModal={handleCloseModal} />
+     
 
      {/* Employee Cards */}
 
@@ -140,21 +151,30 @@ const [datas, setData] = useState<UserData[]>([]);
      {viewMode ? (
      <div className="grid grid-cols-3  gap-5">
      {datas.map((item, index) => (
-          <EmployeesCardData key={index} user={item} />
+          <EmployeesCardData key={index} data={item} />
         ))}
      </div>
        ) : (
         <div className="grid grid-cols-1 gap-5">
-        {employeesData.map((item, index) => (
-             <EmployeesCardListView key={index} data={item} index={index}  />
+        {datas.map((item, index) => (
+             <EmployeesCardListView openDetails={openDetails} key={index} data={item}    />
            ))}
         </div>
          )}
      </div>
 
-    
+     
 
     </div>
+    <ModalEmployee fetchUser={fetchUser} showModal={showModal} handleCloseModal={handleCloseModal} />
+
+    { selectedFeild && ( <ModalEditEmployee
+        fetchUser={fetchUser}
+        id={selectedFeild}
+        showEditModal={showModalEdit}
+        handleCloseModal={handleCloseModalEdit}
+        // employee={employeesData[index]}
+      />)}
     </>    
   )
 }
