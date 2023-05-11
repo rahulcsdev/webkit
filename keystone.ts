@@ -5,6 +5,7 @@ import Project from './Schemas/Project';
 import Milestone from './Schemas/Milestone';
 import Task from './Schemas/Task';
 import TimeEntery from './Schemas/TimeEntery';
+import File from './Schemas/File';
 import dotenv from "dotenv"
 dotenv.config({path:"./.env"});
 import { superAdminData } from './seed';
@@ -29,6 +30,7 @@ export default config(
         Milestone,
         Task,
         TimeEntery,
+        File
       },
       storage: {
         my_local_images: {

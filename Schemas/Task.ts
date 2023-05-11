@@ -26,6 +26,7 @@ export default list({
  name: text(),
 
  code:text({defaultValue: ' ',ui: { itemView: { fieldMode: 'read' } }}),
+ File: relationship({ ref: 'File', many: true }),
 
  discription: text(),
 

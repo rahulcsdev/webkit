@@ -34,6 +34,7 @@ export default list({
      code:text({defaultValue: ' ',ui: { itemView: { fieldMode: 'read' } }}),
      password: password(),
       designation: text(),
+      File: relationship({ ref: 'File', many: true }),
       
 role: multiselect({
       

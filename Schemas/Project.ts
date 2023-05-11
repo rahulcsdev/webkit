@@ -47,6 +47,7 @@ export default list({
  }),
 
  code:text({defaultValue: ' ',ui: { itemView: { fieldMode: 'read' } }}),
+ File: relationship({ ref: 'File', many: true }),
 
  status: select({
 

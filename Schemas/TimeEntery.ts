@@ -29,6 +29,7 @@ export default list({
           activities: text(),
     
     code:text({defaultValue: ' ',ui: { itemView: { fieldMode: 'read' } }}),
+    File: relationship({ ref: 'File', many: true }),
     
      duration: text(),
     
