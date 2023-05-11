@@ -192,7 +192,6 @@ const ModalTasks = (props: typeModal) => {
                     radius="md"
                     {...formData.getInputProps("estimate_Time")}
                   />
-
                   <Textarea
                     label="Desciption"
                     placeholder="Enter description"
