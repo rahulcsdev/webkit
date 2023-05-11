@@ -1,11 +1,13 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { Button, Box } from "@mantine/core";
 import Navbar from "../../components/Navbar";
 import ModalTasks from "../../components/ModalTasks";
 import CardTask from "../../components/CardTask";
 import { getTask } from "../../services";
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import client from "@/apolloClient";
+
 const Tasks = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -16,6 +18,8 @@ const Tasks = () => {
   const [projectList, setProjectList] = useState([]);
   const [milestoneList, setMileStoneList] = useState([]);
   const [tasklist, setTaskList] = useState([]);
+  console.log("20", tasklist);
+  const [page, setPage] = useState(0);
   const handleDateChange = (date: Date) => {
     setDate(date);
   };
@@ -41,13 +45,13 @@ const Tasks = () => {
   function handleCloseModal() {
     setShowModal(false);
   }
-  const Taskquery = async () => {
-    const { data } = await client.query({
-      query: getTask,
-    });
-
-    setTaskList(data?.tasks);
-  };
+  const { data, loading, error } = useQuery(getTask, {
+    client,
+    variables: {
+      take: 8,
+      skip: page * 8,
+    },
+  });
 
   const lists = async () => {
     const { data } = await client.query({
@@ -68,9 +72,13 @@ const Tasks = () => {
     setProjectList(data?.projects);
   };
   useEffect(() => {
-    Taskquery();
+    if (data) {
+      setTaskList(data?.tasks);
+    }
+    console.log(data);
     lists();
-  }, []);
+  }, [data, loading]);
+
   return (
     <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
       <Navbar isScrolling={isScrolling} />
@@ -92,16 +100,35 @@ const Tasks = () => {
         milestones={milestoneList}
       />
 
-      <div className="bg-white p-4 mt-4 shadow-md w-[95%] mx-auto rounded-3xl">
-        {tasklist.map((item: any, index: number) => (
-          <CardTask
-            item={item}
-            key={index}
-            projects={projectList}
-            milestones={milestoneList}
-          />
-        ))}
+      <div className="  bg-white p-4 mt-4 shadow-md w-[95%] mx-auto rounded-3xl">
+        {tasklist &&
+          tasklist.map((item: any, index: number) => (
+            <CardTask
+              item={item}
+              key={index}
+              projects={projectList}
+              milestones={milestoneList}
+            />
+          ))}
       </div>
+      <Box className="col-span-2  flex justify-center items-center my-4">
+        <Button
+          type="submit"
+          radius="md"
+          className="bg-blue-500"
+          disabled={!page}
+          onClick={() => setPage((prev: any) => prev - 1)}
+        >
+          Previous
+        </Button>
+        <Button
+          radius="md"
+          className="px-4 py-2 mx-4 bg-blue-500 "
+          onClick={() => setPage((prev: any) => prev + 1)}
+        >
+          Next
+        </Button>
+      </Box>
     </div>
   );
 };

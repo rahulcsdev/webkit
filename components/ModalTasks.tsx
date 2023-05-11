@@ -4,8 +4,7 @@ import { useForm } from "@mantine/form";
 import { TextInput, Select, Box, Button, Textarea } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useMutation } from "@apollo/client";
-import { addTask } from "../services";
-
+import { addTask, getTask } from "../services";
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: any;
@@ -72,9 +71,9 @@ const ModalTasks = (props: typeModal) => {
           taskType: value?.task_type,
         },
       },
+      refetchQueries: [{ query: getTask }],
     });
   };
-  // console.log("form data", formData);
 
   return (
     <>

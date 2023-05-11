@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { FiEdit } from "react-icons/fi";
 import { useForm } from "@mantine/form";
 import { TextInput, Select, Box, Button, Textarea } from "@mantine/core";
 import { useMutation } from "@apollo/client";
-import { updateTask } from "../services";
+import { updateTask, getTask } from "../services";
 const CardTask = (props: any) => {
   const [show, setShow] = useState(false);
   const [Taskupdate, { data, error, loading }] = useMutation(updateTask);
@@ -32,6 +32,7 @@ const CardTask = (props: any) => {
       description: item?.discription,
     },
   });
+  console.log(item);
 
   const updateTaskHandler = (value: any) => {
     console.log("value", value);
@@ -61,9 +62,11 @@ const CardTask = (props: any) => {
           taskType: item?.task,
         },
       },
+      refetchQueries: [{ query: getTask }],
     });
+    setShow(!show);
   };
-
+  console.log("item", item);
   return (
     <div className="mb-6 ">
       <div className="border rounded-3xl p-4 flex justify-between items-center cursor-pointer hover:bg-[#eee]">
@@ -85,7 +88,7 @@ const CardTask = (props: any) => {
           </button>
         </div>
       </div>
-      {show && (
+      {show && item && (
         <form onSubmit={formData.onSubmit(updateTaskHandler)}>
           <div className="bg-[#ededed] mt-4 rounded-3xl p-4">
             <div className="flex justify-between items-center border-b-2  py-4 ">
