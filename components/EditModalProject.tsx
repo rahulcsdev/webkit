@@ -17,7 +17,7 @@ import { DateInput  } from "@mantine/dates";
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: ()=>void;
-  id:any,
+  id:string;
   fetchProjects:()=>void
 }
 interface formTypes{
@@ -150,7 +150,9 @@ const updateProject=async(formData:formTypes)=>{
     "status": formData.status,
     "endDate": formData.endDate.toISOString(),
     "projectDiscription": formData.desc,
-    
+    "projectManager": {
+      "disconnect": true,
+    },
     "member": {
       "connect":membersObj
     }
@@ -161,9 +163,10 @@ const updateProject=async(formData:formTypes)=>{
       mutation:updateProject,
       variables:{
          "where": {
-          "id": id
+          "id": id,
+          "data":formData.projectManager===''?withOutManager:withManager
         },
-        "data":formData.projectManager===''?withOutManager:withManager
+   
       
       },
     });
