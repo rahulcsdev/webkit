@@ -135,7 +135,7 @@ const Projects = () => {
         </div>
       </div>
    <ModalProject fetchProjects={fetchProjects}  showModal={showModal} handleCloseModal={handleCloseModal} />
-  {selectedFeild && <EditModalProject id={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/> } 
+  {selectedFeild && <EditModalProject fetchProjects={fetchProjects} id={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/> } 
      
    <Footer/>
  </LayoutNav>

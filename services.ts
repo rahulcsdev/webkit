@@ -50,15 +50,12 @@ export const updateAllTimeEntry = gql`
 `;
 
 export const updateProject = gql`
-  mutation ($where: ProjectWhereUniqueInput!, $data: ProjectUpdateInput!) {
-    updateProject(where: $where, data: $data) {
-      id
-      member {
-        id
-        name
-      }
-    }
+mutation Mutation($where: ProjectWhereUniqueInput!, $data: ProjectUpdateInput!) {
+  updateProject(where: $where, data: $data) {
+    id
+    code
   }
+}
 `;
 export const updateTask = gql`
   mutation ($where: TaskWhereUniqueInput!, $data: TaskUpdateInput!) {
@@ -106,20 +103,22 @@ export const getProjectList = gql`
     $orderBy: [ProjectOrderByInput!]
   ) {
     projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
+      status
+    startDate
+    projectType
+    projectManager {
+      name
+      id
+    }
+    projectDiscription
+    name
+    memberCount
+    member {
       id
       name
-      status
-      projectType
-      code
-      startDate
-      endDate
-      member {
-        name
-      }
-      projectManager {
-        id
-        name
-      }
+    }
+    id
+    endDate
     }
   }
 `;
@@ -192,20 +191,23 @@ export const getTask = gql`
 export const getProjectDetail = gql`
   query ($where: ProjectWhereUniqueInput!) {
     project(where: $where) {
-      id
-      name
-      member {
-        id
-        name
-      }
-      projectManager {
-        id
-        name
-      }
-      projectType
       status
-      startDate
-      endDate
+    startDate
+    projectType
+    projectManager {
+      name
+      id
+    }
+    projectDiscription
+    name
+    memberCount
+    member {
+      name
+      id
+    }
+    id
+    endDate
+    code
     }
   }
 `;

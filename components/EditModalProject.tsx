@@ -3,7 +3,7 @@ import { Manrope, Roboto } from "next/font/google";
 import Multiselect from "multiselect-react-dropdown";
 import { employeeData, projectsData } from "../utils/data";
 import client from "@/apolloClient";
-import { getProjectDetail, getUser } from "@/services";
+import { getProjectDetail, getProjectList, getUser } from "@/services";
  
 import {
  
@@ -16,8 +16,9 @@ import { useForm } from "@mantine/form";
 import { DateInput  } from "@mantine/dates";
 interface typeModal {
   showModal: Boolean;
-  handleCloseModal: any;
+  handleCloseModal: ()=>void;
   id:any,
+  fetchProjects:()=>void
 }
 interface formTypes{
   projectName: string,
@@ -32,8 +33,8 @@ interface formTypes{
 }
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Manrope({ weight: "400", subsets: ["latin"] });
-const EditModalProject = (props: typeModal) => {
-  const { showModal, handleCloseModal,id } = props;
+const EditModalProject:React.FC<typeModal> = ({fetchProjects,handleCloseModal,id,showModal}) => {
+  
   const [options, setOptions] = useState<any>([]);
  const [details, setDetails] = useState<object>([]);
  const [users, setUsers] = useState<any>([])
@@ -78,7 +79,14 @@ const fetchDetails=async()=>{
       }
      });
      form.setFieldValue('projectName',data.project.name);
-     
+     form.setFieldValue('startDate',new Date(data.project.startDate));
+     form.setFieldValue('endDate',new Date(data.project.endDate));
+     form.setFieldValue('status',data.project.status);
+     form.setFieldValue('type',data.project.projectType);
+     form.setFieldValue('desc',data.project.projectDiscription);
+     form.setFieldValue('code',data.project.code);
+     data.project.projectManager && form.setFieldValue('projectManager', data.project.projectManager.id);
+     form.setFieldValue('members',data.project.member.map((item)=>item.id))
      console.log(data);
      setDetails(data?.project);
      setLoading(false)
@@ -110,8 +118,61 @@ useEffect(()=>{
   fetchDetails();
 },[id])
 
-const updateProject=(formData:formTypes)=>{
+const updateProject=async(formData:formTypes)=>{
+  console.log(formData)
+  let membersObj=[{id:formData.members[0]}];
 
+  for(let i=1;i<formData.members.length;i++){
+     membersObj.push({id:formData.members[i]})
+  }
+   
+  const withManager={
+    "name": formData.projectName,
+    "projectManager": {
+      "connect": {
+        "id": formData.projectManager 
+      }
+    },
+    "startDate": formData.startDate.toISOString(),
+    "projectType": formData.type,
+    "status": formData.status,
+    "endDate": formData.endDate.toISOString(),
+    "projectDiscription": formData.desc,
+    
+    "member": {
+      "connect":membersObj
+    }
+  }
+  const withOutManager={
+    "name": formData.projectName,
+    "startDate": formData.startDate.toISOString(),
+    "projectType": formData.type,
+    "status": formData.status,
+    "endDate": formData.endDate.toISOString(),
+    "projectDiscription": formData.desc,
+    
+    "member": {
+      "connect":membersObj
+    }
+  }
+
+  try {
+    const {data}=await client.mutate({
+      mutation:updateProject,
+      variables:{
+         "where": {
+          "id": id
+        },
+        "data":formData.projectManager===''?withOutManager:withManager
+      
+      },
+    });
+      console.log(data);
+      fetchProjects();
+      handleCloseModal();
+  } catch (error) {
+    console.log(error)
+  }
 }
  
   return (
@@ -131,7 +192,7 @@ const updateProject=(formData:formTypes)=>{
                 <h2
                   className={`font-semibold mb-2 text-center text-[#140F49] text-2xl ${manrope.className}`}
                 >
-                  New Project
+                  Edit Project
                 </h2>
               </div>
               <div className="p-4">
@@ -173,6 +234,7 @@ const updateProject=(formData:formTypes)=>{
                     <div className="basis-1/2">
                     <Select
                         label="Status"
+                        
                         placeholder="Pick one"
                         data={[
                           { label: "New", value: "New" },
@@ -218,14 +280,26 @@ const updateProject=(formData:formTypes)=>{
                   
                   </div>
                   }
-                     <Input.Wrapper label="Project Description" required mx="auto">
+                         <div className="relative w-full">
+                    <Input.Wrapper label="Project Description" required mx="auto">
                       <Input
                         required
-                        placeholder="Enter your Project description"
+                        placeholder="Enter your Project Desc"
                         {...form.getInputProps("desc")}
                         // sx={{padding:'2px 1px',backgroundColor:'green'}}
                       />
                     </Input.Wrapper>
+                  </div>
+                         <div className="relative w-full">
+                    <Input.Wrapper label="Project Code" required mx="auto">
+                      <Input
+                        required
+                        placeholder="Enter your Project code"
+                        {...form.getInputProps("code")}
+                        // sx={{padding:'2px 1px',backgroundColor:'green'}}
+                      />
+                    </Input.Wrapper>
+                  </div>
                   <MultiSelect
                     data={users}
                     label="Members"
