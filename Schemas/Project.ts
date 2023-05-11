@@ -2,9 +2,23 @@ import { list } from '@keystone-6/core';
 import { text, password, select } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
 import { multiselect ,relationship,timestamp } from '@keystone-6/core/fields';
+type Session = {
+  data: {
+    role: string[];
+  };
+};
+function isAdmin({ session }: { session: Session | undefined }) {
+   
+   const admin= session?.data.role.filter((el) => el=== "admin"||"projectManagement")
+   console.log(admin)
+  if (!session) return false;
+  if (admin?.length!=0) return true;
+  return false;
+}
 
 export default list({
-    access: allowAll, fields: {
+    access: allowAll,
+     fields: {
    name: text(),
 
     member: relationship({
@@ -76,13 +90,14 @@ hooks:{
         }
       }
       const lastProject = Projects[Projects.length-1]
-      let  lastCode = lastProject?.code
+      let  lastCode:any = lastProject?.code
     let matches = lastCode.match(/^([a-zA-Z]+)(\d+)$/);
+    let newCode = '';
 if (matches) {
   let prefix = matches[1];
   let number = parseInt(matches[2]);
   number++;
-  var newCode = prefix + number.toString().padStart(matches[2].length, '0');
+  newCode = prefix + number.toString().padStart(matches[2].length, '0');
 }
       return {
         ...resolvedData,
