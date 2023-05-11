@@ -30,6 +30,27 @@ export default config(
         Task,
         TimeEntery,
       },
+      storage: {
+        my_local_images: {
+          kind: 'local',
+          type: 'image',
+          generateUrl: path => `http://localhost:3000/images${path}`,
+           serverRoute: {
+            path: '/images',
+          },
+         storagePath: 'public/images',
+        },
+        my_local_file: {
+          kind: 'local',
+          type: 'file',
+          generateUrl: path => `http://localhost:3000/file${path}`,
+           serverRoute: {
+            path: '/file',
+          },
+         storagePath: 'public/file',
+        },
+       
+      },
       session,
       ui: {
         isAccessAllowed: (context:any) => !!context.session?.data,

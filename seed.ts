@@ -1,5 +1,6 @@
 import type { Context } from '.keystone/types';
 import dotenv from "dotenv"
+import { role } from './utils/data';
 dotenv.config({path:"./.env"});
 export async function superAdminData(context: Context) {
   if ((await context.db.User.count()) > 0) return;
@@ -9,8 +10,8 @@ export async function superAdminData(context: Context) {
         name: process.env.name,
         email: process.env.email,
         password:process.env.password,
-        role: process.env.role,
-        code:process.env.code
+        code:process.env.code,
+        role:["admin"]
     }
   ] as const) {
     await context.db.User.createOne({ data: user });
