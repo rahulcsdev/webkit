@@ -17,7 +17,12 @@ function isAdmin({ session }: { session: Session | undefined }) {
 }
 
 export default list({
-    access: allowAll,
+  access:{operation: {
+    create: isAdmin,
+    query:isAdmin,
+    update:isAdmin,
+    delete:isAdmin
+  }},
      fields: {
    name: text(),
 
