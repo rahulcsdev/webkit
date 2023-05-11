@@ -9,7 +9,7 @@ type Session = {
 };
 function isAdmin({ session }: { session: Session | undefined }) {
    
-   const admin= session?.data.role.filter((el) => el=== "admin"||"taskManagement")
+   const admin= session?.data.role.filter((el) => ["admin", "taskManagement"].includes(el))
    console.log(admin)
   if (!session) return false;
   if (admin?.length!=0) return true;
@@ -18,7 +18,6 @@ function isAdmin({ session }: { session: Session | undefined }) {
 export default list({
   access:{operation: {
     create: isAdmin,
-    query:isAdmin,
     update:isAdmin,
     delete:isAdmin
   }},
@@ -26,7 +25,7 @@ export default list({
 
  name: text(),
 
- code: text(),
+ code:text({defaultValue: ' ',ui: { itemView: { fieldMode: 'read' } }}),
 
  discription: text(),
 
@@ -109,7 +108,7 @@ hooks:{
       if(tasks.length===0){
         return {
           ...resolvedData,
-          code: `${milestoneCode}-TSKOOO1`
+          code: `${milestoneCode}-TSK0001`
         }
       }
       const lastTask= tasks[tasks.length-1];
@@ -119,10 +118,12 @@ hooks:{
           let matches = taskCode.match(/^([a-zA-Z]+)(\d+)$/);
           let newCode=""
       if (matches) {
-        let prefix = matches[1];
-        let number = parseInt(matches[2]);
-        number++;
-         newCode = prefix + number.toString().padStart(matches[2].length, '0');
+         let prefix = matches[1];
+  let numberStr = matches[2];
+  let number = parseInt(numberStr);
+  number++;
+  let newNumberStr = number.toString().padStart(numberStr.length, '0');
+ newCode= prefix + newNumberStr;
       }
           return {
             ...resolvedData,

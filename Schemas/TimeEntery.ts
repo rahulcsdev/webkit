@@ -9,7 +9,7 @@ type Session = {
 };
 function isAdmin({ session }: { session: Session | undefined }) {
    
-   const admin= session?.data.role.filter((el) => el=== "admin"||"timeEntryManagement")
+   const admin= session?.data.role.filter((el) => ["admin", "timeEntryManagement"].includes(el))
    console.log(admin)
   if (!session) return false;
   if (admin?.length!=0) return true;
@@ -19,7 +19,6 @@ function isAdmin({ session }: { session: Session | undefined }) {
 export default list({
   access:{operation: {
     create: isAdmin,
-    query:isAdmin,
     update:isAdmin,
     delete:isAdmin
   }},
@@ -29,7 +28,7 @@ export default list({
          task: relationship({ref: 'Task',}),
           activities: text(),
     
-     code:text(),
+    code:text({defaultValue: ' ',ui: { itemView: { fieldMode: 'read' } }}),
     
      duration: text(),
     
@@ -90,7 +89,7 @@ export default list({
       if(timeEnteries.length===0){
         return {
           ...resolvedData,
-          code: `${taskCode}-TSEOO1`
+          code: `${taskCode}-TSE0001`
         }
       }
       const lastTimeEntry= timeEnteries[timeEnteries.length-1];
@@ -100,10 +99,12 @@ export default list({
           let matches = timeEnteryCode.match(/^([a-zA-Z]+)(\d+)$/);
         let newCode=""
           if (matches) {
-        let prefix = matches[1];
-        let number = parseInt(matches[2]);
-        number++;
-         newCode = prefix + number.toString().padStart(matches[2].length, '0');
+            let prefix = matches[1];
+            let numberStr = matches[2];
+            let number = parseInt(numberStr);
+            number++;
+            let newNumberStr = number.toString().padStart(numberStr.length, '0');
+           newCode= prefix + newNumberStr;
       }
           return {
             ...resolvedData,

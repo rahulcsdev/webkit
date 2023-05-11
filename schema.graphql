@@ -7,7 +7,6 @@ type User {
   email: String
   code: String
   password: PasswordState
-  file: FileFieldOutput
   designation: String
   role: [String!]
   dateOfJoining: DateTime
@@ -17,12 +16,6 @@ type User {
 
 type PasswordState {
   isSet: Boolean!
-}
-
-type FileFieldOutput {
-  filename: String!
-  filesize: Int!
-  url: String!
 }
 
 scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
@@ -127,20 +120,12 @@ input UserUpdateInput {
   email: String
   code: String
   password: String
-  file: FileFieldInput
   designation: String
   role: [String!]
   dateOfJoining: DateTime
   reportingManager: UserRelateToOneForUpdateInput
   createdDate: DateTime
 }
-
-input FileFieldInput {
-  upload: Upload!
-}
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 input UserRelateToOneForUpdateInput {
   create: UserCreateInput
@@ -158,7 +143,6 @@ input UserCreateInput {
   email: String
   code: String
   password: String
-  file: FileFieldInput
   designation: String
   role: [String!]
   dateOfJoining: DateTime

@@ -2,33 +2,36 @@ import { list } from '@keystone-6/core';
 import { text, password, select ,file} from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
 import { multiselect ,relationship,timestamp} from '@keystone-6/core/fields';
-
+import type { Context } from '.keystone/types';
 type Session = {
   data: {
     role: string[];
   };
 };
-function isAdmin({ session }: { session: Session | undefined }) {
-   
-   const admin= session?.data.role.filter((el) => el=== "admin"||"userManagement")
-   console.log(admin)
-  if (!session) return false;
-  if (admin?.length!=0) return true;
+async function isAdmin({ session }: { session: Session | undefined }) {
+  const admin = session?.data.role.filter((el) => ["admin", "userManagement"].includes(el));
+  console.log(admin);
+  if (!session) {
+    return true;
+  }
+  console.log(admin);
+  if (admin?.length !== 0) {
+    return true;
+  }
   return false;
 }
 
 
 export default list({
     access:{operation: {
-      create: isAdmin,
-      query:isAdmin,
+      create:isAdmin,
       update:isAdmin,
-      delete:isAdmin
+      delete:isAdmin,
     }},
     fields: {
       name: text(),
      email:  text({ validation: { isRequired: true }, isIndexed: 'unique' }),
-     code:text(),
+     code:text({defaultValue: ' ',ui: { itemView: { fieldMode: 'read' } }}),
      password: password(),
       designation: text(),
       
@@ -70,7 +73,7 @@ hooks:{
     if(Users.length==0){
       return {
         ...resolvedData,
-        code: "USRO1"
+        code: "USR001"
       }
     }
     const lastUser = Users[Users.length-1]
@@ -79,9 +82,11 @@ hooks:{
     let newCode="";
 if (matches) {
   let prefix = matches[1];
-  let number = parseInt(matches[2]);
+  let numberStr = matches[2];
+  let number = parseInt(numberStr);
   number++;
-  newCode = prefix + number.toString().padStart(matches[2].length, '0');
+  let newNumberStr = number.toString().padStart(numberStr.length, '0');
+ newCode= prefix + newNumberStr;
 }
       return {
         ...resolvedData,

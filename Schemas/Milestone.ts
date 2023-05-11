@@ -9,7 +9,7 @@ type Session = {
 };
 function isAdmin({ session }: { session: Session | undefined }) {
    
-   const admin= session?.data.role.filter((el) => el=== "admin"||"milestoneManagement")
+   const admin= session?.data.role.filter((el) =>["admin","milestoneManagement"].includes(el))
    console.log(admin)
   if (!session) return false;
   if (admin?.length!=0) return true;
@@ -21,7 +21,6 @@ function isAdmin({ session }: { session: Session | undefined }) {
 export default list({
   access:{operation: {
     create: isAdmin,
-    query:isAdmin,
     update:isAdmin,
     delete:isAdmin
   }},
@@ -29,7 +28,7 @@ export default list({
  fields: { name: text(), project: relationship({ref: 'Project',
     
     }),
-    code:text(),
+    code:text({defaultValue: ' ',ui: { itemView: { fieldMode: 'read' } }}),
     status:select({
     
     defaultValue: "New",
@@ -78,9 +77,11 @@ hooks:{
           let newCode=""
       if (matches) {
         let prefix = matches[1];
-        let number = parseInt(matches[2]);
+        let numberStr = matches[2];
+        let number = parseInt(numberStr);
         number++;
-        newCode = prefix + number.toString().padStart(matches[2].length, '0');
+        let newNumberStr = number.toString().padStart(numberStr.length, '0');
+       newCode= prefix + newNumberStr;
       }
           return {
             ...resolvedData,
