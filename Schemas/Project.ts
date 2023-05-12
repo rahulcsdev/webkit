@@ -1,78 +1,71 @@
-import { list } from '@keystone-6/core';
-import { text, password, select } from '@keystone-6/core/fields';
-import { allowAll } from '@keystone-6/core/access';
-import { multiselect ,relationship,timestamp } from '@keystone-6/core/fields';
+import { list } from "@keystone-6/core";
+import { text, password, select } from "@keystone-6/core/fields";
+import { allowAll } from "@keystone-6/core/access";
+import { multiselect, relationship, timestamp } from "@keystone-6/core/fields";
 
 export default list({
-    access: allowAll, fields: {
-   name: text(),
+  access: allowAll,
+  fields: {
+    name: text(),
 
     member: relationship({
+      ref: "User",
 
-  ref: 'User',
+      many: true,
+    }),
 
-  many: true,
+    projectManager: relationship({
+      ref: "User",
 
- }),
+      ui: {
+        hideCreate: true,
+      },
+    }),
 
- projectManager: relationship({
+    code: text(),
 
-  ref: 'User',
+    status: select({
+      defaultValue: "New",
+      options: [
+        { label: "New", value: "New" },
 
- ui: {
+        { label: "Design Developement", value: "Design Developement" },
 
-  hideCreate: true,
+        { label: "In Progress", value: "In Progress" },
 
+        { label: "Testing", value: "Testing" },
+
+        { label: "Completed", value: "Completed" },
+      ],
+    }),
+
+    projectType: select({
+      options: [
+        { label: "Internal project", value: "Internal project" },
+
+        { label: "Hourly cost project", value: "Hourly cost project" },
+
+        { label: "Fixed cost project", value: "Fixed cost project" },
+      ],
+    }),
+
+    projectDiscription: text(),
+
+    startDate: timestamp({ defaultValue: new Date().toISOString() }),
+
+    endDate: timestamp({ defaultValue: new Date().toISOString() }),
   },
-
- }),
-
- code: text(),
-
- status: select({
-
-  defaultValue: "New",
-  options: [
-
-  { label: 'New', value: 'New' },
-
-  { label: 'Design Developement', value: 'Design Developement' },
-
-  { label: 'In Progress', value: 'In Progress' },
-
-  { label: 'Testing', value: 'Testing' },
-
-  { label: 'Completed', value: 'Completed' },
-
- ],
-
- }),
-
- projectType: select({
-
-  options: [{ label: 'Internal project', value: 'Internal project' },
-
-  { label: 'Hourly cost project', value: 'Hourly cost project' },
-
-  { label: 'Fixed cost project', value: 'Fixed cost project' }]
-
- }),
-
- projectDiscription: text(),
-
- startDate: timestamp({ defaultValue: new Date().toISOString() }),
-
- endDate: timestamp({ defaultValue: new Date().toISOString() }), }, ui: {
-
- labelField: 'name', },
-hooks:{
-    resolveInput: async({ resolvedData,context }) => {
+  ui: {
+    labelField: "name",
+  },
+  hooks: {
+    resolveInput: async ({ resolvedData, context }) => {
       const count = await context.db.Project.count({});
-      
+
       return {
         ...resolvedData,
-        code: `PROO${count+1}`
-      }
-    }
+        code: `PROO${count + 1}`,
+      };
+    },
   },
-})
+});

@@ -9,11 +9,11 @@ export const addProject = gql`
 `;
 
 export const addMilestone = gql`
-  mutation ($data: MilestoneCreateInput!) {
-    createMilestone(data: $data) {
-      id
-    }
+mutation CreateMilestone($data: MilestoneCreateInput!) {
+  createMilestone(data: $data) {
+    id
   }
+}
 `;
 
 export const addTask = gql`
@@ -50,7 +50,10 @@ export const updateAllTimeEntry = gql`
 `;
 
 export const updateProject = gql`
-mutation Mutation($where: ProjectWhereUniqueInput!, $data: ProjectUpdateInput!) {
+mutation Mutation(
+  $where: ProjectWhereUniqueInput!
+  $data: ProjectUpdateInput!
+) {
   updateProject(where: $where, data: $data) {
     id
     code
@@ -64,12 +67,14 @@ export const updateTask = gql`
     }
   }
 `;
-export const updateMilestone = gql`
-  mutation ($where: MilestoneWhereUniqueInput!, $data: MilestoneUpdateInput!) {
-    updateMilestone(where: $where, data: $data) {
-      id
-    }
+export const UPDATE_MILESTONE = gql`
+mutation Mutation($where: MilestoneWhereUniqueInput!, $data: MilestoneUpdateInput!) {
+  updateMilestone(where: $where, data: $data) {
+    id
+    name
+    code
   }
+}
 `;
 export const updateTimeEntry = gql`
   mutation ($where: TimeEntryWhereUniqueInput!, $data: TimeEntryUpdateInput!) {
@@ -237,19 +242,20 @@ export const getTaskDetails = gql`
   }
 `;
 export const getMilestoneDetails = gql`
-  query ($where: MilestoneWhereUniqueInput!) {
-    milestone(where: $where) {
-      id
-      project {
-        name
-        id
-      }
+query Query($where: MilestoneWhereUniqueInput!) {
+  milestone(where: $where) {
+    code
+    endDate
+    id
+    name
+    project {
       name
-      startDate
-      endDate
-      status
+      id
     }
+    startDate
+    status
   }
+}
 `;
 export const getspecficUser = gql`
 query User($id: ID!) {

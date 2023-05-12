@@ -1,29 +1,33 @@
 "use client";
 import LayoutNav from "@/components/LayoutNav";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { dropDown, milestones } from "../../utils/data";
 import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import TlCardCol from "../../components/MsCardCol";
-import TlCardGrid from "../../components/MsCardGrid";
+ 
 import ModalMs from "../../components/ModalMs";
 import MsCardGrid from "../../components/MsCardGrid";
 import MsCardCol from "../../components/MsCardCol";
 import EditModalMs from "../../components/EditModalMs";
+import client from "@/apolloClient";
+import { getMilestone } from "@/services";
+import { useQuery } from "@apollo/client";
 
 const manrope = Manrope({ subsets: ["latin"] });
 const MildStone = () => {
   const [isExpand, setIsExpand] = useState(false);
-
+  
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
-
+  
   const [viewMode, setViewMode] = useState(true);
  
-  const [selectedFeild, setSelectedFeild] = useState<string>();
-  const openDetails = (title: string) => {
-    setSelectedFeild(title);
+  const [selectedFeild, setSelectedFeild] = useState<string | null >()
+  const [mileData, setMileData] = useState([])
+  const openDetails = (id: string) => {
+    // console.log(id)
+    setSelectedFeild(id);
     setShowModalEdit(true);
   };
 
@@ -32,8 +36,21 @@ const MildStone = () => {
   }
 
   function handleCloseModalEdit() {
+    setSelectedFeild(null);
     setShowModalEdit(false);
   }
+ 
+const { data, loading, error } = useQuery(getMilestone, {
+  client,
+  // variables: {
+  //   take: 8,
+  //   skip: 1 * 8,
+  // },
+});
+useEffect(()=>{
+  setMileData(data?.milestones);
+},[data,loading]);
+
 
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
@@ -104,10 +121,10 @@ const MildStone = () => {
         </div>
         {/* View Parts */}
         <div className="mt-5">
-          {viewMode ? (
+          {loading?<h1 className="">Loading...</h1>:mileData?.length===0?<h1 className="">No Data found</h1>:viewMode ? (
             <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
              {
-              milestones.map((item,index)=>(
+              mileData?.map((item,index)=>(
                 <MsCardGrid key={index} openDetails={openDetails} data={item} />
 
               ))
@@ -116,8 +133,8 @@ const MildStone = () => {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-4">
                 {
-              milestones.map((item,index)=>(
-                <MsCardCol key={index} data={item} />
+              mileData?.map((item,index)=>(
+                <MsCardCol key={index} openDetails={openDetails} data={item} />
 
               ))
              }
@@ -128,7 +145,7 @@ const MildStone = () => {
         
       </div>
       <ModalMs  showModal={showModal} handleCloseModal={handleCloseModal} />
-      <EditModalMs selectedFeild={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/>
+     {selectedFeild && <EditModalMs selectedFeild={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/>} 
     </LayoutNav>
   );
 };

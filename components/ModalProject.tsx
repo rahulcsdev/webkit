@@ -1,59 +1,54 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
- import client from '../apolloClient/index'
- import { gql } from "@apollo/client";
+import client from "../apolloClient/index";
+import { gql, useMutation } from "@apollo/client";
 import { employeeData, projectsData } from "../utils/data";
-import {
- 
-  MultiSelect,
- 
-  Input,
-  Select,
-} from "@mantine/core";
+import { MultiSelect, Input, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { DateInput  } from "@mantine/dates";
+import { DateInput } from "@mantine/dates";
 import { addProject, getProjectList, getUser } from "@/services";
 interface typeModal {
   showModal: Boolean;
-  handleCloseModal: ()=>void;
-  fetchProjects:()=>void;
+  handleCloseModal: () => void;
 }
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const ModalProject = (props: typeModal) => {
-  const { showModal, handleCloseModal,fetchProjects } = props;
+  const { showModal, handleCloseModal } = props;
   const [options, setOptions] = useState<any>([]);
-   const [users, setUsers] = useState<any>([])
-   const [showManager, setShowManager] = useState(false)
-   const managerOp=[
-    { value: "", label: "Choose One",disabled: true  },
-  ];
- 
-const managerOptions=(users:any)=>{
-  console.log(users);
-  for (let i = 0; i < users?.length; i++) {
-    managerOp.push({value: users[i]?.id,label:users[i].name,disabled:false});
-  }
-  setUsers(managerOp);
-}
+  const [users, setUsers] = useState<any>([]);
+  const [showManager, setShowManager] = useState(false);
+  const managerOp = [{ value: "", label: "Choose One", disabled: true }];
+
+  const managerOptions = (users: any) => {
+    // console.log(users);
+    for (let i = 0; i < users?.length; i++) {
+      managerOp.push({
+        value: users[i]?.id,
+        label: users[i].name,
+        disabled: false,
+      });
+    }
+    setUsers(managerOp);
+  };
 
   useEffect(() => {
-    const getEmployeeInfo = async() => {
+    const getEmployeeInfo = async () => {
       const info: string[] = [];
-      const {data}=await client.query({
-        query:getUser
-        });
-        // console.log(data)
- 
-        managerOptions(data.users);
+      const { data } = await client.query({
+        query: getUser,
+      });
+      // console.log(data)
+
+      managerOptions(data.users);
       for (let i = 0; i < data?.users?.length; i++) {
         info.push(data?.users[i]?.name);
       }
-      
+
       setOptions(info);
     };
-    
+
     getEmployeeInfo();
   }, []);
   const form = useForm({
@@ -65,86 +60,73 @@ const managerOptions=(users:any)=>{
       status: "",
       type: "",
       members: [],
-      desc:"",
-      code:""
+      desc: "",
+      code: "",
     },
   });
-interface formTypes{
-  projectName: string,
-  projectManager: string,
-  startDate:Date,
-  endDate: Date,
-  status:string,
-  type:string,
-  members: Array<string>,
-  desc:string,
-  code:string
-}
-const createProject=async(formData:formTypes)=>{
- console.log(formData)
+  interface formTypes {
+    projectName: string;
+    projectManager: string;
+    startDate: Date;
+    endDate: Date;
+    status: string;
+    type: string;
+    members: Array<string>;
+    desc: string;
+    code: string;
+  }
 
-let membersObj=[{id:formData.members[0]}];
+  const [createProject, { loading, data, error }] = useMutation(addProject);
 
-for(let i=1;i<formData.members.length;i++){
-   membersObj.push({id:formData.members[i]})
-}
- 
-const withManager={
-  "name": formData.projectName,
-  "projectManager": {
-    "connect": {
-      "id": formData.projectManager 
+  const handleSubmit = (formData: formTypes) => {
+    console.log(formData);
+
+    let membersObj = [{ id: formData.members[0] }];
+
+    for (let i = 1; i < formData.members.length; i++) {
+      membersObj.push({ id: formData.members[i] });
     }
-  },
-  "startDate": formData.startDate.toISOString(),
-  "projectType": formData.type,
-  "status": formData.status,
-  "endDate": formData.endDate.toISOString(),
-  "projectDiscription": formData.desc,
-  
-  "member": {
-    "connect":membersObj
-  }
-}
-const withOutManager={
-  "name": formData.projectName,
-  "startDate": formData.startDate.toISOString(),
-  "projectType": formData.type,
-  "status": formData.status,
-  "endDate": formData.endDate.toISOString(),
-  "projectDiscription": formData.desc,
-  
-  "member": {
-    "connect":membersObj
-  }
-}
-  try {
-    const {data}=await client.mutate({
-      mutation:addProject,
-      variables:{
-        data:formData.projectManager===''?withOutManager:withManager
+
+    const withManager = {
+      name: formData.projectName,
+      projectManager: {
+        connect: {
+          id: formData.projectManager,
+        },
       },
-      refetchQueries:[{query:getProjectList}],
-      update:(cache,{data})=>{
-        const newProject = data.createProject;
-        const {projects}=cache.readQuery({query:getProjectList})
-        const updatedProjects=[...projects,newProject]
-        cache.writeQuery({
-          query: getProjectList,
-          data: { projects: updatedProjects },
-        });
-        // console.log(updatedProjects)
-      }
-     
-    });
-    // console.log(data);
-    fetchProjects();
-    handleCloseModal();
-  } catch (error) {
-    console.log(error);
-  }
-}
-//  console.log(form.getInputProps('type').value)
+      startDate: formData.startDate.toISOString(),
+      projectType: formData.type,
+      status: formData.status,
+      endDate: formData.endDate.toISOString(),
+      projectDiscription: formData.desc,
+
+      member: {
+        connect: membersObj,
+      },
+    };
+    const withOutManager = {
+      name: formData.projectName,
+      startDate: formData.startDate.toISOString(),
+      projectType: formData.type,
+      status: formData.status,
+      endDate: formData.endDate.toISOString(),
+      projectDiscription: formData.desc,
+
+      member: {
+        connect: membersObj,
+      },
+    };
+
+    createProject({
+      variables: {
+        data: formData.projectManager === "" ? withOutManager : withManager,
+      },
+      refetchQueries: [{ query: getProjectList }],
+    })
+      .then(() => handleCloseModal())
+      .catch((error) => console.log(error));
+  };
+  //  console.log(form.getInputProps('type').value)
   return (
     <>
       {showModal && (
@@ -167,7 +149,7 @@ const withOutManager={
               <div className="p-4">
                 <form
                   action=""
-                  onSubmit={form.onSubmit((values) =>createProject(values))}
+                  onSubmit={form.onSubmit((values) => handleSubmit(values))}
                 >
                   <div className="relative w-full">
                     <Input.Wrapper label="Project Name" required mx="auto">
@@ -179,21 +161,21 @@ const withOutManager={
                       />
                     </Input.Wrapper>
                   </div>
-          
+
                   <div className="flex flex-row gap-2 mt-4">
                     <div className="basis-1/2">
-                      <DateInput 
+                      <DateInput
                         mx="auto"
                         maw={400}
-                       label='Start Date'
+                        label="Start Date"
                         placeholder="Start date"
                         {...form.getInputProps("startDate")}
                       />
                     </div>
                     <div className="basis-1/2">
-                      <DateInput 
+                      <DateInput
                         mx="auto"
-                      label='End Date'
+                        label="End Date"
                         placeholder="End date"
                         {...form.getInputProps("endDate")}
                       />
@@ -201,18 +183,21 @@ const withOutManager={
                   </div>
                   <div className="flex flex-row gap-2 mt-4">
                     <div className="basis-1/2">
-                    <Select
+                      <Select
                         label="Status"
                         placeholder="Pick one"
                         data={[
                           { label: "New", value: "New" },
-                  
-                          { label: "Design Developement", value: "Design Developement" },
-                  
+
+                          {
+                            label: "Design Developement",
+                            value: "Design Developement",
+                          },
+
                           { label: "In Progress", value: "In Progress" },
-                  
+
                           { label: "Testing", value: "Testing" },
-                  
+
                           { label: "Completed", value: "Completed" },
                         ]}
                         {...form.getInputProps("status")}
@@ -223,39 +208,43 @@ const withOutManager={
                         label="Project Type"
                         placeholder="Pick one"
                         data={[
-                          { label: "Internal project", value: "Internal project" },
-                  
-                          { label: "Hourly cost project", value: "Hourly cost project" },
-                  
-                          { label: "Fixed cost project", value: "Fixed cost project" },
+                          {
+                            label: "Internal project",
+                            value: "Internal project",
+                          },
+
+                          {
+                            label: "Hourly cost project",
+                            value: "Hourly cost project",
+                          },
+
+                          {
+                            label: "Fixed cost project",
+                            value: "Fixed cost project",
+                          },
                         ]}
                         {...form.getInputProps("type")}
-                      
                       />
                     </div>
                   </div>
-                  {
-                    form.getInputProps('type').value!=='Internal project' &&   <div className="relative w-full">
-                   
-                    <Select
+                  {form.getInputProps("type").value !== "Internal project" && (
+                    <div className="relative w-full">
+                      <Select
                         label="Project Manager"
                         placeholder="Pick one"
                         data={users}
                         {...form.getInputProps("projectManager")}
-                        
-                        
                       />
-                  
-                  </div>
-                  }
-                     <Input.Wrapper label="Project Description" required mx="auto">
-                      <Input
-                        required
-                        placeholder="Enter your Project description"
-                        {...form.getInputProps("desc")}
-                        // sx={{padding:'2px 1px',backgroundColor:'green'}}
-                      />
-                    </Input.Wrapper>
+                    </div>
+                  )}
+                  <Input.Wrapper label="Project Description" required mx="auto">
+                    <Input
+                      required
+                      placeholder="Enter your Project description"
+                      {...form.getInputProps("desc")}
+                      // sx={{padding:'2px 1px',backgroundColor:'green'}}
+                    />
+                  </Input.Wrapper>
                   <MultiSelect
                     data={users}
                     label="Members"
@@ -264,14 +253,13 @@ const withOutManager={
                     placeholder="Pick all members you like"
                     {...form.getInputProps("members")}
                   />
-               
-               
+
                   <div className="flex items-center justify-center mt-4 gap-4 ">
                     <button
                       type="submit"
                       className={`text-base font-normal ${roboto.className} text-white px-2 bg-[#5773FF] rounded-md py-1 border-none`}
                     >
-                      Save
+                      {loading?'Creating...':'Create'}
                     </button>
                     <button
                       onClick={() => form.reset()}
