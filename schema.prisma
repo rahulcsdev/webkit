@@ -22,11 +22,7 @@ model User {
   dateOfJoining               DateTime?
   reportingManager            User?        @relation("User_reportingManager", fields: [reportingManagerId], references: [id])
   reportingManagerId          String?      @map("reportingManager")
-<<<<<<< HEAD
-  createdDate                 DateTime?    @default("2023-05-11T07:17:34.590Z")
-=======
-  createdDate                 DateTime?    @default("2023-05-09T12:51:54.020Z")
->>>>>>> 7e0a261d547118c68610b81add7ce3f675007d06
+  createdDate                 DateTime?    @default("2023-05-12T04:37:57.581Z")
   from_User_reportingManager  User[]       @relation("User_reportingManager")
   from_Project_member         Project[]    @relation("Project_member")
   from_Project_projectManager Project[]    @relation("Project_projectManager")
@@ -46,13 +42,8 @@ model Project {
   status                  String?      @default("New")
   projectType             String?
   projectDiscription      String       @default("")
-<<<<<<< HEAD
-  startDate               DateTime?    @default("2023-05-11T07:17:34.591Z")
-  endDate                 DateTime?    @default("2023-05-11T07:17:34.591Z")
-=======
-  startDate               DateTime?    @default("2023-05-09T12:51:54.020Z")
-  endDate                 DateTime?    @default("2023-05-09T12:51:54.020Z")
->>>>>>> 7e0a261d547118c68610b81add7ce3f675007d06
+  startDate               DateTime?    @default("2023-05-12T04:37:57.583Z")
+  endDate                 DateTime?    @default("2023-05-12T04:37:57.583Z")
   from_Milestone_project  Milestone[]  @relation("Milestone_project")
   from_Task_project       Task[]       @relation("Task_project")
   from_TimeEntery_project TimeEntery[] @relation("TimeEntery_project")
