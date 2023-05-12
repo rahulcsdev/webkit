@@ -75,11 +75,11 @@ export const updateMilestone = gql`
   }
 `;
 export const updateTimeEntry = gql`
-  mutation ($where: TimeEntryWhereUniqueInput!, $data: TimeEntryUpdateInput!) {
-    updateTimeEntry(where: $where, data: $data) {
-      id
-    }
+mutation Mutation($where: TimeEnteryWhereUniqueInput!, $data: TimeEnteryUpdateInput!) {
+  updateTimeEntery(where: $where, data: $data) {
+    reviewStatus
   }
+}
 `;
 export const UserLogin = gql`
 mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
@@ -328,32 +328,30 @@ export const viewTimesheetDetails = gql`
   }
 `;
 
-export const getTimeEntries = gql`
-  query ($where: TimeEntryWhereUniqueInput!) {
-    timeEntry(where: $where) {
+export const getTimeEntriesWhenIamAreportingManager = gql`
+query Query($where: TimeEnteryWhereInput!) {
+  timeEnteries(where: $where) {
+    id
+    project {
+      name
       id
-      project {
-        id
-        name
-      }
-      task {
-        id
-        name
-      }
-      projectType
-      reviewStatus
-      projectManager
-      activities
-
+    }
+    task {
+      name
+      id
+    }
       reviewedBy {
         name
         id
       }
-      reviewedAt
-      duration
-      remarks
-    }
+    activities
+    reviewStatus
+    date
+    projectType
+    duration
+    remarks
   }
+}
 `;
 
 export const finduserRole = gql`
@@ -408,16 +406,29 @@ export const getTasks = gql`
 export const addTimesheets = gql`
   mutation Mutation($data: [TimeEnteryCreateInput!]!) {
     createTimeEnteries(data: $data) {
-      activities
+      id
       project {
-        id
         name
       }
       task {
-        id
         name
       }
+      activities
+      code
       duration
+      projectType
+      projectManager
+      userName {
+       name 
+       id
+      }
+      reviewStatus
+      remarks
+      reviewedBy {
+        name
+        id
+      }
+      reviewedAt
       date
     }
   }

@@ -20,7 +20,13 @@ import { useRouter } from "next/navigation";
 import { gql, useQuery, useMutation } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
 import client from "../../apolloClient/index";
-import { getProjects,getTasks,addTimesheets } from "@/services";
+import {
+  getProjects,
+  getTasks,
+  addTimesheets,
+  getProjectDetail,
+  getspecficUser,
+} from "@/services";
 
 const Projects = () => {
   const myDivRef = useRef<any>(null);
@@ -34,6 +40,47 @@ const Projects = () => {
   const [projects, setProjects] = useState<Array<string>>([]);
   const [tasks, setTasks] = useState<Array<string>>([]);
   const router = useRouter();
+
+  const getManagerId = async (item: any) => {
+
+
+    if (
+      item.projectType === "Hourly cost project" ||
+      item.projectType === "Fixed cost project"
+    ) {
+   return await client
+        .query({
+          query: getProjectDetail,
+          variables: {
+            where: {
+              id: item.project,
+            },
+          },
+        })
+        .then((res: any) => {
+          console.log("res", res);
+          return res.data?.project?.projectManager.id;
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    } else {
+     return await client
+        .query({
+          query: getspecficUser,
+          variables: {
+            id: localStorage.getItem("userId"),
+          },
+        })
+        .then((res: any) => {
+          console.log("res", res);
+          return res.data?.user?.reportingManager.id;
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    }
+  };
 
   const getDropDownsData = async () => {
     await client
@@ -81,7 +128,18 @@ const Projects = () => {
 
   const form = useForm({
     initialValues: {
-      entries: [{ project: "", task: "", duration: 0, activity: "", key: 0 }],
+      entries: [
+        {
+          project: "",
+          task: "",
+          duration: 0,
+          activity: "",
+          projectType: "",
+          remarks: "",
+          projectManager: "",
+          key: 0,
+        },
+      ],
       date: new Date(),
     },
 
@@ -94,6 +152,8 @@ const Projects = () => {
       },
     },
   });
+
+
 
   const deleteEntry = (Id: string) => {
     console.log("delete", Id);
@@ -114,25 +174,24 @@ const Projects = () => {
       activity: "",
       key: randomId(),
     });
-
-    // const name: any = {
-    //   ...form.values,
-    //   id: "id" + new Date().getTime(),
-    // };
-
-    // setEntries([...entry, name]);
   };
 
-  const saveAll = async() => {
+  const saveAll = async () => {
     console.log("here are all entries", form.values);
 
     const isEmptyTask = form.values.entries.filter((item) => item.task === "");
 
-    const isEmptyProject = form.values.entries.filter((item) => item.project === "");
+    const isEmptyProject = form.values.entries.filter(
+      (item) => item.project === ""
+    );
 
-    const isEmptyActivity = form.values.entries.filter((item) => item.activity === "");
+    const isEmptyActivity = form.values.entries.filter(
+      (item) => item.activity === ""
+    );
 
-    const isDurationZero = form.values.entries.filter((item) => item.duration === 0);
+    const isDurationZero = form.values.entries.filter(
+      (item) => item.duration === 0
+    );
 
     if (isEmptyTask.length > 0) {
       return alert("please select task");
@@ -149,7 +208,7 @@ const Projects = () => {
       return alert("duration can notbe zero");
     }
 
-    const Mutatedata = form.values.entries.map((item) => {
+    const Mutatedata =  form.values.entries.map(async(item) => {
       return {
         activities: item.activity,
         duration: item.duration.toString(),
@@ -164,25 +223,46 @@ const Projects = () => {
             id: item.project,
           },
         },
+        projectType: item.projectType,
+        reviewedBy: {
+          connect: {
+            id: await getManagerId(item),
+          },
+        },
+        ...((item.projectType === "Hourly cost project" ||
+          item.projectType === "Fixed cost project") && {
+          projectManager: await getManagerId(item),
+        }),
+        userName: {
+          connect: {
+            id: localStorage.getItem("userId"),
+          },
+        },
+        reviewStatus: "Pending",
+        remarks: item.remarks,
       };
-    });
+    })
 
-    
-    await client
+     
+     Promise.all(Mutatedata).then((values) => {
+      console.log(values);
+      client
       .mutate({
         mutation: addTimesheets,
-         variables:{
-         data:Mutatedata
-       }
+        variables: {
+          data: values,
+        },
       })
       .then((res: any) => {
         console.log("timelines added", res);
+        alert('timeline added')
       })
       .catch((err) => {
         console.log("err", err);
       });
+    })
 
-  
+
   };
 
   function handleCloseModal() {
@@ -249,6 +329,13 @@ const Projects = () => {
                         Task
                       </th>
                       <th scope="col" className="px-6 py-3">
+                        project Type
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        remarks
+                      </th>
+
+                      <th scope="col" className="px-6 py-3">
                         Duration
                       </th>
                       <th scope="col" className="px-6 py-3">
@@ -283,6 +370,30 @@ const Projects = () => {
                           nothingFound="No options"
                           data={tasks}
                           {...form.getInputProps(`entries.${0}.task`)}
+                        />
+                      </td>
+                      <td className="px-6 py-4">
+                        <Select
+                          placeholder="select project type"
+                          searchable
+                          dropdownPosition="top"
+                          withinPortal
+                          nothingFound="No options"
+                          data={[
+                            "Internal project",
+                            "Hourly cost project",
+                            "Fixed cost project",
+                          ]}
+                          {...form.getInputProps(`entries.${0}.projectType`)}
+                         
+                        />
+                      </td>
+
+                      <td className="px-6 py-4">
+                        <Textarea
+                          placeholder="write remark"
+                          withAsterisk
+                          {...form.getInputProps(`entries.${0}.remarks`)}
                         />
                       </td>
                       <td className="px-6 py-4">
@@ -330,6 +441,31 @@ const Projects = () => {
                                   data={tasks}
                                   {...form.getInputProps(
                                     `entries.${index}.task`
+                                  )}
+                                />
+                              </td>
+                              <td className="px-6 py-4">
+                                <Select
+                                  placeholder="project Type"
+                                  searchable
+                                  nothingFound="No options"
+                                  data={[
+                                    "Internal project",
+                                    "Hourly cost project",
+                                    "Fixed cost project",
+                                  ]}
+                                  {...form.getInputProps(
+                                    `entries.${index}.projectType`
+                                  )}
+                                />
+                              </td>
+
+                              <td className="px-6 py-4">
+                                <Textarea
+                                  placeholder="write remark"
+                                  withAsterisk
+                                  {...form.getInputProps(
+                                    `entries.${index}.remarks`
                                   )}
                                 />
                               </td>
