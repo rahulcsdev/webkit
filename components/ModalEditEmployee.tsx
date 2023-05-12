@@ -25,6 +25,7 @@ import {
   getUserDetails,
   getspecficUser,
   addUser,
+  updateUser
 } from "../services";
 
 interface formTypes {
@@ -160,33 +161,26 @@ const ModalEditEmployee = (props: typeModal) => {
   //   fetchDetails();
   // },[id])
 
-  const updateUser = async (formData: formTypes) => {
+  const updateUserHandler = async (formData: formTypes) => {
     console.log(formData);
 
-    const projectUpdate = {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      designation: formData.designation,
-      role: formData.role,
-      dateOfJoining: formData.dateofjoining.toISOString(),
-      reportingManager: {
-        connect: {
-          id: formData.reportingmanager,
-        },
-      },
-    };
+    // const projectUpdate = {
+    //   name: formData.name,
+    //   email: formData.email,
+    //   password: formData.password,
+    //   designation: formData.designation,
+    //   role: formData.role,
+    //   dateOfJoining: formData.dateofjoining.toISOString(),
+    //   reportingManager: {
+    //     connect: {
+    //       id: formData.reportingmanager,
+    //     },
+    //   },
+    // };
 
     try {
       const { data } = await client.mutate({
-        mutation: gql`
-    mutation Mutation($where: UserWhereUniqueInput!,$data:UserUpdateInput!){
-     updateUser(where: $where, data: $data){ 
-      id  
-    name   
-      }    
-      }
-    `,
+        mutation: updateUser,
         variables: {
           where: {
             id: id,
@@ -216,12 +210,24 @@ const ModalEditEmployee = (props: typeModal) => {
            
           },
         },
+        refetchQueries: [{ query: getUserDetails }],
+        // update: (cache, { data }) => {
+        //   const newEmployee = data.createUser;
+        //   const { users } = cache.readQuery({ query: getUserDetails });
+        //   const updatedUsers = [...users, newEmployee];
+        //   cache.writeQuery({
+        //     query: getUserDetails,
+        //     data: { users: updatedUsers },
+        //   });
+        // }
       });
       console.log(data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  
 
   return (
     <>
@@ -243,7 +249,7 @@ const ModalEditEmployee = (props: typeModal) => {
                 </h2>
               </div>
               <div className="p-4">
-                <form onSubmit={form.onSubmit((values) => updateUser(values))}>
+                <form onSubmit={form.onSubmit((values) => updateUserHandler(values))}>
                   <Grid>
                     <Grid.Col span={12}>
                       <TextInput

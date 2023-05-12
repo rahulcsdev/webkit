@@ -109,7 +109,7 @@ const fetchUser = async () => {
 
   useEffect(() => {
     fetchUser();
-  }, []);
+  }, [fetchUser]);
 
 
   return (
@@ -173,7 +173,6 @@ const fetchUser = async () => {
         id={selectedFeild}
         showEditModal={showModalEdit}
         handleCloseModal={handleCloseModalEdit}
-        // employee={employeesData[index]}
       />)}
     </>    
   )

@@ -155,15 +155,15 @@ const ModalEmployee = (props: typeModal) => {
           }
         },
         refetchQueries: [{ query: getUserDetails }],
-        update: (cache, { data }) => {
-          const newEmployee = data.createUser;
-          const { users } = cache.readQuery({ query: getUserDetails });
-          const updatedUsers = [...users, newEmployee];
-          cache.writeQuery({
-            query: getUserDetails,
-            data: { users: updatedUsers },
-          });
-        }
+        // update: (cache, { data }) => {
+        //   const newEmployee = data.createUser;
+        //   const { users } = cache.readQuery({ query: getUserDetails });
+        //   const updatedUsers = [...users, newEmployee];
+        //   cache.writeQuery({
+        //     query: getUserDetails,
+        //     data: { users: updatedUsers },
+        //   });
+        // }
       });
   
       console.log(data);
