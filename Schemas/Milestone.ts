@@ -2,14 +2,35 @@ import { list } from '@keystone-6/core';
 import { text, password, select } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
 import { multiselect ,relationship,timestamp} from '@keystone-6/core/fields';
+type Session = {
+  data: {
+    role: string[];
+  };
+};
+function isAdmin({ session }: { session: Session | undefined }) {
+   
+   const admin= session?.data.role.filter((el) =>["admin","milestoneManagement"].includes(el))
+   console.log(admin)
+  if (!session) return false;
+  if (admin?.length!=0) return true;
+  return false;
+}
+
+
 
 export default list({
-    access: allowAll,
+  access:{operation: {
+    create: isAdmin,
+    update:isAdmin,
+    delete:isAdmin,
+    query:()=>{return true}
+  }},
 
  fields: { name: text(), project: relationship({ref: 'Project',
     
     }),
-    code:text(),
+    code:text({defaultValue: ' ',ui: { itemView: { fieldMode: 'read' } }}),
+    File: relationship({ ref: 'File', many: true }),
     status:select({
     
     defaultValue: "New",
@@ -42,12 +63,31 @@ hooks:{
             var projectCode= project.code;
             console.log(projectCode)
           }
-      
-          const count = await context.db.Milestone.count({});  
-    
+          const milestone=await context.db.Milestone.findMany({}) 
+          if(milestone.length===0){
+            return {
+              ...resolvedData,
+              code: `${projectCode}-MST001`
+            }
+          }
+
+          const lastMilestone= milestone[milestone.length-1];
+          const lastCode:any =lastMilestone.code;
+          let splitCode = lastCode.split("-")
+          const milestoneCode= splitCode[splitCode.length-1]
+          let matches = milestoneCode.match(/^([a-zA-Z]+)(\d+)$/);
+          let newCode=""
+      if (matches) {
+        let prefix = matches[1];
+        let numberStr = matches[2];
+        let number = parseInt(numberStr);
+        number++;
+        let newNumberStr = number.toString().padStart(numberStr.length, '0');
+       newCode= prefix + newNumberStr;
+      }
           return {
             ...resolvedData,
-            code: `${projectCode}-MST00${count+1}`
+            code: `${projectCode}-${newCode}`
           }
   },
 },
