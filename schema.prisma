@@ -15,14 +15,15 @@ model User {
   id                          String       @id @default(cuid())
   name                        String       @default("")
   email                       String       @unique @default("")
-  code                        String       @default("")
+  code                        String       @default(" ")
   password                    String?
   designation                 String       @default("")
+  File                        File[]       @relation("User_File")
   role                        Json         @default("[]")
   dateOfJoining               DateTime?
   reportingManager            User?        @relation("User_reportingManager", fields: [reportingManagerId], references: [id])
   reportingManagerId          String?      @map("reportingManager")
-  createdDate                 DateTime?    @default("2023-05-11T04:55:52.084Z")
+  createdDate                 DateTime?    @default("2023-05-12T07:48:18.064Z")
   from_User_reportingManager  User[]       @relation("User_reportingManager")
   from_Project_member         Project[]    @relation("Project_member")
   from_Project_projectManager Project[]    @relation("Project_projectManager")
@@ -36,14 +37,16 @@ model Project {
   id                      String       @id @default(cuid())
   name                    String       @default("")
   member                  User[]       @relation("Project_member")
+  createAt                DateTime?    @default("2023-05-12T07:48:18.065Z")
   projectManager          User?        @relation("Project_projectManager", fields: [projectManagerId], references: [id])
   projectManagerId        String?      @map("projectManager")
-  code                    String       @default("")
+  code                    String       @default(" ")
+  File                    File[]       @relation("Project_File")
   status                  String?      @default("New")
   projectType             String?
   projectDiscription      String       @default("")
-  startDate               DateTime?    @default("2023-05-11T04:55:52.086Z")
-  endDate                 DateTime?    @default("2023-05-11T04:55:52.086Z")
+  startDate               DateTime?    @default("2023-05-12T07:48:18.065Z")
+  endDate                 DateTime?    @default("2023-05-12T07:48:18.065Z")
   from_Milestone_project  Milestone[]  @relation("Milestone_project")
   from_Task_project       Task[]       @relation("Task_project")
   from_TimeEntery_project TimeEntery[] @relation("TimeEntery_project")
@@ -52,15 +55,16 @@ model Project {
 }
 
 model Milestone {
-  id                  String   @id @default(cuid())
-  name                String   @default("")
-  project             Project? @relation("Milestone_project", fields: [projectId], references: [id])
-  projectId           String?  @map("project")
-  code                String   @default("")
-  status              String?  @default("New")
-  startDate           String   @default("")
-  endDate             String   @default("")
-  from_Task_milestone Task[]   @relation("Task_milestone")
+  id                  String    @id @default(cuid())
+  name                String    @default("")
+  project             Project?  @relation("Milestone_project", fields: [projectId], references: [id])
+  projectId           String?   @map("project")
+  code                String    @default(" ")
+  File                File[]    @relation("Milestone_File")
+  status              String?   @default("New")
+  startDate           DateTime? @default("2023-05-12T07:48:18.066Z")
+  endDate             DateTime? @default("2023-05-12T07:48:18.066Z")
+  from_Task_milestone Task[]    @relation("Task_milestone")
 
   @@index([projectId])
 }
@@ -68,7 +72,8 @@ model Milestone {
 model Task {
   id                   String       @id @default(cuid())
   name                 String       @default("")
-  code                 String       @default("")
+  code                 String       @default(" ")
+  File                 File[]       @relation("Task_File")
   discription          String       @default("")
   project              Project?     @relation("Task_project", fields: [projectId], references: [id])
   projectId            String?      @map("project")
@@ -93,7 +98,8 @@ model TimeEntery {
   task           Task?    @relation("TimeEntery_task", fields: [taskId], references: [id])
   taskId         String?  @map("task")
   activities     String   @default("")
-  code           String   @default("")
+  code           String   @default(" ")
+  File           File[]   @relation("TimeEntery_File")
   duration       String   @default("")
   projectType    String?
   projectManager String   @default("")
@@ -110,4 +116,15 @@ model TimeEntery {
   @@index([taskId])
   @@index([userNameId])
   @@index([reviewedById])
+}
+
+model File {
+  id                   String       @id @default(cuid())
+  documents_filesize   Int?
+  documents_filename   String?
+  from_User_File       User[]       @relation("User_File")
+  from_Project_File    Project[]    @relation("Project_File")
+  from_Milestone_File  Milestone[]  @relation("Milestone_File")
+  from_Task_File       Task[]       @relation("Task_File")
+  from_TimeEntery_File TimeEntery[] @relation("TimeEntery_File")
 }
