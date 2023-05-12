@@ -22,7 +22,8 @@ export default list({
   access:{operation: {
     create: isAdmin,
     update:isAdmin,
-    delete:isAdmin
+    delete:isAdmin,
+    query:()=>{return true}
   }},
 
  fields: { name: text(), project: relationship({ref: 'Project',

@@ -27,6 +27,7 @@ export default list({
       create:isAdmin,
       update:isAdmin,
       delete:isAdmin,
+      query:()=>{return true}
     }},
     fields: {
       name: text(),

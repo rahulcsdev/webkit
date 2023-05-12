@@ -10,7 +10,6 @@ type Session = {
 function isAdmin({ session }: { session: Session | undefined }) {
    
    const admin= session?.data.role.filter((el) => ["admin", "taskManagement"].includes(el))
-   console.log(admin)
   if (!session) return false;
   if (admin?.length!=0) return true;
   return false;
@@ -19,7 +18,8 @@ export default list({
   access:{operation: {
     create: isAdmin,
     update:isAdmin,
-    delete:isAdmin
+    delete:isAdmin,
+    query:()=>{return true}
   }},
      fields: {
 
