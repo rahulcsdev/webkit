@@ -344,6 +344,9 @@ query Query($where: TimeEnteryWhereInput!) {
         name
         id
       }
+      userName {
+        name
+      }
     activities
     reviewStatus
     date

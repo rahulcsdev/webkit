@@ -41,9 +41,9 @@ const Projects = () => {
   const [id, setId] = useState<string | null>(null);
   const [taskid, setTaskId] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
-
-  const [tasks, setTasks] = useState<Array<string>>([]);
+  const [TimeLines, setTimelines] = useState<Array<string>>([]);
   const [opened, { open, close }] = useDisclosure(false);
+  const [remark, setRemark] = useState<string>('');
   const router = useRouter();
 
   const getTimeEntries = async () => {
@@ -62,7 +62,7 @@ const Projects = () => {
       })
       .then((res: any) => {
         console.log("res", res);
-        setTasks(res.data.timeEnteries);
+        setTimelines(res.data.timeEnteries);
       })
       .catch((err) => {
         console.log("err", err);
@@ -89,6 +89,7 @@ const Projects = () => {
           },
           data: {
             reviewStatus: value,
+            remarks:remark,
             task: {
               connect: {
                 id: taskid,
@@ -101,6 +102,9 @@ const Projects = () => {
       if (data?.data?.updateTimeEntery) {
         console.log("s",data?.data?.updateTimeEntery);
         close();
+        await client.refetchQueries({
+          include: ["getTimeEntriesWhenIamAreportingManager"],
+        });
         getTimeEntries();
       }
     } catch (err) {
@@ -125,6 +129,13 @@ const Projects = () => {
               { value: "Rejected", label: "Rejected" },
             ]}
           />
+              <Textarea
+      placeholder="Your Remark"
+      value={remark}
+      onChange={(e)=>setRemark(e.target.value)}
+      label="Your Remark"
+      withAsterisk
+    />
           <Group position="right">
             <button
               type="button"
@@ -189,9 +200,8 @@ const Projects = () => {
                       date
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      remarks
+                      createdBy
                     </th>
-
                     <th scope="col" className="px-6 py-3">
                       Duration
                     </th>
@@ -208,8 +218,8 @@ const Projects = () => {
                 </thead>
 
                 <tbody>
-                  {tasks.length > 0 &&
-                    tasks.map((item: any, index) => {
+                  {TimeLines.length > 0 &&
+                    TimeLines.map((item: any, index) => {
                       if (item.key === 0) {
                       } else {
                         return (
@@ -222,8 +232,7 @@ const Projects = () => {
                             </th>
                             <td className="px-6 py-4">{item.task?.name}</td>
                             <td className="px-6 py-4">{item.date.slice(0,10)}</td>
-
-                            <td className="px-6 py-4">{item.remarks}</td>
+                            <td className="px-6 py-4"> {item.userName.name}</td>
                             <td className="px-6 py-4">{item.duration}</td>
                             <td className="px-6 py-4">{item.activities}</td>
                             <td className="px-6 py-4">{item.reviewStatus}</td>
