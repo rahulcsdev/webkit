@@ -71,25 +71,7 @@ const ModalEditEmployee = (props: typeModal) => {
     setUsers(reportManager);
   };
 
-  useEffect(() => {
-    const getReportingReportingManger = async () => {
-      const info: string[] = [];
-      const { data } = await client.query({
-        query: getUser,
-      });
-      // console.log(data)
-
-      reportingManagerOptions(data.users);
-      for (let i = 0; i < data?.users?.length; i++) {
-        info.push(data?.users[i]?.name);
-      }
-
-      setOptions(info);
-    };
-
-    getReportingReportingManger();
-  }, []);
-
+  
   const form = useForm({
     initialValues: {
       // entries: [{ roles:"", key: 0 }],
@@ -119,7 +101,6 @@ const ModalEditEmployee = (props: typeModal) => {
               email
               designation
               role
-
               dateOfJoining
               reportingManager {
                 id
@@ -152,7 +133,28 @@ const ModalEditEmployee = (props: typeModal) => {
   };
 
   useEffect(() => {
+    const getReportingReportingManger = async () => {
+      const info: string[] = [];
+      const { data } = await client.query({
+        query: getUser,
+      });
+      // console.log(data)
+
+      reportingManagerOptions(data.users);
+      for (let i = 0; i < data?.users?.length; i++) {
+        info.push(data?.users[i]?.name);
+      }
+
+      setOptions(info);
+    };
+
+    getReportingReportingManger();
+  }, []);
+
+
+  useEffect(() => {
     fetchDetails();
+  
   }, [id]);
 
   // console.log(id);
@@ -185,29 +187,17 @@ const ModalEditEmployee = (props: typeModal) => {
           where: {
             id: id,
           },
-
           data: {
             role: formData.role,
-
             reportingManager: {
               connect: {
                 id: formData.reportingmanager,
               },
             },
-
-           
-
             name: formData.name,
-
             email: formData.email,
-
-            password:formData.password,
-
             designation: formData.designation,
-
-            dateOfJoining:formData.dateofjoining.toISOString(),
-
-           
+            dateOfJoining:formData.dateofjoining.toISOString(),         
           },
         },
         refetchQueries: [{ query: getUserDetails }],
@@ -222,6 +212,7 @@ const ModalEditEmployee = (props: typeModal) => {
         // }
       });
       console.log(data);
+      handleCloseModal();
     } catch (error) {
       console.log(error);
     }
@@ -283,23 +274,6 @@ const ModalEditEmployee = (props: typeModal) => {
                           },
                         }}
                         {...form.getInputProps("email")}
-                      />
-                    </Grid.Col>
-
-                    <Grid.Col span={6}>
-                      <TextInput
-                        variant="filled"
-                        label="Password"
-                        placeholder="Password"
-                        radius="md"
-                        size="lg"
-                        labelProps={{
-                          style: {
-                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
-                            fontSize: "1.2rem", // increase label font size
-                          },
-                        }}
-                        {...form.getInputProps("password")}
                       />
                     </Grid.Col>
 
