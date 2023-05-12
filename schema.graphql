@@ -317,8 +317,8 @@ type Milestone {
   File(where: FileWhereInput! = {}, orderBy: [FileOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FileWhereUniqueInput): [File!]
   FileCount(where: FileWhereInput! = {}): Int
   status: String
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
 }
 
 input MilestoneWhereUniqueInput {
@@ -335,8 +335,8 @@ input MilestoneWhereInput {
   code: StringFilter
   File: FileManyRelationFilter
   status: StringNullableFilter
-  startDate: StringFilter
-  endDate: StringFilter
+  startDate: DateTimeNullableFilter
+  endDate: DateTimeNullableFilter
 }
 
 input MilestoneOrderByInput {
@@ -354,8 +354,8 @@ input MilestoneUpdateInput {
   code: String
   File: FileRelateToManyForUpdateInput
   status: String
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
 }
 
 input ProjectRelateToOneForUpdateInput {
@@ -375,8 +375,8 @@ input MilestoneCreateInput {
   code: String
   File: FileRelateToManyForCreateInput
   status: String
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
 }
 
 input ProjectRelateToOneForCreateInput {
