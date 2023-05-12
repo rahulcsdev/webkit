@@ -128,7 +128,7 @@ const Employees = () => {
     <>
       <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
         <Navbar isScrolling={isScrolling} />
-        <div>
+        
         <div className="px-5 py-6">
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="flex items-center justify-between">
@@ -167,7 +167,7 @@ const Employees = () => {
               </div>
             </div>
           </div>
-        </div>
+      
 
         {/* Employee Cards */}
 
