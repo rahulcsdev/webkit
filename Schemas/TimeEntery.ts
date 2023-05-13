@@ -2,16 +2,35 @@ import { list } from '@keystone-6/core';
 import { text, password, select } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
 import { multiselect ,relationship,timestamp} from '@keystone-6/core/fields';
+type Session = {
+  data: {
+    role: string[];
+  };
+};
+function isAdmin({ session }: { session: Session | undefined }) {
+   
+   const admin= session?.data.role.filter((el) => ["admin", "timeEntryManagement"].includes(el))
+   console.log(admin)
+  if (!session) return false;
+  if (admin?.length!=0) return true;
+  return false;
+}
 
 export default list({
-    access: allowAll,
+  access:{operation: {
+    create: isAdmin,
+    update:isAdmin,
+    delete:isAdmin,
+    query:()=>{return true}
+  }},
       fields: {
     
   project:relationship({ref: 'Project',}),
          task: relationship({ref: 'Task',}),
           activities: text(),
     
-     code:text(),
+    code:text({defaultValue: ' ',ui: { itemView: { fieldMode: 'read' } }}),
+    File: relationship({ ref: 'File', many: true }),
     
      duration: text(),
     
@@ -68,10 +87,31 @@ export default list({
       if(task){
         var taskCode= task.code;
       }
-      return {
-        ...resolvedData,
-        code: `${taskCode}-TSE00${count+1}`
+      const timeEnteries=await context.db.TimeEntery.findMany({}) 
+      if(timeEnteries.length===0){
+        return {
+          ...resolvedData,
+          code: `${taskCode}-TSE0001`
+        }
       }
+      const lastTimeEntry= timeEnteries[timeEnteries.length-1];
+          const lastCode:any =lastTimeEntry?.code;
+          let splitCode = lastCode.split("-")
+          const timeEnteryCode= splitCode[splitCode.length-1]
+          let matches = timeEnteryCode.match(/^([a-zA-Z]+)(\d+)$/);
+        let newCode=""
+          if (matches) {
+            let prefix = matches[1];
+            let numberStr = matches[2];
+            let number = parseInt(numberStr);
+            number++;
+            let newNumberStr = number.toString().padStart(numberStr.length, '0');
+           newCode= prefix + newNumberStr;
+      }
+          return {
+            ...resolvedData,
+            code: `${taskCode}-${newCode}`
+          }
   }
 }, 
     

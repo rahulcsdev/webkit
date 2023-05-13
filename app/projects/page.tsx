@@ -13,44 +13,26 @@ import Footer from "@/components/Footer";
 import LayoutNav from "@/components/LayoutNav";
 import EditModalProject from "@/components/EditModalProject";
 import client from '../../apolloClient/index'
-import { gql } from "@apollo/client";
-
-
-
+import { gql, useQuery } from "@apollo/client";
+import { getProjectList } from "@/services";
 const manrope = Manrope({ subsets: ["latin"] });
+
+
+
 const Projects = () => {
-  const [projects, setProjects] = useState([])
-  const fetchProjects=async()=>{
-    const {data}=await client.query({
-      query:gql`
-      query Query {
-        projects {
-          status
-          startDate
-          projectType
-          projectManager {
-            name
-            id
-          }
-          projectDiscription
-          name
-          memberCount
-          member {
-            id
-            name
-          }
-          id
-          endDate
-        }
-      }
-      `
-    });
-    setProjects(data.projects)
-  }
+  const [projects, setProjects] = useState([]);
+  const { data, loading, error } = useQuery(getProjectList, {
+    client,
+    // variables: {
+    //   take: 8,
+    //   skip: 1 * 8,
+    // },
+  });
+ 
  
   useEffect(()=>{
-    fetchProjects();
-  },[]);
+    setProjects(data?.projects)
+  },[data,loading]);
   const [isExpand, setIsExpand] = useState(false);
  
   const [showModal, setShowModal] = useState(false);
@@ -58,7 +40,7 @@ const Projects = () => {
   
   const [viewMode, setViewMode] = useState(true);
  
-  const [selectedFeild, setSelectedFeild] = useState<string>()
+  const [selectedFeild, setSelectedFeild] = useState<string | null >()
  const openDetails=(title:string)=>{
    setSelectedFeild(title)
    setShowModalEdit(true);
@@ -67,10 +49,12 @@ const Projects = () => {
 
   function handleCloseModal() {
     setShowModal(false);
+   
   }
   
   function handleCloseModalEdit() {
     setShowModalEdit(false);
+    setSelectedFeild(null);
   }
   
   const clickS = "bg-[#5773FF] text-white";
@@ -136,23 +120,23 @@ const Projects = () => {
         </div>
 
         <div className="mt-5">
-          {viewMode ? (
+          {loading?<h1 className="">Loading...</h1>:projects?.length==0?<h1 className="">No Data found</h1>:viewMode ? (
             <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
-              {projects.map((data, index) => (
+              {projects?.map((data, index) => (
                 <ProjectCard  openDetais={openDetails}  key={index} data={data} />
               ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-4">
-              {projects.map((data, index) => (
-                <ProjectCardCol openDetails={openDetails}  key={index} data={data} />
+              {projects?.map((data, index) => (
+                <ProjectCardCol openDetais={openDetails}  key={index} data={data}  />
               ))}
             </div>
           )}
         </div>
       </div>
-   <ModalProject  showModal={showModal} handleCloseModal={handleCloseModal} />
-   <EditModalProject title={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/>
+   <ModalProject    showModal={showModal} handleCloseModal={handleCloseModal} />
+  {selectedFeild&& <EditModalProject   id={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/> } 
      
    <Footer/>
  </LayoutNav>
