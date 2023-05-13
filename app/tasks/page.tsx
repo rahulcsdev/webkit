@@ -48,8 +48,8 @@ const Tasks = () => {
   const { data, loading, error } = useQuery(getTask, {
     client,
     variables: {
-      take: 8,
-      skip: page * 8,
+      take: 9,
+      skip: page * 9,
     },
   });
 

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { FiEdit } from "react-icons/fi";
 import { useForm } from "@mantine/form";
 import { TextInput, Select, Box, Button, Textarea } from "@mantine/core";
@@ -24,15 +24,25 @@ const CardTask = (props: any) => {
 
   const formData = useForm({
     initialValues: {
+      task: "",
+      project: "",
+      priority: "",
+      status: "",
+      mileStone: " ",
+      description: " ",
+    },
+  });
+
+  useEffect(() => {
+    formData.setValues({
       task: item?.name,
       project: item?.project?.id,
       priority: item?.priority,
       status: item?.status,
       mileStone: item?.milestone?.id,
       description: item?.discription,
-    },
-  });
-  console.log(item);
+    });
+  }, [Taskupdate]);
 
   const updateTaskHandler = (value: any) => {
     console.log("value", value);
@@ -66,7 +76,7 @@ const CardTask = (props: any) => {
     });
     setShow(!show);
   };
-  console.log("item", item);
+
   return (
     <div className="mb-6 ">
       <div className="border rounded-3xl p-4 flex justify-between items-center cursor-pointer hover:bg-[#eee]">
