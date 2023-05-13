@@ -25,7 +25,7 @@ import ProjectCardCol from "../../components/ProjectCardCol";
 import Footer from "../../components/Footer";
 import LayoutNav from "../../components/LayoutNav";
 import { useRouter } from "next/navigation";
-import { gql } from "@apollo/client";
+import { gql ,useMutation} from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
 import client from "../../apolloClient/index";
 import {
@@ -45,6 +45,8 @@ const Projects = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [remark, setRemark] = useState<string>('');
   const router = useRouter();
+
+  const [createProject, { loading, data, error }] = useMutation(updateTimeEntry);
 
   const getTimeEntries = async () => {
     await client
@@ -80,36 +82,56 @@ const Projects = () => {
   const changeStatus = async () => {
     console.log(value);
 
-    try {
-      const data = await client.mutate({
-        mutation: updateTimeEntry,
-        variables: {
-          where: {
-            id: id,
-          },
-          data: {
-            reviewStatus: value,
-            remarks:remark,
-            task: {
-              connect: {
-                id: taskid,
+    createProject({
+      variables: {
+              where: {
+                id: id,
+              },
+              data: {
+                reviewStatus: value,
+                remarks:remark,
+                task: {
+                  connect: {
+                    id: taskid,
+                  },
+                },
               },
             },
-          },
-        },
-      });
+            refetchQueries: [{ query: getTimeEntriesWhenIamAreportingManager }],
+          }).then(() => {
+            close()
+            getTimeEntries()
+          } )
+          .catch((error) => console.log(error))
 
-      if (data?.data?.updateTimeEntery) {
-        console.log("s",data?.data?.updateTimeEntery);
-        close();
-        await client.refetchQueries({
-          include: ["getTimeEntriesWhenIamAreportingManager"],
-        });
-        getTimeEntries();
-      }
-    } catch (err) {
-      console.log("error", err);
-    }
+    // try {
+    //   const data = await client.mutate({
+    //     mutation: updateTimeEntry,
+    //     variables: {
+    //       where: {
+    //         id: id,
+    //       },
+    //       data: {
+    //         reviewStatus: value,
+    //         remarks:remark,
+    //         task: {
+    //           connect: {
+    //             id: taskid,
+    //           },
+    //         },
+    //       },
+    //     },
+    //     refetchQueries: [{ query: getTimeEntriesWhenIamAreportingManager }],
+    //   });
+
+    //   if (data?.data?.updateTimeEntery) {
+    //     console.log("s",data?.data?.updateTimeEntery);
+    //     close();
+    //     getTimeEntries();
+    //   }
+    // } catch (err) {
+    //   console.log("error", err);
+    // }
   };
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
