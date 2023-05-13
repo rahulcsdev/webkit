@@ -93,22 +93,7 @@ const ModalEditEmployee = (props: typeModal) => {
     try {
       setLoading(true);
       const { data } = await client.query({
-        query: gql`
-          query Query($where: UserWhereUniqueInput!) {
-            user(where: $where) {
-              id
-              name
-              email
-              designation
-              role
-              dateOfJoining
-              reportingManager {
-                id
-                name
-              }
-            }
-          }
-        `,
+        query:getspecficUser,
         variables: {
           where: {
             id: id,
