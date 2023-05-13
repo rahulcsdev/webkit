@@ -277,6 +277,7 @@ const Projects = () => {
     console.log("number", index);
 
     form.setFieldValue(`entries.${index}.project`, e);
+    form.setFieldValue(`entries.${index}.task`,"")
 
     const tasks = await getProjectsTasks(e);
 
@@ -485,7 +486,9 @@ const Projects = () => {
                 <button
                   className={`${clickS} px-3 py-2 rounded-lg capitalize ml-6 mt-2`}
                   onClick={() => addEntry()}
+                  type="button"
                 >
+          
                   Add Time Entry
                 </button>
               </div>
