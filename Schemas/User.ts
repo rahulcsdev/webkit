@@ -56,9 +56,11 @@ role: multiselect({
       
    ],
       
-}),
-  
-       dateOfJoining: timestamp(),
+          }),
+      
+       
+      
+          dateOfJoining: timestamp(),
       
 reportingManager:relationship({
       

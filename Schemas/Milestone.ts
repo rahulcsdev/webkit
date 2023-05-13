@@ -49,8 +49,9 @@ export default list({
     
     ],
 }),
-startDate:text(),
-endDate:text() },
+startDate: timestamp({ defaultValue: new Date().toISOString() }),
+
+ endDate: timestamp({ defaultValue: new Date().toISOString() })},
 hooks:{
     resolveInput: async({ resolvedData,context }) => {
        
