@@ -22,10 +22,10 @@ const manrope = Manrope({ subsets: ["latin"] });
 import client from "../../apolloClient/index";
 import {
   getProjects,
-  getTasks,
   addTimesheets,
   getProjectDetail,
   getspecficUser,
+  getTasksOfSelectedProject,
 } from "@/services";
 
 const Projects = () => {
@@ -42,13 +42,11 @@ const Projects = () => {
   const router = useRouter();
 
   const getManagerId = async (item: any) => {
-
-
     if (
       item.projectType === "Hourly cost project" ||
       item.projectType === "Fixed cost project"
     ) {
-   return await client
+      return await client
         .query({
           query: getProjectDetail,
           variables: {
@@ -65,7 +63,7 @@ const Projects = () => {
           console.log("err", err);
         });
     } else {
-     return await client
+      return await client
         .query({
           query: getspecficUser,
           variables: {
@@ -82,7 +80,7 @@ const Projects = () => {
     }
   };
 
-  const getDropDownsData = async () => {
+  const getProjectsData = async () => {
     await client
       .query({
         query: getProjects,
@@ -101,21 +99,25 @@ const Projects = () => {
       .catch((err) => {
         console.log("err", err);
       });
+  };
 
-    await client
+  const getProjectsTasks = async (id: string) => {
+    return await client
       .query({
-        query: getTasks,
+        query: getTasksOfSelectedProject,
+        variables: {
+          where: {
+            project: {
+              id: {
+                equals: id,
+              },
+            },
+          },
+        },
       })
       .then((res: any) => {
-        console.log("res", res);
-        setTasks(
-          res.data.tasks.map((item: any) => {
-            return {
-              value: item.id,
-              label: item.name,
-            };
-          })
-        );
+        console.log("tasks", res);
+        return res.data.tasks;
       })
       .catch((err) => {
         console.log("err", err);
@@ -123,7 +125,7 @@ const Projects = () => {
   };
 
   useEffect(() => {
-    getDropDownsData();
+    getProjectsData();
   }, []);
 
   const form = useForm({
@@ -132,6 +134,7 @@ const Projects = () => {
         {
           project: "",
           task: "",
+          tasks: [],
           duration: 0,
           activity: "",
           projectType: "",
@@ -147,13 +150,30 @@ const Projects = () => {
       entries: {
         project: (value) => (value ? null : "select project"),
         task: (value) => (value ? null : "select task"),
-        duration: (value) => (value !== 0 ? null : "duration can not be zero"),
+        duration: (value:any) => ( (value === 0  || value === '' ) ?  "duration can not be zero" : null),
         activity: (value) => (value ? null : "add activity"),
       },
     },
   });
 
-
+  const getProjectType = async (id: string) => {
+    return await client
+      .query({
+        query: getProjectDetail,
+        variables: {
+          where: {
+            id: id,
+          },
+        },
+      })
+      .then((res: any) => {
+        console.log("res", res.data?.project?.projectType);
+        return res.data?.project?.projectType;
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
 
   const deleteEntry = (Id: string) => {
     console.log("delete", Id);
@@ -170,45 +190,26 @@ const Projects = () => {
     form.insertListItem("entries", {
       project: "",
       task: "",
+      tasks: [],
       duration: 0,
       activity: "",
+      projectType: "",
+      projectManager: "",
       key: randomId(),
     });
   };
 
   const saveAll = async () => {
-    console.log("here are all entries", form.values);
+    console.log("here ", form.validate());
 
-    const isEmptyTask = form.values.entries.filter((item) => item.task === "");
-
-    const isEmptyProject = form.values.entries.filter(
-      (item) => item.project === ""
-    );
-
-    const isEmptyActivity = form.values.entries.filter(
-      (item) => item.activity === ""
-    );
-
-    const isDurationZero = form.values.entries.filter(
-      (item) => item.duration === 0
-    );
-
-    if (isEmptyTask.length > 0) {
-      return alert("please select task");
+    if(form.validate().hasErrors){
+       return
     }
 
-    if (isEmptyProject.length > 0) {
-      return alert("please select all project");
-    }
-
-    if (isEmptyActivity.length > 0) {
-      return alert("please select activity");
-    }
-    if (isDurationZero.length > 0) {
-      return alert("duration can notbe zero");
-    }
-
-    const Mutatedata =  form.values.entries.map(async(item) => {
+    else{
+     console.log('no errors')
+     
+    const Mutatedata = form.values.entries.map(async (item) => {
       return {
         activities: item.activity,
         duration: item.duration.toString(),
@@ -241,10 +242,9 @@ const Projects = () => {
         reviewStatus: "Pending",
         remarks: item.remarks,
       };
-    })
+    });
 
-     
-     Promise.all(Mutatedata).then((values) => {
+    Promise.all(Mutatedata).then((values) => {
       console.log(values);
       client
       .mutate({
@@ -260,51 +260,80 @@ const Projects = () => {
       .catch((err) => {
         console.log("err", err);
       });
-    })
-
+    });
+    }
 
   };
 
   function handleCloseModal() {
     setShowModal(false);
   }
+
+  const getFilteredTasks = () => {
+    console.log("jj");
+  };
+
+  const selectProject = async (e: any, index: number) => {
+    console.log("number", index);
+
+    form.setFieldValue(`entries.${index}.project`, e);
+
+    const tasks = await getProjectsTasks(e);
+
+    console.log("tasks", tasks);
+
+    const TasksDropDownData = tasks.map((item: any) => {
+      return {
+        value: item.id,
+        label: item.name,
+      };
+    });
+
+    form.setFieldValue(`entries.${index}.tasks`, TasksDropDownData);
+
+    const projectType = await getProjectType(e);
+
+    form.setFieldValue(`entries.${index}.projectType`, projectType);
+  };
+
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
   return (
     <LayoutNav>
-      <div className="px-5 py-6">
-        {/* Second Navbar */}
-        <div className="p-5 bg-white drop-shadow-md rounded-xl">
-          <div className="flex items-center justify-between">
-            <h1
-              className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
-            >
-              Add Time Entry
-            </h1>
-            <div className="flex items-center gap-4 justify-center">
-              <div className="relative"></div>
+      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+        <div className="px-5 py-6">
+          {/* Second Navbar */}
+          <div className="p-5 bg-white drop-shadow-md rounded-xl">
+            <div className="flex items-center justify-between">
+              <h1
+                className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
+              >
+                Add Time Entry
+              </h1>
+              <div className="flex items-center gap-4 justify-center">
+                <div className="relative"></div>
 
-              <div className="relative">
-                <button
-                  className={`${clickS} px-3 py-2 rounded-lg capitalize mr-6`}
-                  onClick={() => router.push("/timeline")}
-                >
-                  Go Back
-                </button>
-                <button
-                  onClick={() => saveAll()}
-                  className={`${clickS} px-3 py-2 rounded-lg capitalize`}
-                >
-                  Save Time Entry
-                </button>
+                <div className="relative">
+                  <button
+                    className={`${clickS} px-3 py-2 rounded-lg capitalize mr-6`}
+                    onClick={() => router.push("/timeline")}
+                  >
+                    Go Back
+                  </button>
+                  <button
+                    onClick={() => saveAll()}
+                    type="submit"
+                    className={`${clickS} px-3 py-2 rounded-lg capitalize`}
+                  >
+                    Save Time Entry
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="px-5 py-6">
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
+        <div className="px-5 py-6">
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2 ml-6">
@@ -329,13 +358,6 @@ const Projects = () => {
                         Task
                       </th>
                       <th scope="col" className="px-6 py-3">
-                        project Type
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        remarks
-                      </th>
-
-                      <th scope="col" className="px-6 py-3">
                         Duration
                       </th>
                       <th scope="col" className="px-6 py-3">
@@ -359,6 +381,7 @@ const Projects = () => {
                           dropdownPosition="top"
                           withinPortal
                           {...form.getInputProps(`entries.${0}.project`)}
+                          onChange={(e) => selectProject(e, 0)}
                         />
                       </th>
                       <td className="px-6 py-4">
@@ -368,38 +391,15 @@ const Projects = () => {
                           dropdownPosition="top"
                           withinPortal
                           nothingFound="No options"
-                          data={tasks}
+                          data={form.values.entries[0].tasks}
                           {...form.getInputProps(`entries.${0}.task`)}
-                        />
-                      </td>
-                      <td className="px-6 py-4">
-                        <Select
-                          placeholder="select project type"
-                          searchable
-                          dropdownPosition="top"
-                          withinPortal
-                          nothingFound="No options"
-                          data={[
-                            "Internal project",
-                            "Hourly cost project",
-                            "Fixed cost project",
-                          ]}
-                          {...form.getInputProps(`entries.${0}.projectType`)}
-                         
-                        />
-                      </td>
-
-                      <td className="px-6 py-4">
-                        <Textarea
-                          placeholder="write remark"
-                          withAsterisk
-                          {...form.getInputProps(`entries.${0}.remarks`)}
                         />
                       </td>
                       <td className="px-6 py-4">
                         <NumberInput
                           defaultValue={18}
                           placeholder="choose duration"
+                          type="number"
                           withAsterisk
                           {...form.getInputProps(`entries.${0}.duration`)}
                         />
@@ -431,6 +431,7 @@ const Projects = () => {
                                   {...form.getInputProps(
                                     `entries.${index}.project`
                                   )}
+                                  onChange={(e) => selectProject(e, index)}
                                 />
                               </th>
                               <td className="px-6 py-4">
@@ -438,34 +439,9 @@ const Projects = () => {
                                   placeholder="choose Task"
                                   searchable
                                   nothingFound="No options"
-                                  data={tasks}
+                                  data={item.tasks}
                                   {...form.getInputProps(
                                     `entries.${index}.task`
-                                  )}
-                                />
-                              </td>
-                              <td className="px-6 py-4">
-                                <Select
-                                  placeholder="project Type"
-                                  searchable
-                                  nothingFound="No options"
-                                  data={[
-                                    "Internal project",
-                                    "Hourly cost project",
-                                    "Fixed cost project",
-                                  ]}
-                                  {...form.getInputProps(
-                                    `entries.${index}.projectType`
-                                  )}
-                                />
-                              </td>
-
-                              <td className="px-6 py-4">
-                                <Textarea
-                                  placeholder="write remark"
-                                  withAsterisk
-                                  {...form.getInputProps(
-                                    `entries.${index}.remarks`
                                   )}
                                 />
                               </td>
@@ -473,6 +449,7 @@ const Projects = () => {
                                 <NumberInput
                                   defaultValue={18}
                                   placeholder="choose duration"
+                                  type="number"
                                   withAsterisk
                                   {...form.getInputProps(
                                     `entries.${index}.duration`
@@ -508,18 +485,20 @@ const Projects = () => {
                 <button
                   className={`${clickS} px-3 py-2 rounded-lg capitalize ml-6 mt-2`}
                   onClick={() => addEntry()}
-                  type="submit"
                 >
                   Add Time Entry
                 </button>
               </div>
             </div>
           </div>
-        </form>
-      </div>
+        </div>
 
-      <ModalProject showModal={showModal} handleCloseModal={handleCloseModal} />
-      <Footer />
+        <ModalProject
+          showModal={showModal}
+          handleCloseModal={handleCloseModal}
+        />
+        <Footer />
+      </form>
     </LayoutNav>
   );
 };

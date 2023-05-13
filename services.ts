@@ -397,6 +397,15 @@ export const getTasks = gql`
   }
 `;
 
+export const getTasksOfSelectedProject = gql`
+query Query($where: TaskWhereInput!) {
+  tasks(where: $where) {
+    name
+    id
+  }
+}
+`;
+
  export const getProjects = gql`
   query Projects {
     projects {
