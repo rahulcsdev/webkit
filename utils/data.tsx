@@ -50,6 +50,11 @@ export const navLinks=[
    },
    {
     icon:<BsHourglass className='text-2xl'/>,
+    name:"approval as project Manager",
+    link:'/projectManagerTimeLines'
+   },
+   {
+    icon:<BsHourglass className='text-2xl'/>,
     name:"Time Entry",
     link:'/timeline'
    },

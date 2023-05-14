@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { useForm,isNotEmpty } from "@mantine/form";
+import { useForm, isNotEmpty } from "@mantine/form";
 import DatePicker from "react-datepicker";
 import {
   Textarea,
@@ -52,24 +52,24 @@ const TimeEntries = () => {
     },
 
     validate: {
-      remark: isNotEmpty('remark cannot be empty'),
+      remark: isNotEmpty("remark cannot be empty"),
     },
   });
 
   useEffect(()=>{
-    const userId = localStorage.getItem("userId")
-    if(userId){
-     form.setFieldValue("userId", userId)
-    }
- },[])
+    console.log('l')
+     const userId = localStorage.getItem("userId")
+     if(userId){
+      form.setFieldValue("userId", userId)
+   
+     }
+  },[])
 
-  const { data } = useQuery(getSpecificManagerTimeEntries, {
+  const { data, refetch  } = useQuery(getSpecificManagerTimeEntries, {
     variables: {
       where: {
-        reviewedBy: {
-          id: {
-            equals: form.values.userId,
-          },
+        projectManager: {
+          equals: form.values.userId,
         },
       },
     },
@@ -84,8 +84,8 @@ const TimeEntries = () => {
   }
 
   const changeStatus = async () => {
-    if(form.validate().hasErrors){
-       return     form.setFieldError('remark', 'remark cannot be empty')
+    if (form.validate().hasErrors) {
+      return form.setFieldError("remark", "remark cannot be empty");
     }
     createProject({
       variables: {
@@ -115,10 +115,16 @@ const TimeEntries = () => {
   const notClickS = "bg-gray-100 text-black";
   return (
     <LayoutNav>
-<form onSubmit={form.onSubmit(
-    (values, _event) => { console.log('h',values,_event)  },
-    (validationErrors, _values, _event) => { console.log(validationErrors) }
-)}>
+      <form
+        onSubmit={form.onSubmit(
+          (values, _event) => {
+            console.log("h", values, _event);
+          },
+          (validationErrors, _values, _event) => {
+            console.log(validationErrors);
+          }
+        )}
+      >
         <>
           <Modal opened={opened} onClose={close} centered>
             change status
@@ -156,7 +162,7 @@ const TimeEntries = () => {
               <h1
                 className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
               >
-                Reporting Manager Time Entries
+                Project Manager Time Entries
               </h1>
               <div className="flex items-center gap-4 justify-center">
                 <div className="relative"></div>

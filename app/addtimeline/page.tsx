@@ -26,6 +26,7 @@ import {
   getProjectDetail,
   getspecficUser,
   getTasksOfSelectedProject,
+  getSpecificManagerTimeEntries,
 } from "@/services";
 
 const Projects = () => {
@@ -41,43 +42,42 @@ const Projects = () => {
   const [tasks, setTasks] = useState<Array<string>>([]);
   const router = useRouter();
 
-  const getManagerId = async (item: any) => {
-    if (
-      item.projectType === "Hourly cost project" ||
-      item.projectType === "Fixed cost project"
-    ) {
-      return await client
-        .query({
-          query: getProjectDetail,
-          variables: {
-            where: {
-              id: item.project,
-            },
+  const [createTimesheets, {}] = useMutation(addTimesheets);
+
+  const getReportingManagerId = async (item: any) => {
+    return await client
+      .query({
+        query: getspecficUser,
+        variables: {
+          id: localStorage.getItem("userId"),
+        },
+      })
+      .then((res: any) => {
+        console.log("res", res);
+        return res.data?.user?.reportingManager.id;
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
+  const getProjectManagerId = async (item: any) => {
+    return await client
+      .query({
+        query: getProjectDetail,
+        variables: {
+          where: {
+            id: item.project,
           },
-        })
-        .then((res: any) => {
-          console.log("res", res);
-          return res.data?.project?.projectManager.id;
-        })
-        .catch((err) => {
-          console.log("err", err);
-        });
-    } else {
-      return await client
-        .query({
-          query: getspecficUser,
-          variables: {
-            id: localStorage.getItem("userId"),
-          },
-        })
-        .then((res: any) => {
-          console.log("res", res);
-          return res.data?.user?.reportingManager.id;
-        })
-        .catch((err) => {
-          console.log("err", err);
-        });
-    }
+        },
+      })
+      .then((res: any) => {
+        console.log("res", res);
+        return res.data?.project?.projectManager.id;
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
 
   const getProjectsData = async () => {
@@ -125,11 +125,16 @@ const Projects = () => {
   };
 
   useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      form.setFieldValue("userId", userId);
+    }
     getProjectsData();
   }, []);
 
   const form = useForm({
     initialValues: {
+      userId: "",
       entries: [
         {
           project: "",
@@ -150,8 +155,43 @@ const Projects = () => {
       entries: {
         project: (value) => (value ? null : "select project"),
         task: (value) => (value ? null : "select task"),
-        duration: (value:any) => ( (value === 0  || value === '' ) ?  "duration can not be zero" : null),
+        duration: (value: any) =>
+          value === 0 || value === "" ? "duration can not be zero" : null,
         activity: (value) => (value ? null : "add activity"),
+      },
+    },
+  });
+
+  const { refetch: refetch1 } = useQuery(getSpecificManagerTimeEntries, {
+    variables: {
+      where: {
+        userName: {
+          id: {
+            equals: form.values.userId,
+          },
+        },
+      },
+    },
+  });
+
+  const { refetch: refetch2 } = useQuery(getSpecificManagerTimeEntries, {
+    variables: {
+      where: {
+        reviewedBy: {
+          id: {
+            equals: form.values.userId,
+          },
+        },
+      },
+    },
+  });
+
+  const { refetch: refetch3 } = useQuery(getSpecificManagerTimeEntries, {
+    variables: {
+      where: {
+        projectManager: {
+          equals: form.values.userId,
+        },
       },
     },
   });
@@ -202,67 +242,67 @@ const Projects = () => {
   const saveAll = async () => {
     console.log("here ", form.validate());
 
-    if(form.validate().hasErrors){
-       return
-    }
+    if (form.validate().hasErrors) {
+      return;
+    } else {
+      console.log("no errors");
 
-    else{
-     console.log('no errors')
-     
-    const Mutatedata = form.values.entries.map(async (item) => {
-      return {
-        activities: item.activity,
-        duration: item.duration.toString(),
-        task: {
-          connect: {
-            id: item.task,
+      const Mutatedata = form.values.entries.map(async (item) => {
+        return {
+          activities: item.activity,
+          duration: item.duration.toString(),
+          task: {
+            connect: {
+              id: item.task,
+            },
           },
-        },
-        date: form.values.date,
-        project: {
-          connect: {
-            id: item.project,
+          date: form.values.date,
+          project: {
+            connect: {
+              id: item.project,
+            },
           },
-        },
-        projectType: item.projectType,
-        reviewedBy: {
-          connect: {
-            id: await getManagerId(item),
+          projectType: item.projectType,
+          ...(item.projectType === "Internal project" && {
+            reviewedBy: {
+              connect: {
+                id: await getReportingManagerId(item),
+              },
+            },
+          }),
+          ...((item.projectType === "Hourly cost project" ||
+            item.projectType === "Fixed cost project") && {
+            projectManager: await getProjectManagerId(item),
+          }),
+          userName: {
+            connect: {
+              id: localStorage.getItem("userId"),
+            },
           },
-        },
-        ...((item.projectType === "Hourly cost project" ||
-          item.projectType === "Fixed cost project") && {
-          projectManager: await getManagerId(item),
-        }),
-        userName: {
-          connect: {
-            id: localStorage.getItem("userId"),
-          },
-        },
-        reviewStatus: "Pending",
-        remarks: item.remarks,
-      };
-    });
-
-    Promise.all(Mutatedata).then((values) => {
-      console.log(values);
-      client
-      .mutate({
-        mutation: addTimesheets,
-        variables: {
-          data: values,
-        },
-      })
-      .then((res: any) => {
-        console.log("timelines added", res);
-        alert('timeline added')
-      })
-      .catch((err) => {
-        console.log("err", err);
+          reviewStatus: "Pending",
+          remarks: item.remarks,
+        };
       });
-    });
-    }
 
+      Promise.all(Mutatedata).then((values) => {
+        console.log(values);
+        createTimesheets({
+          variables: {
+            data: values,
+          },
+        })
+          .then((res: any) => {
+            console.log("timelines added", res);
+            refetch1();
+            refetch2();
+            refetch3();
+            alert("timeline added");
+          })
+          .catch((err) => {
+            console.log("err", err);
+          });
+      });
+    }
   };
 
   function handleCloseModal() {
@@ -277,7 +317,7 @@ const Projects = () => {
     console.log("number", index);
 
     form.setFieldValue(`entries.${index}.project`, e);
-    form.setFieldValue(`entries.${index}.task`,"")
+    form.setFieldValue(`entries.${index}.task`, "");
 
     const tasks = await getProjectsTasks(e);
 
@@ -488,7 +528,6 @@ const Projects = () => {
                   onClick={() => addEntry()}
                   type="button"
                 >
-          
                   Add Time Entry
                 </button>
               </div>

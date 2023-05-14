@@ -257,6 +257,16 @@ query Query($where: MilestoneWhereUniqueInput!) {
   }
 }
 `;
+
+export const getAll= gql`
+query TimeEnteries {
+  timeEnteries {
+    userName {
+      email
+    }
+  }
+}`
+
 export const getspecficUser = gql`
 query User($id: ID!) {
   user(where: { id: $id }) {
@@ -336,7 +346,7 @@ export const viewTimesheetDetails = gql`
   }
 `;
 
-export const getTimeEntriesWhenIamAreportingManager = gql`
+export const getSpecificManagerTimeEntries = gql`
 query Query($where: TimeEnteryWhereInput!) {
   timeEnteries(where: $where) {
     id

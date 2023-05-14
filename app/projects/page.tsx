@@ -23,7 +23,7 @@ const Projects = () => {
   const [projects, setProjects] = useState([]);
   const { data, loading, error } = useQuery(getProjectList, {
     client,
-    // variables: {
+    // variables: { 
     //   take: 8,
     //   skip: 1 * 8,
     // },
