@@ -88,7 +88,7 @@ const handleDateChange=(date:Date)=>{
       </div>
 
     </div>
-    <Footer  />
+   
     </LayoutNav>
   );
 }
