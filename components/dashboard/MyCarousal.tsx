@@ -1,5 +1,5 @@
 import React from 'react'
-import { carousalData } from '../utils/data'
+import { carousalData } from '../../utils/data'
 import CardCarousal from './CardCarousal'
 import Slider,{Settings} from 'react-slick'
 import 'slick-carousel/slick/slick.css';

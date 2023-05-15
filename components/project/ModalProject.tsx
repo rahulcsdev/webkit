@@ -1,24 +1,27 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
-import client from "../apolloClient/index";
+import client from "../../apolloClient/index";
 import { gql, useMutation } from "@apollo/client";
-import { employeeData, projectsData } from "../utils/data";
-import { MultiSelect, Input, Select } from "@mantine/core";
+ 
+import { MultiSelect, Input, Select, FileInput, rem } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DateInput } from "@mantine/dates";
 import { addProject, getProjectList, getUser } from "@/services";
+import {FaUpload} from 'react-icons/fa'
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: () => void;
+  refetch:any
 }
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const ModalProject = (props: typeModal) => {
-  const { showModal, handleCloseModal } = props;
+  const { showModal, handleCloseModal,refetch } = props;
   const [options, setOptions] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
   const [showManager, setShowManager] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>();
   const managerOp = [{ value: "", label: "Choose One", disabled: true }];
 
   const managerOptions = (users: any) => {
@@ -62,6 +65,7 @@ const ModalProject = (props: typeModal) => {
       members: [],
       desc: "",
       code: "",
+      file:""
     },
   });
   interface formTypes {
@@ -74,7 +78,68 @@ const ModalProject = (props: typeModal) => {
     members: Array<string>;
     desc: string;
     code: string;
+    file:string,
   }
+
+const UPLOAD_QUERY=gql`mutation Mutation($data: FileCreateInput!) {
+  createFile(data: $data) {
+    id
+    documents {
+      url
+      filesize
+      filename
+    }
+  }
+}`;
+ 
+const [file, setFile] = useState<File | null>(null);
+const [uploadFile] = useMutation(UPLOAD_QUERY);
+
+const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const selectedFile = event.target.files?.[0];
+  if (selectedFile) {
+    setFile(selectedFile);
+  }
+};
+
+// const convertBase64 = (file) => {
+//     return new Promise((resolve, reject) => {
+//         const fileReader = new FileReader();
+//         fileReader.readAsDataURL(file);
+
+//         fileReader.onload = () => {
+//             resolve(fileReader.result);
+//         };
+
+//         fileReader.onerror = (error) => {
+//             reject(error);
+//         };
+//     });
+// };
+
+
+// const upload=async()=>{
+//   console.log(file)
+//   const base64=await convertBase64(file);
+//   console.log(base64)
+//   if (file) {
+//     try {
+//       await uploadFile({ variables: {
+//         "data": {
+//           "documents": {
+//             "upload": file
+//           }
+//         }
+//       } });
+//       // Handle successful upload
+//       console.log("Completed")
+//     } catch (error) {
+//       // Handle upload error
+//       console.log(error)
+//     }
+//   }
+// }
+
 
   const [createProject, { loading, data, error }] = useMutation(addProject);
 
@@ -111,7 +176,7 @@ const ModalProject = (props: typeModal) => {
       status: formData.status,
       endDate: formData.endDate.toISOString(),
       projectDiscription: formData.desc,
-
+      
       member: {
         connect: membersObj,
       },
@@ -122,11 +187,17 @@ const ModalProject = (props: typeModal) => {
         data: formData.projectManager === "" ? withOutManager : withManager,
       },
       refetchQueries: [{ query: getProjectList }],
+      onCompleted:()=>{
+        refetch();
+      }
     })
       .then(() => handleCloseModal())
       .catch((error) => console.log(error));
   };
   //  console.log(form.getInputProps('type').value)
+
+
+ 
   return (
     <>
       {showModal && (
@@ -253,7 +324,12 @@ const ModalProject = (props: typeModal) => {
                     placeholder="Pick all members you like"
                     {...form.getInputProps("members")}
                   />
+                  {/* <div className="flex gap-2 items-end w-full">
+                 <FileInput className="w-full" label="Your resume" onChange={(e)=>setSelectedFile(e)} placeholder="Choose file" icon={<FaUpload size={rem(14)} />} />
+                 <input type="file"  onChange={handleFileChange} />
+                 <button type="button" className="px-2 py-1 rounded-md bg-[#5773FF] text-white" onClick={upload} >Upload</button>
 
+                  </div> */}
                   <div className="flex items-center justify-center mt-4 gap-4 ">
                     <button
                       type="submit"

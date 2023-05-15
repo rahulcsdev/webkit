@@ -1,14 +1,14 @@
 "use client"
 import { Manrope } from "next/font/google";
 import { boxCardData, cartData, dataDev, progressData } from "../utils/data";
-import Card from "../components/Card";
+import Card from "../components/dashboard/Card";
 import {useState} from 'react'
-import CardPro from "../components/CardPro";
+import CardPro from "../components/dashboard/CardPro";
  
-import BoxCard from "../components/BoxCard";
+import BoxCard from "../components/dashboard/BoxCard";
 import CustomCalender from "../components/CustomCalender";
-import DataCard from "../components/DataCard";
-import MyCarousal from "../components/MyCarousal";
+import DataCard from "../components/dashboard/DataCard";
+import MyCarousal from "../components/dashboard/MyCarousal";
  
 import LayoutNav from "@/components/LayoutNav";
 import Footer from "@/components/Footer";
