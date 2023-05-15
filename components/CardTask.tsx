@@ -33,17 +33,6 @@ const CardTask = (props: any) => {
     },
   });
 
-  useEffect(() => {
-    formData.setValues({
-      task: item?.name,
-      project: item?.project?.id,
-      priority: item?.priority,
-      status: item?.status,
-      mileStone: item?.milestone?.id,
-      description: item?.discription,
-    });
-  }, [Taskupdate]);
-
   const updateTaskHandler = (value: any) => {
     console.log("value", value);
     Taskupdate({
@@ -77,6 +66,16 @@ const CardTask = (props: any) => {
     setShow(!show);
   };
 
+  useEffect(() => {
+    formData.setValues({
+      task: item?.name,
+      project: item?.project?.id,
+      priority: item?.priority,
+      status: item?.status,
+      mileStone: item?.milestone?.id,
+      description: item?.discription,
+    });
+  });
   return (
     <div className="mb-6 ">
       <div className="border rounded-3xl p-4 flex justify-between items-center cursor-pointer hover:bg-[#eee]">
