@@ -3,7 +3,7 @@ import { FiEdit } from "react-icons/fi";
 import { useForm } from "@mantine/form";
 import { TextInput, Select, Box, Button, Textarea } from "@mantine/core";
 import { useMutation } from "@apollo/client";
-import { updateTask, getTask } from "../services";
+import { updateTask, getTask } from "../../services";
 import { IoEyeSharp } from "react-icons/io5";
 import IndividalTask from "./IndividalTask";
 const CardTask = (props: any) => {
@@ -37,7 +37,6 @@ const CardTask = (props: any) => {
   });
 
   const updateTaskHandler = (value: any) => {
-    console.log("value", value);
     Taskupdate({
       variables: {
         where: {

@@ -4,7 +4,7 @@ import { useForm } from "@mantine/form";
 import { TextInput, Select, Box, Button, Textarea } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useMutation } from "@apollo/client";
-import { addTask, getTask } from "../services";
+import { addTask, getTask } from "../../services";
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: any;
@@ -38,8 +38,8 @@ const ModalTasks = (props: typeModal) => {
       priority: "",
       status: "",
       task_type: "",
-      start_date: "",
-      end_date: "",
+      start_date: new Date(),
+      end_date: new Date(),
       mileStone: "",
       estimate_Time: "",
       description: " ",
@@ -47,7 +47,6 @@ const ModalTasks = (props: typeModal) => {
   });
 
   const formSubmitHandler = (value: any) => {
-    console.log(value);
     if (
       !(
         value?.task &&
@@ -62,10 +61,10 @@ const ModalTasks = (props: typeModal) => {
         value?.task_type
       )
     ) {
-      setErrMessage("All the Field is Required");
+      setErrMessage("Fill all the Field , Required");
       return;
     } else {
-      setErrMessage("Created");
+      setErrMessage("New Task is Created");
     }
     createTask({
       variables: {
@@ -86,8 +85,8 @@ const ModalTasks = (props: typeModal) => {
               id: value?.mileStone,
             },
           },
-          endDate: value?.end_date,
-          startDate: value?.start_date,
+          endDate: value?.end_date?.toISOString(),
+          startDate: value?.start_date?.toISOString(),
           taskType: value?.task_type,
         },
       },
@@ -230,9 +229,12 @@ const ModalTasks = (props: typeModal) => {
                     <Button
                       radius="md"
                       className="px-4 py-2 mx-4 bg-blue-500 "
-                      onClick={handleCloseModal}
+                      onClick={() => {
+                        formData.reset();
+                        setErrMessage("");
+                      }}
                     >
-                      Cancel
+                      Reset
                     </Button>
                   </Box>
                 </form>
