@@ -33,7 +33,7 @@ interface Props {
 }
 
 const EmployeesCardListView = (props: Props) => {
-  const { data:{id , name , email ,code , designation , role  } , openDetails } = props;
+  const { data:{id , name , email ,code , designation , role , dateofjoining , reportingmanager  } , openDetails } = props;
  
 
   return (

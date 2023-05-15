@@ -93,7 +93,7 @@ const Employees = () => {
       },
     });
     setData(data.users);
-    console.log(data.users);
+    console.log(" check data" + data.users);
   };
 
   // const fetchUser = useCallback(async () => {
@@ -118,6 +118,7 @@ const Employees = () => {
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
+    
   };
 
   const startIndex = (activePage - 1) * PAGE_SIZE;

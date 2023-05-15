@@ -275,19 +275,19 @@ query Query($where: MilestoneWhereUniqueInput!) {
 `;
 export const getspecficUser = gql`
 query Query($where: UserWhereUniqueInput!) {
-  user(where: $where) {
-    id
-    name
-    email
-    designation
-    role
-    dateOfJoining
-    reportingManager {
-      id
-      name
-    }
-  }
-}
+            user(where: $where) {
+              id
+              name
+              email
+              designation
+              role
+              dateOfJoining
+              reportingManager {
+                id
+                name
+              }
+            }
+          }
 `;
 
 export const getUserDetails=gql`
@@ -419,11 +419,18 @@ export const addUser = gql`
 `;
 
 export const updateUser = gql`
-  mutation UpdateUser($where: UserWhereUniqueInput!, $data: UserUpdateInput!) {
-    updateUser(where: $where, data: $data) {
+mutation UpdateUser($where: UserWhereUniqueInput!, $data: UserUpdateInput!) {
+  updateUser(where: $where, data: $data) {
+    id
+    name
+    email
+    designation
+    dateOfJoining
+    reportingManager {
       id
     }
   }
+}
 `;
 
 

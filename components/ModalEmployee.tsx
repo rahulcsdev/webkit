@@ -63,8 +63,8 @@ interface formTypes {
   password:string;
   designation: string;
   role: string;
-  dateofjoining: Date;
-  reportingmanager: string;
+  dateOfJoining: Date;
+  reportingManager: string;
 };
 
 
@@ -120,8 +120,8 @@ const ModalEmployee = (props: typeModal) => {
       password: "",
       designation: "",
       role: "",
-      dateofjoining: new Date(),
-      reportingmanager: "",
+      dateOfJoining: new Date(),
+      reportingManager: "",
     },
 
     
@@ -146,10 +146,10 @@ const ModalEmployee = (props: typeModal) => {
             password: formData.password,
             designation: formData.designation,
             role: formData.role,
-            dateOfJoining: formData.dateofjoining.toISOString(),
+            dateOfJoining: formData.dateOfJoining.toISOString(),
             reportingManager: {
               connect: {
-                id: formData.reportingmanager
+                id: formData.reportingManager
               }
             }
           }
@@ -174,12 +174,6 @@ const ModalEmployee = (props: typeModal) => {
     }
   }
   
-
-
-
- 
-
-
   return (
     <>
       {showModal && (
@@ -286,7 +280,7 @@ const ModalEmployee = (props: typeModal) => {
                           },
                         }}
                         data={users}
-                        {...form.getInputProps("reportingmanager")}
+                        {...form.getInputProps("reportingManager")}
                       />
                     </Grid.Col>
 
@@ -307,7 +301,7 @@ const ModalEmployee = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
-                        {...form.getInputProps("dateofjoining")}
+                        {...form.getInputProps("dateOfJoining")}
                       />
                     </Grid.Col>
 
