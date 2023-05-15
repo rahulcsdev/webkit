@@ -306,10 +306,13 @@ query Query {
     id
     name
     email
-    code
     designation
     role
     dateOfJoining
+    reportingManager {
+      id
+      name
+    }
   }
 }
 `;
