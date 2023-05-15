@@ -105,8 +105,8 @@ export const updateTimeEntry = gql`
     }
   }
 `;
-export const Login = gql`
-  mutation authenticateUserWithPassword($email: String!, $password: String!) {
+export const UserLogin = gql`
+  mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
     authenticateUserWithPassword(email: $email, password: $password) {
       ... on UserAuthenticationWithPasswordSuccess {
         sessionToken
@@ -280,19 +280,13 @@ export const getMilestoneDetails = gql`
   }
 `;
 export const getspecficUser = gql`
-query Query($where: UserWhereUniqueInput!) {
-  user(where: $where) {
-    id
-    name
-    email
-    designation
-    role
-    dateOfJoining
-    reportingManager {
+  query Query($where: UserWhereUniqueInput!) {
+    user(where: $where) {
       id
       name
       email
       designation
+      role
       dateOfJoining
       reportingManager {
         id
@@ -433,6 +427,42 @@ export const updateUser = gql`
   mutation UpdateUser($where: UserWhereUniqueInput!, $data: UserUpdateInput!) {
     updateUser(where: $where, data: $data) {
       id
+    }
+  }
+`;
+
+export const getTasks = gql`
+  query Query {
+    tasks {
+      name
+      id
+    }
+  }
+`;
+
+export const getProjects = gql`
+  query Projects {
+    projects {
+      name
+      id
+    }
+  }
+`;
+
+export const addTimesheets = gql`
+  mutation Mutation($data: [TimeEnteryCreateInput!]!) {
+    createTimeEnteries(data: $data) {
+      activities
+      project {
+        id
+        name
+      }
+      task {
+        id
+        name
+      }
+      duration
+      date
     }
   }
 `;
