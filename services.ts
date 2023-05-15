@@ -99,9 +99,12 @@ export const UPDATE_MILESTONE = gql`
   }
 `;
 export const updateTimeEntry = gql`
-  mutation ($where: TimeEntryWhereUniqueInput!, $data: TimeEntryUpdateInput!) {
-    updateTimeEntry(where: $where, data: $data) {
-      id
+  mutation Mutation(
+    $where: TimeEnteryWhereUniqueInput!
+    $data: TimeEnteryUpdateInput!
+  ) {
+    updateTimeEntery(where: $where, data: $data) {
+      reviewStatus
     }
   }
 `;
@@ -279,6 +282,17 @@ export const getMilestoneDetails = gql`
     }
   }
 `;
+
+export const getAll = gql`
+  query TimeEnteries {
+    timeEnteries {
+      userName {
+        email
+      }
+    }
+  }
+`;
+
 export const getspecficUser = gql`
   query Query($where: UserWhereUniqueInput!) {
     user(where: $where) {
@@ -373,28 +387,32 @@ export const viewTimesheetDetails = gql`
   }
 `;
 
-export const getTimeEntries = gql`
-  query ($where: TimeEntryWhereUniqueInput!) {
-    timeEntry(where: $where) {
+export const getSpecificManagerTimeEntries = gql`
+  query Query(
+    $orderBy: [TimeEnteryOrderByInput!]!
+    $where: TimeEnteryWhereInput!
+  ) {
+    timeEnteries(orderBy: $orderBy, where: $where) {
       id
       project {
-        id
         name
+        id
       }
       task {
-        id
         name
+        id
       }
-      projectType
-      reviewStatus
-      projectManager
-      activities
-
       reviewedBy {
         name
         id
       }
-      reviewedAt
+      userName {
+        name
+      }
+      activities
+      reviewStatus
+      date
+      projectType
       duration
       remarks
     }
@@ -440,6 +458,15 @@ export const getTasks = gql`
   }
 `;
 
+export const getTasksOfSelectedProject = gql`
+  query Query($where: TaskWhereInput!) {
+    tasks(where: $where) {
+      name
+      id
+    }
+  }
+`;
+
 export const getProjects = gql`
   query Projects {
     projects {
@@ -452,16 +479,29 @@ export const getProjects = gql`
 export const addTimesheets = gql`
   mutation Mutation($data: [TimeEnteryCreateInput!]!) {
     createTimeEnteries(data: $data) {
-      activities
+      id
       project {
-        id
         name
       }
       task {
-        id
         name
       }
+      activities
+      code
       duration
+      projectType
+      projectManager
+      userName {
+        name
+        id
+      }
+      reviewStatus
+      remarks
+      reviewedBy {
+        name
+        id
+      }
+      reviewedAt
       date
     }
   }
