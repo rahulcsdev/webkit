@@ -354,6 +354,7 @@ export const deskCarousalData=[
 
 export const dropDown=[
   
+   { label: "All", value: "all" },
    { label: "New", value: "New" },
    {
      label: "Design",

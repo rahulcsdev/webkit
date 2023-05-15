@@ -20,30 +20,84 @@ const manrope = Manrope({ subsets: ["latin"] });
 
 
 const Projects = () => {
+  
+const ITEMS_PER_PAGE = 9;
+const INITIAL_PAGE = 1;
+const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [projects, setProjects] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
-  const [status, setStatus] = useState('Completed')
+  const [status, setStatus] = useState('all')
   const [viewMode, setViewMode] = useState(true);
+  const [total, setTotal] = useState(0);
+
+// Condition for status
+ 
+
+
   const { data, loading, error } = useQuery(getProjectList, {
     client,
-    variables: {
-      // skip: (currentPage - 1) * ITEMS_PER_PAGE,
-      // take: ITEMS_PER_PAGE,
+    variables:status==='all'? {
+      skip: (currentPage - 1) * ITEMS_PER_PAGE,
+      take: ITEMS_PER_PAGE,
+    }: {
+      skip: (currentPage - 1) * ITEMS_PER_PAGE,
+      take: ITEMS_PER_PAGE,
        "where": {
         "status": {
           "equals": status
         }
       }
-    },
+    }
   });
+  // Without all
+  // const { data, loading, error } = useQuery(getProjectList, {
+  //   client,
+  //   variables:{
+  //     skip: (currentPage - 1) * ITEMS_PER_PAGE,
+  //     take: ITEMS_PER_PAGE,
+  //      "where": {
+  //       "status": {
+  //         "equals": status
+  //       }
+  //     }
+  //   }
+  // });
  
+  const handlePageChange = (page:any) => {
+    setCurrentPage(page);
+  };
  
+  
  
+  const fetchData=async()=>{
+ 
+       client.query({
+        query:getProjectList,
+      
+        variables:status==='all'?{}:{
+          "where": {
+            "status": {
+              "equals": status
+            }
+          }
+        },
+        
+      }).then(({data})=>{
+        console.log(data);
+      setTotal(data?.projects?.length);
+      })
+  
+  }
+
+  useEffect(()=>{
+    fetchData();
+  },[status,currentPage]);
+
 
   useEffect(()=>{
     console.log(data)
-    setProjects(data?.projects)
+    setProjects(data?.projects);
   },[data,loading]);
   
  
@@ -55,7 +109,7 @@ const Projects = () => {
    setShowModalEdit(true);
 
  }
-  console.log(status)
+ 
   function handleCloseModal() {
     setShowModal(false);
    
@@ -65,7 +119,10 @@ const Projects = () => {
     setShowModalEdit(false);
     setSelectedFeild(null);
   }
- 
+  // console.log(total)
+    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    const visibleTotal = currentPage === totalPages ? total % ITEMS_PER_PAGE : ITEMS_PER_PAGE;
+  // console.log(visibleTotal)
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
   return (
@@ -143,10 +200,16 @@ const Projects = () => {
             </div>
           )}
         </div>
-     
+       <div className="my-5 flex items-center justify-center">
+
+         <Pagination total={totalPages}   onChange={handlePageChange} value={currentPage} />
+       </div>
+      
+ 
+       
    
       </div>
-   <ModalProject    showModal={showModal} handleCloseModal={handleCloseModal} />
+   <ModalProject    showModal={showModal} handleCloseModal={handleCloseModal}  />
   {selectedFeild&& <EditModalProject   id={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/> } 
      
    

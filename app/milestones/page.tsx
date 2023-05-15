@@ -13,16 +13,19 @@ import EditModalMs from "../../components/EditModalMs";
 import client from "@/apolloClient";
 import { getMilestone } from "@/services";
 import { useQuery } from "@apollo/client";
+import { Pagination } from "@mantine/core";
 
 const manrope = Manrope({ subsets: ["latin"] });
 const MildStone = () => {
   const [isExpand, setIsExpand] = useState(false);
-  
+  const ITEMS_PER_PAGE = 9;
+const INITIAL_PAGE = 1;
+const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
-  
+  const [total, setTotal] = useState(0);
   const [viewMode, setViewMode] = useState(true);
-  const [status, setStatus] = useState('Completed')
+  const [status, setStatus] = useState('all')
   const [selectedFeild, setSelectedFeild] = useState<string | null >()
   const [mileData, setMileData] = useState([])
   const openDetails = (id: string) => {
@@ -42,20 +45,52 @@ const MildStone = () => {
  
 const { data, loading, error } = useQuery(getMilestone, {
   client,
-  variables: {
-    // take: 8,
-    // skip: 1 * 8,
-    "where": {
+  variables:status==='all'? {
+    skip: (currentPage - 1) * ITEMS_PER_PAGE,
+    take: ITEMS_PER_PAGE,
+  }: {
+    skip: (currentPage - 1) * ITEMS_PER_PAGE,
+    take: ITEMS_PER_PAGE,
+     "where": {
       "status": {
         "equals": status
       }
     }
   },
 });
+const handlePageChange = (page:any) => {
+  setCurrentPage(page);
+};
+
+const fetchData=async()=>{
+ 
+  client.query({
+   query:getMilestone,
+ 
+   variables:status==='all'?{}:{
+     "where": {
+       "status": {
+         "equals": status
+       }
+     }
+   },
+   
+ }).then(({data})=>{
+   console.log(data);
+ setTotal(data?.milestones?.length);
+ })
+
+}
+
+useEffect(()=>{
+fetchData();
+},[status,currentPage]);
+
 useEffect(()=>{
   setMileData(data?.milestones);
 },[data,loading]);
-
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+  const visibleTotal = currentPage === totalPages ? total % ITEMS_PER_PAGE : ITEMS_PER_PAGE;
 
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
@@ -148,7 +183,10 @@ useEffect(()=>{
             </div>
           )}
         </div>
+        <div className="my-5 flex items-center justify-center">
 
+<Pagination total={totalPages}   onChange={handlePageChange} value={currentPage} />
+</div>
         
       </div>
       <ModalMs  showModal={showModal} handleCloseModal={handleCloseModal} />
