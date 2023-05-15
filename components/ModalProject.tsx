@@ -12,11 +12,12 @@ import {FaUpload} from 'react-icons/fa'
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: () => void;
+  refetch:any
 }
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const ModalProject = (props: typeModal) => {
-  const { showModal, handleCloseModal } = props;
+  const { showModal, handleCloseModal,refetch } = props;
   const [options, setOptions] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
   const [showManager, setShowManager] = useState(false);
@@ -186,6 +187,9 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         data: formData.projectManager === "" ? withOutManager : withManager,
       },
       refetchQueries: [{ query: getProjectList }],
+      onCompleted:()=>{
+        refetch();
+      }
     })
       .then(() => handleCloseModal())
       .catch((error) => console.log(error));

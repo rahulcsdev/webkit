@@ -43,7 +43,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
     setShowModalEdit(false);
   }
  
-const { data, loading, error } = useQuery(getMilestone, {
+const { data, loading, error,refetch } = useQuery(getMilestone, {
   client,
   variables:status==='all'? {
     skip: (currentPage - 1) * ITEMS_PER_PAGE,
@@ -189,7 +189,7 @@ useEffect(()=>{
 </div>
         
       </div>
-      <ModalMs  showModal={showModal} handleCloseModal={handleCloseModal} />
+      <ModalMs refetch={refetch} showModal={showModal} handleCloseModal={handleCloseModal} />
      {selectedFeild && <EditModalMs selectedFeild={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/>} 
     </LayoutNav>
   );

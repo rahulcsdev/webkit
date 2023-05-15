@@ -12,12 +12,13 @@ import { addMilestone, getMilestone } from '@/services';
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: any;
+  refetch:any
 }
 
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const ModalMs = (props: typeModal) => {
-  const { showModal, handleCloseModal } = props;
+  const { showModal, handleCloseModal,refetch } = props;
   const [projects,setProjects]=useState<any>([]);
   const [isLoading, setIsLoading] = useState(false)
  
@@ -90,6 +91,9 @@ const [createMileStones,{data,loading,error}]=useMutation(addMilestone)
             }
           },
     refetchQueries: [{ query: getMilestone }],
+    onCompleted:()=>{
+      refetch();
+    }
   })
     .then(() => handleCloseModal())
     .catch((error) => console.log(error));

@@ -35,7 +35,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
  
 
 
-  const { data, loading, error } = useQuery(getProjectList, {
+  const { data, loading, error,refetch } = useQuery(getProjectList, {
     client,
     variables:status==='all'? {
       skip: (currentPage - 1) * ITEMS_PER_PAGE,
@@ -92,6 +92,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
 
   useEffect(()=>{
     fetchData();
+    // refetch()
   },[status,currentPage]);
 
 
@@ -209,7 +210,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
        
    
       </div>
-   <ModalProject    showModal={showModal} handleCloseModal={handleCloseModal}  />
+   <ModalProject refetch={refetch}   showModal={showModal} handleCloseModal={handleCloseModal}  />
   {selectedFeild&& <EditModalProject   id={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/> } 
      
    
