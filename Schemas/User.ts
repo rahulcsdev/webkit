@@ -10,11 +10,11 @@ type Session = {
 };
 async function isAdmin({ session }: { session: Session | undefined }) {
   const admin = session?.data.role.filter((el) => ["admin", "userManagement"].includes(el));
-  console.log(admin);
+ 
   if (!session) {
     return true;
   }
-  console.log(admin);
+  
   if (admin?.length !== 0) {
     return true;
   }
@@ -56,9 +56,11 @@ role: multiselect({
       
    ],
       
-}),
-  
-       dateOfJoining: timestamp(),
+          }),
+      
+       
+      
+          dateOfJoining: timestamp(),
       
 reportingManager:relationship({
       
