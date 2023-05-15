@@ -335,7 +335,7 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                       type="submit"
                       className={`text-base font-normal ${roboto.className} text-white px-2 bg-[#5773FF] rounded-md py-1 border-none`}
                     >
-                      {loading?'Creating...':'Create'}
+                      {loading ? "Creating..." : "Create"}
                     </button>
                     <button
                       onClick={() => form.reset()}
