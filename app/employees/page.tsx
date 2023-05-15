@@ -80,6 +80,7 @@ const Employees = () => {
   const notClickS = "bg-gray-100 text-black";
 
   const [datas, setData] = useState<UserData[]>([]);
+  console.log("datas " , datas);
   const [activePage, setPage] = useState(1);
   
   const PAGE_SIZE = 9; // Number of items per page
@@ -93,24 +94,9 @@ const Employees = () => {
       },
     });
     setData(data.users);
-    console.log(" check data" + data.users);
+    console.log("check data" + data);
   };
 
-  // const fetchUser = useCallback(async () => {
-  //   const { data } = await client.query({
-  //     query: getUserDetails,
-  //     variables: {
-  //       take: PAGE_SIZE,
-  //       skip: (activePage - 1) * PAGE_SIZE,
-  //     },
-  //   });
-
-    
-  //   setData(data.users);
-  //   // setTotalCount(data.totalCount.aggregate.count);
-  //   console.log(data.users);
-  // }, [activePage, client]);
-  
 
   useEffect(() => {
     fetchUser();
@@ -124,6 +110,8 @@ const Employees = () => {
   const startIndex = (activePage - 1) * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;
   const displayedData = datas.slice(startIndex, endIndex);
+  console.log("displayedData" ,displayedData);
+  
 
   return (
     <>
