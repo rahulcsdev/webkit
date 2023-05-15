@@ -146,10 +146,11 @@ const Projects = () => {
               }
             })}
         </div>
-        <ModalProject
+        {/* <ModalProject
           showModal={showModal}
           handleCloseModal={handleCloseModal}
-        />
+          refetch={refetch}
+        /> */}
         <Footer />
       </form>
     </LayoutNav>

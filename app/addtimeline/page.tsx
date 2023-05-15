@@ -547,10 +547,10 @@ const Projects = () => {
           </div>
         </div>
 
-        <ModalProject
+         {/* <ModalProject
           showModal={showModal}
           handleCloseModal={handleCloseModal}
-        />
+        />  */}
         <Footer />
       </form>
     </LayoutNav>
