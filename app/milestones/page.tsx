@@ -22,7 +22,7 @@ const MildStone = () => {
   const [showModalEdit, setShowModalEdit] = useState(false);
   
   const [viewMode, setViewMode] = useState(true);
- 
+  const [status, setStatus] = useState('Completed')
   const [selectedFeild, setSelectedFeild] = useState<string | null >()
   const [mileData, setMileData] = useState([])
   const openDetails = (id: string) => {
@@ -42,10 +42,15 @@ const MildStone = () => {
  
 const { data, loading, error } = useQuery(getMilestone, {
   client,
-  // variables: {
-  //   take: 8,
-  //   skip: 1 * 8,
-  // },
+  variables: {
+    // take: 8,
+    // skip: 1 * 8,
+    "where": {
+      "status": {
+        "equals": status
+      }
+    }
+  },
 });
 useEffect(()=>{
   setMileData(data?.milestones);
@@ -69,12 +74,14 @@ useEffect(()=>{
               <div className="relative">
                 <div
                   className={`bg-gray-100 px-3   rounded-xl flex items-center gap-1 cursor-pointer`}
-                  onClick={() => setIsExpand((prev) => !prev)}
+                  
                 >
                   <p className="font-semibold text-base text-[#605C8D]">
                     Status :
                   </p>
                   <select
+                  value={status}
+                  onChange={(e)=>setStatus(e.target.value)}
                     className={`capitalize bg-transparent  outline-none border-none`}
                   >
                     {dropDown.map((item, index) => (
@@ -84,7 +91,7 @@ useEffect(()=>{
                         value={item.value}
                         className={`px-2 py-1`}
                       >
-                        {item.name}
+                        {item.label}
                       </option>
                     ))}
                   </select>

@@ -1,11 +1,13 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
 
 
-const LayoutNav = ({ children }) => {
+const LayoutNav  = ({ children }:{
+  children: React.ReactNode;
+}) => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
 
@@ -32,9 +34,10 @@ const LayoutNav = ({ children }) => {
  
  
   return (
-    <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
+    <div className="h-full overflow-y-scroll myGrid " id="my-div"   ref={myDivRef}>
       <Navbar isScrolling={isScrolling} />
       {children}
+      <Footer/>
     </div>
   );
 };

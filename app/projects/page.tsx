@@ -2,8 +2,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
-import { dropDown, projectsData } from "../../utils/data";
-import { FiChevronDown, FiChevronRight } from "react-icons/fi";
+import { dropDown } from "../../utils/data";
+import {Pagination} from '@mantine/core'
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
 import ModalProject from "../../components/ModalProject";
@@ -21,24 +21,33 @@ const manrope = Manrope({ subsets: ["latin"] });
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [status, setStatus] = useState('Completed')
+  const [viewMode, setViewMode] = useState(true);
   const { data, loading, error } = useQuery(getProjectList, {
     client,
-    // variables: {
-    //   take: 8,
-    //   skip: 1 * 8,
-    // },
+    variables: {
+      // skip: (currentPage - 1) * ITEMS_PER_PAGE,
+      // take: ITEMS_PER_PAGE,
+       "where": {
+        "status": {
+          "equals": status
+        }
+      }
+    },
   });
  
  
+ 
+
   useEffect(()=>{
+    console.log(data)
     setProjects(data?.projects)
   },[data,loading]);
-  const [isExpand, setIsExpand] = useState(false);
- 
-  const [showModal, setShowModal] = useState(false);
-  const [showModalEdit, setShowModalEdit] = useState(false);
   
-  const [viewMode, setViewMode] = useState(true);
+ 
+
  
   const [selectedFeild, setSelectedFeild] = useState<string | null >()
  const openDetails=(title:string)=>{
@@ -46,7 +55,7 @@ const Projects = () => {
    setShowModalEdit(true);
 
  }
-
+  console.log(status)
   function handleCloseModal() {
     setShowModal(false);
    
@@ -56,7 +65,7 @@ const Projects = () => {
     setShowModalEdit(false);
     setSelectedFeild(null);
   }
-  
+ 
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
   return (
@@ -74,13 +83,13 @@ const Projects = () => {
               <div className="relative">
                 <div
                   className={`bg-gray-100 px-3   rounded-xl flex items-center gap-1 cursor-pointer`}
-                  onClick={() => setIsExpand((prev) => !prev)}
+                
                 >
                   <p className="font-semibold text-base text-[#605C8D]">Status :</p>
-                  <select className={`capitalize bg-transparent  outline-none border-none`} >
+                  <select  value={status}  onChange={(e)=>setStatus(e.target.value)} className={`capitalize bg-transparent max-w-xl outline-none border-none`} >
                   {
                     dropDown.map((item,index)=>(
-                      <option key={index} defaultValue='progress' value={item.value} className={`px-2 py-1`} >{item.name}</option>
+                      <option key={index} defaultValue='progress' value={item.value} className={`px-2 py-1`} >{item.label}</option>
                     ))
                   }
                   </select>
@@ -134,11 +143,13 @@ const Projects = () => {
             </div>
           )}
         </div>
+     
+   
       </div>
    <ModalProject    showModal={showModal} handleCloseModal={handleCloseModal} />
   {selectedFeild&& <EditModalProject   id={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/> } 
      
-   <Footer/>
+   
  </LayoutNav>
      
 

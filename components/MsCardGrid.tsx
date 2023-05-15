@@ -40,7 +40,7 @@ const MsCardGrid:React.FC<props> = ({data,openDetails}) => {
       
       </div>
       <div className={`${roboto.className} text-gray-900`}>
-            <h6 className={`text-md font-normal`}> <span className={`font-medium text-gray-600`}>Project Name :</span> {name}</h6>
+            <h6 className={`text-md font-normal`}> <span className={`font-medium text-gray-600`}>Project Name :</span> {project.name}</h6>
             <h6 className={`text-md font-normal`}> <span className={`font-medium text-gray-600`}>Start Date :</span> {new Date(startDate).toLocaleDateString()}</h6>
             <h6 className={`text-md font-normal`}> <span className={`font-medium text-gray-600`}>End Date :</span> {new Date(endDate).toLocaleDateString()}</h6>
             <h6 className={`text-md font-normal`}> <span className={`font-medium text-gray-600`}>Status :</span> {status}</h6>
