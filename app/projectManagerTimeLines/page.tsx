@@ -72,8 +72,14 @@ const TimeEntries = () => {
           equals: form.values.userId,
         },
       },
+      orderBy: [
+        {
+          date: "asc"
+        }]
     },
   });
+
+
 
   console.log(data);
 

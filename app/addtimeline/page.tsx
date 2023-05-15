@@ -171,6 +171,10 @@ const Projects = () => {
           },
         },
       },
+      orderBy: [
+        {
+          date: "asc"
+        }]
     },
   });
 
@@ -183,6 +187,10 @@ const Projects = () => {
           },
         },
       },
+      orderBy: [
+        {
+          date: "asc"
+        }]
     },
   });
 
@@ -193,6 +201,10 @@ const Projects = () => {
           equals: form.values.userId,
         },
       },
+      orderBy: [
+        {
+          date: "asc"
+        }]
     },
   });
 

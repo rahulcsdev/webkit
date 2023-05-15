@@ -49,6 +49,10 @@ const Projects = () => {
           },
         },
       },
+      orderBy: [
+        {
+          date: "asc"
+        }]
     },
   });
 

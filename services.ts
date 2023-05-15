@@ -347,8 +347,8 @@ export const viewTimesheetDetails = gql`
 `;
 
 export const getSpecificManagerTimeEntries = gql`
-query Query($where: TimeEnteryWhereInput!) {
-  timeEnteries(where: $where) {
+query Query( $orderBy: [TimeEnteryOrderByInput!]!, $where: TimeEnteryWhereInput!) {
+  timeEnteries(orderBy: $orderBy,where: $where) {
     id
     project {
       name

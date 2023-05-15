@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { useForm,isNotEmpty } from "@mantine/form";
+import { useForm, isNotEmpty } from "@mantine/form";
 import DatePicker from "react-datepicker";
 import {
   Textarea,
@@ -28,10 +28,7 @@ import { useRouter } from "next/navigation";
 import { gql, useMutation, useQuery } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
 import client from "../../apolloClient/index";
-import {
-  getSpecificManagerTimeEntries,
-  updateTimeEntry,
-} from "@/services";
+import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 
 const TimeEntries = () => {
   const myDivRef = useRef<any>(null);
@@ -48,20 +45,20 @@ const TimeEntries = () => {
       remark: "",
       taskId: "",
       id: "",
-      userId:""
+      userId: "",
     },
 
     validate: {
-      remark: isNotEmpty('remark cannot be empty'),
+      remark: isNotEmpty("remark cannot be empty"),
     },
   });
 
-  useEffect(()=>{
-    const userId = localStorage.getItem("userId")
-    if(userId){
-     form.setFieldValue("userId", userId)
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      form.setFieldValue("userId", userId);
     }
- },[])
+  }, []);
 
   const { data } = useQuery(getSpecificManagerTimeEntries, {
     variables: {
@@ -72,6 +69,11 @@ const TimeEntries = () => {
           },
         },
       },
+      orderBy: [
+        {
+          date: "asc",
+        },
+      ],
     },
   });
 
@@ -84,8 +86,8 @@ const TimeEntries = () => {
   }
 
   const changeStatus = async () => {
-    if(form.validate().hasErrors){
-       return     form.setFieldError('remark', 'remark cannot be empty')
+    if (form.validate().hasErrors) {
+      return form.setFieldError("remark", "remark cannot be empty");
     }
     createProject({
       variables: {
@@ -115,10 +117,16 @@ const TimeEntries = () => {
   const notClickS = "bg-gray-100 text-black";
   return (
     <LayoutNav>
-<form onSubmit={form.onSubmit(
-    (values, _event) => { console.log('h',values,_event)  },
-    (validationErrors, _values, _event) => { console.log(validationErrors) }
-)}>
+      <form
+        onSubmit={form.onSubmit(
+          (values, _event) => {
+            console.log("h", values, _event);
+          },
+          (validationErrors, _values, _event) => {
+            console.log(validationErrors);
+          }
+        )}
+      >
         <>
           <Modal opened={opened} onClose={close} centered>
             change status
