@@ -2,14 +2,15 @@
 import React, { useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
 import client from "../apolloClient/index";
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { employeeData, projectsData } from "../utils/data";
 import { MultiSelect, Input, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DateInput } from "@mantine/dates";
+import { addProject, getProjectList, getUser } from "@/services";
 interface typeModal {
   showModal: Boolean;
-  handleCloseModal: any;
+  handleCloseModal: () => void;
 }
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
@@ -21,7 +22,7 @@ const ModalProject = (props: typeModal) => {
   const managerOp = [{ value: "", label: "Choose One", disabled: true }];
 
   const managerOptions = (users: any) => {
-    console.log(users);
+    // console.log(users);
     for (let i = 0; i < users?.length; i++) {
       managerOp.push({
         value: users[i]?.id,
@@ -36,14 +37,7 @@ const ModalProject = (props: typeModal) => {
     const getEmployeeInfo = async () => {
       const info: string[] = [];
       const { data } = await client.query({
-        query: gql`
-          query Query {
-            users {
-              id
-              name
-            }
-          }
-        `,
+        query: getUser,
       });
       // console.log(data)
 
@@ -81,7 +75,10 @@ const ModalProject = (props: typeModal) => {
     desc: string;
     code: string;
   }
-  const createProject = async (formData: formTypes) => {
+
+  const [createProject, { loading, data, error }] = useMutation(addProject);
+
+  const handleSubmit = (formData: formTypes) => {
     console.log(formData);
 
     let membersObj = [{ id: formData.members[0] }];
@@ -89,44 +86,45 @@ const ModalProject = (props: typeModal) => {
     for (let i = 1; i < formData.members.length; i++) {
       membersObj.push({ id: formData.members[i] });
     }
-    // console.log(membersObj)
-    // console.log(JSON.stringify(membersObj))
-    try {
-      const { data } = await client.mutate({
-        mutation: gql`
-          mutation Mutation($data: ProjectCreateInput!) {
-            createProject(data: $data) {
-              id
-              member {
-                id
-              }
-            }
-          }
-        `,
-        variables: {
-          data: {
-            name: formData.projectName,
-            projectManager: {
-              connect: {
-                id: formData.projectManager,
-              },
-            },
-            startDate: formData.startDate.toISOString(),
-            projectType: formData.type,
-            status: formData.status,
-            endDate: formData.endDate.toISOString(),
-            projectDiscription: formData.desc,
 
-            member: {
-              connect: membersObj,
-            },
-          },
+    const withManager = {
+      name: formData.projectName,
+      projectManager: {
+        connect: {
+          id: formData.projectManager,
         },
-      });
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
+      },
+      startDate: formData.startDate.toISOString(),
+      projectType: formData.type,
+      status: formData.status,
+      endDate: formData.endDate.toISOString(),
+      projectDiscription: formData.desc,
+
+      member: {
+        connect: membersObj,
+      },
+    };
+    const withOutManager = {
+      name: formData.projectName,
+      startDate: formData.startDate.toISOString(),
+      projectType: formData.type,
+      status: formData.status,
+      endDate: formData.endDate.toISOString(),
+      projectDiscription: formData.desc,
+
+      member: {
+        connect: membersObj,
+      },
+    };
+
+    createProject({
+      variables: {
+        data: formData.projectManager === "" ? withOutManager : withManager,
+      },
+      refetchQueries: [{ query: getProjectList }],
+    })
+      .then(() => handleCloseModal())
+      .catch((error) => console.log(error));
   };
   //  console.log(form.getInputProps('type').value)
   return (
@@ -151,7 +149,7 @@ const ModalProject = (props: typeModal) => {
               <div className="p-4">
                 <form
                   action=""
-                  onSubmit={form.onSubmit((values) => createProject(values))}
+                  onSubmit={form.onSubmit((values) => handleSubmit(values))}
                 >
                   <div className="relative w-full">
                     <Input.Wrapper label="Project Name" required mx="auto">
@@ -261,7 +259,7 @@ const ModalProject = (props: typeModal) => {
                       type="submit"
                       className={`text-base font-normal ${roboto.className} text-white px-2 bg-[#5773FF] rounded-md py-1 border-none`}
                     >
-                      Save
+                      {loading ? "Creating..." : "Create"}
                     </button>
                     <button
                       onClick={() => form.reset()}

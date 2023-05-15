@@ -1,5 +1,24 @@
 import { gql } from "@apollo/client";
 
+export const addNewUser = gql`
+  mutation Mutation($data: UserCreateInput!) {
+    createUser(data: $data) {
+      id
+      name
+      email
+      password {
+        isSet
+      }
+      designation
+      role
+      reportingManager {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const addProject = gql`
   mutation ($data: ProjectCreateInput!) {
     createProject(data: $data) {
@@ -9,7 +28,7 @@ export const addProject = gql`
 `;
 
 export const addMilestone = gql`
-  mutation ($data: MilestoneCreateInput!) {
+  mutation CreateMilestone($data: MilestoneCreateInput!) {
     createMilestone(data: $data) {
       id
     }
@@ -50,13 +69,13 @@ export const updateAllTimeEntry = gql`
 `;
 
 export const updateProject = gql`
-  mutation ($where: ProjectWhereUniqueInput!, $data: ProjectUpdateInput!) {
+  mutation Mutation(
+    $where: ProjectWhereUniqueInput!
+    $data: ProjectUpdateInput!
+  ) {
     updateProject(where: $where, data: $data) {
       id
-      member {
-        id
-        name
-      }
+      code
     }
   }
 `;
@@ -67,10 +86,15 @@ export const updateTask = gql`
     }
   }
 `;
-export const updateMilestone = gql`
-  mutation ($where: MilestoneWhereUniqueInput!, $data: MilestoneUpdateInput!) {
+export const UPDATE_MILESTONE = gql`
+  mutation Mutation(
+    $where: MilestoneWhereUniqueInput!
+    $data: MilestoneUpdateInput!
+  ) {
     updateMilestone(where: $where, data: $data) {
       id
+      name
+      code
     }
   }
 `;
@@ -106,20 +130,22 @@ export const getProjectList = gql`
     $orderBy: [ProjectOrderByInput!]
   ) {
     projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
-      id
-      name
       status
-      projectType
-      code
       startDate
-      endDate
-      member {
-        name
-      }
+      projectType
       projectManager {
+        name
+        id
+      }
+      projectDiscription
+      name
+      memberCount
+      member {
         id
         name
       }
+      id
+      endDate
     }
   }
 `;
@@ -192,20 +218,23 @@ export const getTask = gql`
 export const getProjectDetail = gql`
   query ($where: ProjectWhereUniqueInput!) {
     project(where: $where) {
-      id
-      name
-      member {
-        id
-        name
-      }
-      projectManager {
-        id
-        name
-      }
-      projectType
       status
       startDate
+      projectType
+      projectManager {
+        name
+        id
+      }
+      projectDiscription
+      name
+      memberCount
+      member {
+        name
+        id
+      }
+      id
       endDate
+      code
     }
   }
 `;
@@ -235,23 +264,31 @@ export const getTaskDetails = gql`
   }
 `;
 export const getMilestoneDetails = gql`
-  query ($where: MilestoneWhereUniqueInput!) {
+  query Query($where: MilestoneWhereUniqueInput!) {
     milestone(where: $where) {
+      code
+      endDate
       id
+      name
       project {
         name
         id
       }
-      name
       startDate
-      endDate
       status
     }
   }
 `;
 export const getspecficUser = gql`
-  query User($where: UserWhereUniqueInput!) {
-    user(where: $where) {
+query Query($where: UserWhereUniqueInput!) {
+  user(where: $where) {
+    id
+    name
+    email
+    designation
+    role
+    dateOfJoining
+    reportingManager {
       id
       name
       email
@@ -264,6 +301,21 @@ export const getspecficUser = gql`
     }
   }
 `;
+
+export const getUserDetails = gql`
+  query Query {
+    users {
+      id
+      name
+      email
+      code
+      designation
+      role
+      dateOfJoining
+    }
+  }
+`;
+
 export const getTimesheetDetails = gql`
   query ($where: TimeSheetWhereUniqueInput!) {
     timeSheet(where: $where) {
