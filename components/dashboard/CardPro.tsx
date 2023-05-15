@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
-import ProgressBar from './ProgressBar'
+import ProgressBar from '../ProgressBar'
  
 
 interface dataType{
@@ -24,7 +24,7 @@ const CardPro = (props:Props) => {
       <h6 className={`whitespace-nowrap capitalize text-[#605C8D] text-base`}>{data.title}</h6>
       <div className="w-[80%] flex items-center gap-px">
         <div className="w-full">
-          <ProgressBar percentage={data.percentage} color={data.bg} sbg={data.sbg} />
+          <ProgressBar percentage={data.percentage}  />
         </div>
 
         <p>{data.percentage}%</p>

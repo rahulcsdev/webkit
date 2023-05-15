@@ -1,5 +1,25 @@
 import { gql } from "@apollo/client";
 
+export const addNewUser=gql`
+mutation Mutation($data: UserCreateInput!) {
+  createUser(data: $data) {
+    id
+    name
+    email
+    password {
+      isSet
+    }
+    designation
+    role
+    reportingManager {
+      id
+      name
+    }
+  }
+}
+`;
+
+
 export const addProject = gql`
   mutation ($data: ProjectCreateInput!) {
     createProject(data: $data) {
@@ -142,16 +162,12 @@ export const getUser = gql`
   }
 `;
 
-export const getMilestone = gql`
-  query (
-    $where: MilestoneWhereInput
-    $take: Int
-    $skip: Int
-    $orderBy: [MilestoneOrderByInput!]
-  ) {
-    milestones(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
-      id
-      project {
+
+    export const getMilestone=gql`
+    query ($where:MilestoneWhereInput, $take: Int, $skip: Int, $orderBy: [MilestoneOrderByInput!]) {
+      milestones(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
+        id
+      project{
         name
       }
       status
@@ -268,12 +284,13 @@ query TimeEnteries {
 }`
 
 export const getspecficUser = gql`
-query User($id: ID!) {
-  user(where: { id: $id }) {
+query Query($where: UserWhereUniqueInput!) {
+  user(where: $where) {
     id
     name
     email
     designation
+    role
     dateOfJoining
     reportingManager {
       id
@@ -282,6 +299,21 @@ query User($id: ID!) {
   }
 }
 `;
+
+export const getUserDetails=gql`
+query Query {
+  users {
+    id
+    name
+    email
+    code
+    designation
+    role
+    dateOfJoining
+  }
+}
+`;
+
 
 export const getTimesheetDetails = gql`
   query ($where: TimeSheetWhereUniqueInput!) {

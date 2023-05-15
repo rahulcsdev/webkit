@@ -39,6 +39,7 @@ export default function RootLayout({
             </ApolloProvider>
           </div>
         </div>
+       
       </body>
     </html>
   );

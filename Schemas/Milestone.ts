@@ -10,7 +10,7 @@ type Session = {
 function isAdmin({ session }: { session: Session | undefined }) {
    
    const admin= session?.data.role.filter((el) =>["admin","milestoneManagement"].includes(el))
-   console.log(admin)
+  
   if (!session) return false;
   if (admin?.length!=0) return true;
   return false;
@@ -56,13 +56,12 @@ hooks:{
     resolveInput: async({ resolvedData,context }) => {
        
       const {id} =  resolvedData.project.connect
-       console.log(id)
+       
         const project = await context.db.Project.findOne({
             where: { id: id },
           });
           if(project){
             var projectCode= project.code;
-            console.log(projectCode)
           }
           const milestone=await context.db.Milestone.findMany({}) 
           if(milestone.length===0){
