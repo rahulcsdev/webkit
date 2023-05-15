@@ -353,22 +353,19 @@ export const deskCarousalData=[
 
 
 export const dropDown=[
+  
+   { label: "All", value: "all" },
+   { label: "New", value: "New" },
    {
-      name:'in Progress',
-      icon:<BsMic/>,
-      value:'progress'
-   },
-   {
-      name:'Priority',
-      icon:<RiLinksLine/>,
-      value:'priority'
-   },
-   {
-      name:'Category',
-      icon:<MdOutlineFileCopy/>,
-      value:'category'
+     label: "Design",
+     value: "Design Developement",
    },
 
+   { label: "In Progress", value: "In Progress" },
+
+   { label: "Testing", value: "Testing" },
+
+   { label: "Completed", value: "Completed" },
 ]
 
 export const deskDropDown=[

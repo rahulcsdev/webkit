@@ -2,16 +2,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
-import { dropDown, projectsData } from "../../utils/data";
-import { FiChevronDown, FiChevronRight } from "react-icons/fi";
+import { dropDown } from "../../utils/data";
+import {Pagination} from '@mantine/core'
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalProject from "../../components/ModalProject";
-import ProjectCard from "@/components/ProjectCard";
-import ProjectCardCol from "@/components/ProjectCardCol";
+import ModalProject from "../../components/project/ModalProject";
+import ProjectCard from "@/components/project/ProjectCard";
+import ProjectCardCol from "@/components/project/ProjectCardCol";
 import Footer from "@/components/Footer";
 import LayoutNav from "@/components/LayoutNav";
-import EditModalProject from "@/components/EditModalProject";
+import EditModalProject from "@/components/project/EditModalProject";
 import client from '../../apolloClient/index'
 import { gql, useQuery } from "@apollo/client";
 import { getProjectList } from "@/services";
@@ -20,25 +20,89 @@ const manrope = Manrope({ subsets: ["latin"] });
 
 
 const Projects = () => {
+  
+const ITEMS_PER_PAGE = 9;
+const INITIAL_PAGE = 1;
+const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [projects, setProjects] = useState([]);
-  const { data, loading, error } = useQuery(getProjectList, {
-    client,
-    // variables: {
-    //   take: 8,
-    //   skip: 1 * 8,
-    // },
-  });
- 
- 
-  useEffect(()=>{
-    setProjects(data?.projects)
-  },[data,loading]);
-  const [isExpand, setIsExpand] = useState(false);
- 
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
-  
+  const [status, setStatus] = useState('all')
   const [viewMode, setViewMode] = useState(true);
+  const [total, setTotal] = useState(0);
+
+// Condition for status
+ 
+
+
+  const { data, loading, error,refetch } = useQuery(getProjectList, {
+    client,
+    variables:status==='all'? {
+      skip: (currentPage - 1) * ITEMS_PER_PAGE,
+      take: ITEMS_PER_PAGE,
+    }: {
+      skip: (currentPage - 1) * ITEMS_PER_PAGE,
+      take: ITEMS_PER_PAGE,
+       "where": {
+        "status": {
+          "equals": status
+        }
+      }
+    }
+  });
+  // Without all
+  // const { data, loading, error } = useQuery(getProjectList, {
+  //   client,
+  //   variables:{
+  //     skip: (currentPage - 1) * ITEMS_PER_PAGE,
+  //     take: ITEMS_PER_PAGE,
+  //      "where": {
+  //       "status": {
+  //         "equals": status
+  //       }
+  //     }
+  //   }
+  // });
+ 
+  const handlePageChange = (page:any) => {
+    setCurrentPage(page);
+  };
+ 
+  
+ 
+  const fetchData=async()=>{
+ 
+       client.query({
+        query:getProjectList,
+      
+        variables:status==='all'?{}:{
+          "where": {
+            "status": {
+              "equals": status
+            }
+          }
+        },
+        
+      }).then(({data})=>{
+        console.log(data);
+      setTotal(data?.projects?.length);
+      })
+  
+  }
+
+  useEffect(()=>{
+    fetchData();
+    // refetch()
+  },[status,currentPage]);
+
+
+  useEffect(()=>{
+    console.log(data)
+    setProjects(data?.projects);
+  },[data,loading]);
+  
+ 
+
  
   const [selectedFeild, setSelectedFeild] = useState<string | null >()
  const openDetails=(title:string)=>{
@@ -46,7 +110,7 @@ const Projects = () => {
    setShowModalEdit(true);
 
  }
-
+ 
   function handleCloseModal() {
     setShowModal(false);
    
@@ -56,7 +120,10 @@ const Projects = () => {
     setShowModalEdit(false);
     setSelectedFeild(null);
   }
-  
+  // console.log(total)
+    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    const visibleTotal = currentPage === totalPages ? total % ITEMS_PER_PAGE : ITEMS_PER_PAGE;
+  // console.log(visibleTotal)
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
   return (
@@ -74,13 +141,13 @@ const Projects = () => {
               <div className="relative">
                 <div
                   className={`bg-gray-100 px-3   rounded-xl flex items-center gap-1 cursor-pointer`}
-                  onClick={() => setIsExpand((prev) => !prev)}
+                
                 >
                   <p className="font-semibold text-base text-[#605C8D]">Status :</p>
-                  <select className={`capitalize bg-transparent  outline-none border-none`} >
+                  <select  value={status}  onChange={(e)=>setStatus(e.target.value)} className={`capitalize bg-transparent max-w-xl outline-none border-none`} >
                   {
                     dropDown.map((item,index)=>(
-                      <option key={index} defaultValue='progress' value={item.value} className={`px-2 py-1`} >{item.name}</option>
+                      <option key={index} defaultValue='progress' value={item.value} className={`px-2 py-1`} >{item.label}</option>
                     ))
                   }
                   </select>
@@ -134,11 +201,19 @@ const Projects = () => {
             </div>
           )}
         </div>
+       <div className="my-5 flex items-center justify-center">
+
+         <Pagination total={totalPages}   onChange={handlePageChange} value={currentPage} />
+       </div>
+      
+ 
+       
+   
       </div>
-   <ModalProject    showModal={showModal} handleCloseModal={handleCloseModal} />
+   <ModalProject refetch={refetch}   showModal={showModal} handleCloseModal={handleCloseModal}  />
   {selectedFeild&& <EditModalProject   id={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/> } 
      
-   <Footer/>
+   
  </LayoutNav>
      
 

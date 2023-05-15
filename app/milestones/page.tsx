@@ -6,23 +6,26 @@ import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
  
-import ModalMs from "../../components/ModalMs";
-import MsCardGrid from "../../components/MsCardGrid";
-import MsCardCol from "../../components/MsCardCol";
-import EditModalMs from "../../components/EditModalMs";
+import ModalMs from "../../components/milestone/ModalMs";
+import MsCardGrid from "../../components/milestone/MsCardGrid";
+import MsCardCol from "../../components/milestone/MsCardCol";
+import EditModalMs from "../../components/milestone/EditModalMs";
 import client from "@/apolloClient";
 import { getMilestone } from "@/services";
 import { useQuery } from "@apollo/client";
+import { Pagination } from "@mantine/core";
 
 const manrope = Manrope({ subsets: ["latin"] });
 const MildStone = () => {
   const [isExpand, setIsExpand] = useState(false);
-  
+  const ITEMS_PER_PAGE = 9;
+const INITIAL_PAGE = 1;
+const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
-  
+  const [total, setTotal] = useState(0);
   const [viewMode, setViewMode] = useState(true);
- 
+  const [status, setStatus] = useState('all')
   const [selectedFeild, setSelectedFeild] = useState<string | null >()
   const [mileData, setMileData] = useState([])
   const openDetails = (id: string) => {
@@ -40,17 +43,54 @@ const MildStone = () => {
     setShowModalEdit(false);
   }
  
-const { data, loading, error } = useQuery(getMilestone, {
+const { data, loading, error,refetch } = useQuery(getMilestone, {
   client,
-  // variables: {
-  //   take: 8,
-  //   skip: 1 * 8,
-  // },
+  variables:status==='all'? {
+    skip: (currentPage - 1) * ITEMS_PER_PAGE,
+    take: ITEMS_PER_PAGE,
+  }: {
+    skip: (currentPage - 1) * ITEMS_PER_PAGE,
+    take: ITEMS_PER_PAGE,
+     "where": {
+      "status": {
+        "equals": status
+      }
+    }
+  },
 });
+const handlePageChange = (page:any) => {
+  setCurrentPage(page);
+};
+
+const fetchData=async()=>{
+ 
+  client.query({
+   query:getMilestone,
+ 
+   variables:status==='all'?{}:{
+     "where": {
+       "status": {
+         "equals": status
+       }
+     }
+   },
+   
+ }).then(({data})=>{
+   console.log(data);
+ setTotal(data?.milestones?.length);
+ })
+
+}
+
+useEffect(()=>{
+fetchData();
+},[status,currentPage]);
+
 useEffect(()=>{
   setMileData(data?.milestones);
 },[data,loading]);
-
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+  const visibleTotal = currentPage === totalPages ? total % ITEMS_PER_PAGE : ITEMS_PER_PAGE;
 
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
@@ -69,12 +109,14 @@ useEffect(()=>{
               <div className="relative">
                 <div
                   className={`bg-gray-100 px-3   rounded-xl flex items-center gap-1 cursor-pointer`}
-                  onClick={() => setIsExpand((prev) => !prev)}
+                  
                 >
                   <p className="font-semibold text-base text-[#605C8D]">
                     Status :
                   </p>
                   <select
+                  value={status}
+                  onChange={(e)=>setStatus(e.target.value)}
                     className={`capitalize bg-transparent  outline-none border-none`}
                   >
                     {dropDown.map((item, index) => (
@@ -84,7 +126,7 @@ useEffect(()=>{
                         value={item.value}
                         className={`px-2 py-1`}
                       >
-                        {item.name}
+                        {item.label}
                       </option>
                     ))}
                   </select>
@@ -141,10 +183,13 @@ useEffect(()=>{
             </div>
           )}
         </div>
+        <div className="my-5 flex items-center justify-center">
 
+<Pagination total={totalPages}   onChange={handlePageChange} value={currentPage} />
+</div>
         
       </div>
-      <ModalMs  showModal={showModal} handleCloseModal={handleCloseModal} />
+      <ModalMs refetch={refetch} showModal={showModal} handleCloseModal={handleCloseModal} />
      {selectedFeild && <EditModalMs selectedFeild={selectedFeild} showModal={showModalEdit} handleCloseModal={handleCloseModalEdit}/>} 
     </LayoutNav>
   );
