@@ -1,15 +1,25 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { Button, Box } from "@mantine/core";
 import Navbar from "../../components/Navbar";
-import ModalTasks from "../../components/ModalTasks";
-import CardTask from "../../components/CardTask";
+import ModalTasks from "../../components/tasks/ModalTasks";
+import CardTask from "../../components/tasks/CardTask";
+import { getTask } from "../../services";
+import { gql, useQuery } from "@apollo/client";
+import client from "@/apolloClient";
+import { Pagination } from "@mantine/core";
+
 const Tasks = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
   const [isExpand, setIsExpand] = useState(false);
-  const [value, setValue] = useState("progress");
   const [showModal, setShowModal] = useState(false);
+  const [projectList, setProjectList] = useState([]);
+  const [milestoneList, setMileStoneList] = useState([]);
+  const [tasklist, setTaskList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPageNumber, setTotalPageNumber] = useState(0);
   const handleDateChange = (date: Date) => {
     setDate(date);
   };
@@ -32,9 +42,54 @@ const Tasks = () => {
     };
   }, [myDivRef]);
 
+  const { data, loading, error, refetch } = useQuery(getTask, {
+    client,
+    variables: {
+      take: 9,
+      skip: (page - 1) * 9,
+    },
+  });
   function handleCloseModal() {
     setShowModal(false);
+    refetch({
+      skip: (page - 1) * 9,
+    });
   }
+  const lists = async () => {
+    const { data } = await client.query({
+      query: gql`
+        query Query {
+          milestones {
+            id
+            name
+          }
+          projects {
+            id
+            name
+          }
+        }
+      `,
+    });
+    setMileStoneList(data?.milestones);
+    setProjectList(data?.projects);
+  };
+  useEffect(() => {
+    if (data) {
+      setTaskList(data?.tasks);
+    }
+    lists();
+  }, [data, showModal]);
+
+  const TotolPageNumberHandler = async () => {
+    const { data } = await client.query({
+      query: getTask,
+    });
+    setTotalPageNumber(data?.tasks?.length);
+  };
+
+  useEffect(() => {
+    TotolPageNumberHandler();
+  }, []);
 
   return (
     <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
@@ -50,12 +105,31 @@ const Tasks = () => {
           </button>
         </div>
       </div>
-      <ModalTasks showModal={showModal} handleCloseModal={handleCloseModal} />
+      <ModalTasks
+        showModal={showModal}
+        handleCloseModal={handleCloseModal}
+        project={projectList}
+        milestones={milestoneList}
+      />
 
       <div className="bg-white p-4 mt-4 shadow-md w-[95%] mx-auto rounded-3xl">
-        <CardTask heading="heading" />
-        <CardTask heading="heading" />
+        {tasklist &&
+          tasklist.map((item: any, index: number) => (
+            <CardTask
+              item={item}
+              key={index}
+              projects={projectList}
+              milestones={milestoneList}
+            />
+          ))}
       </div>
+      <Box className="col-span-2  flex justify-center items-center my-4">
+        <Pagination
+          value={page}
+          onChange={setPage}
+          total={Math.ceil(totalPageNumber / 9)}
+        />
+      </Box>
     </div>
   );
 };

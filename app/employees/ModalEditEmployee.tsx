@@ -1,6 +1,6 @@
 import React, { FormEventHandler, useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
-import { type, role, employeesData } from "../utils/data";
+// import { type, role, employeesData } from "../utils/data";
 import { useRouter } from "next/navigation";
 import {
   TextInput,
@@ -18,7 +18,7 @@ import {
 import { useForm } from "@mantine/form";
 import { DateInput } from "@mantine/dates";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import client from "../apolloClient/index";
+import client from "../../apolloClient/index";
 import {
   getUser,
   addNewUser,
@@ -26,7 +26,7 @@ import {
   getspecficUser,
   addUser,
   updateUser
-} from "../services";
+} from "../../services";
 
 interface formTypes {
   // id: string;

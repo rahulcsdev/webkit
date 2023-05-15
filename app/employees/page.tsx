@@ -4,14 +4,14 @@ import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalEmployee from "../../components/ModalEmployee";
+import ModalEmployee from "./ModalEmployee";
 import { employeesData } from "../../utils/data";
-import EmployeesCardData from "../../components/EmployeesCardData";
-import EmployeesCardListView from "../../components/EmployeeCardListView";
+import EmployeesCardData from "./EmployeesCardData";
+import EmployeesCardListView from "./EmployeeCardListView";
 import { gql } from "@apollo/client";
 import client from "../../apolloClient/index";
 import { getUserDetails } from "@/services";
-import ModalEditEmployee from "@/components/ModalEditEmployee";
+import ModalEditEmployee from "./ModalEditEmployee";
 import { Pagination } from "@mantine/core";
 import Footer from "@/components/Footer";
 

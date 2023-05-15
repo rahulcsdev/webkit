@@ -1,7 +1,7 @@
 import React from 'react'
 import {Manrope,Roboto} from 'next/font/google'
 import { BiTask } from 'react-icons/bi'
-import ProgressBar from './ProgressBar'
+import ProgressBar from '../ProgressBar'
 import Image from 'next/image'
  
 const manrope=Manrope({subsets:['latin']})
@@ -34,7 +34,7 @@ const CardCarousal = (props:Props) => {
    <p className={`text-base text-[#605C8D] font-normal ${manrope.className}`}>{data.date}</p>
     </div>
     <div className="w-full mb-8">
-    <ProgressBar percentage={data.percentage} color={data.bg} sbg={data.sbg} />
+    <ProgressBar percentage={data.percentage} />
     </div>
     <div className="flex justify-between items-center">
     <div className="flex">

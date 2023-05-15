@@ -1,6 +1,6 @@
 import React  , { useState , useEffect} from "react";
 import { Manrope, Roboto } from "next/font/google";
-import { type, role } from "../utils/data";
+// import { type, role } from "../utils/data";
 import {
   TextInput,
   Checkbox,
@@ -17,8 +17,8 @@ import {
 import { useForm } from "@mantine/form";
 import { DateInput } from '@mantine/dates';
 import { gql, useQuery, useMutation } from "@apollo/client";
-import client from '../apolloClient/index';
-import { addNewUser , getUser, getUserDetails, getspecficUser } from '../services';
+import client from '../../apolloClient/index';
+import { addNewUser , getUser, getUserDetails, getspecficUser } from '../../services';
 // import { finduserRole } from '../services';
 
 
