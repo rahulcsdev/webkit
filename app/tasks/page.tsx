@@ -18,7 +18,7 @@ const Tasks = () => {
   const [projectList, setProjectList] = useState([]);
   const [milestoneList, setMileStoneList] = useState([]);
   const [tasklist, setTaskList] = useState([]);
-  console.log("20", tasklist);
+
   const [page, setPage] = useState(0);
   const handleDateChange = (date: Date) => {
     setDate(date);
@@ -75,9 +75,9 @@ const Tasks = () => {
     if (data) {
       setTaskList(data?.tasks);
     }
-    console.log(data);
+
     lists();
-  }, [data, loading]);
+  }, [data, loading, error]);
 
   return (
     <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>

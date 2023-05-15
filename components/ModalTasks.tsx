@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Manrope, Roboto } from "next/font/google";
 import { useForm } from "@mantine/form";
 import { TextInput, Select, Box, Button, Textarea } from "@mantine/core";
@@ -17,6 +17,7 @@ const roboto = Manrope({ weight: "400", subsets: ["latin"] });
 const ModalTasks = (props: typeModal) => {
   const { showModal, handleCloseModal, milestones, project } = props;
   const [createTask, { data, error, loading }] = useMutation(addTask);
+  const [errMessage, setErrMessage] = useState("");
   const mileStoneArr = milestones?.map((item: any) => {
     return {
       value: item?.id,
@@ -47,6 +48,25 @@ const ModalTasks = (props: typeModal) => {
 
   const formSubmitHandler = (value: any) => {
     console.log(value);
+    if (
+      !(
+        value?.task &&
+        value?.description &&
+        value?.estimate_Time &&
+        value?.project &&
+        value?.priority &&
+        value?.status &&
+        value?.mileStone &&
+        value?.end_date &&
+        value?.start_date &&
+        value?.task_type
+      )
+    ) {
+      setErrMessage("All the Field is Required");
+      return;
+    } else {
+      setErrMessage("Created");
+    }
     createTask({
       variables: {
         data: {
@@ -198,6 +218,11 @@ const ModalTasks = (props: typeModal) => {
                     radius="md"
                     {...formData.getInputProps("description")}
                   />
+                  {errMessage && (
+                    <div className="col-span-2 flex justify-center items-center">
+                      <h1 className="text-red-500">{errMessage}</h1>
+                    </div>
+                  )}
                   <Box className="col-span-2  flex justify-center items-center">
                     <Button type="submit" radius="md" className="bg-blue-500">
                       Save

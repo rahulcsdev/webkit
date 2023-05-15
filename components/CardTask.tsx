@@ -4,8 +4,12 @@ import { useForm } from "@mantine/form";
 import { TextInput, Select, Box, Button, Textarea } from "@mantine/core";
 import { useMutation } from "@apollo/client";
 import { updateTask, getTask } from "../services";
+import { IoEyeSharp } from "react-icons/io5";
+import IndividalTask from "./IndividalTask";
 const CardTask = (props: any) => {
-  const [show, setShow] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [popup, setPopUp] = useState(false);
+
   const [Taskupdate, { data, error, loading }] = useMutation(updateTask);
   const { item, projects, milestones } = props;
 
@@ -21,7 +25,6 @@ const CardTask = (props: any) => {
       label: item?.name,
     };
   });
-
   const formData = useForm({
     initialValues: {
       task: "",
@@ -63,7 +66,7 @@ const CardTask = (props: any) => {
       },
       refetchQueries: [{ query: getTask }],
     });
-    setShow(!show);
+    setEdit(!edit);
   };
 
   useEffect(() => {
@@ -75,7 +78,7 @@ const CardTask = (props: any) => {
       mileStone: item?.milestone?.id,
       description: item?.discription,
     });
-  });
+  }, [props]);
   return (
     <div className="mb-6 ">
       <div className="border rounded-3xl p-4 flex justify-between items-center cursor-pointer hover:bg-[#eee]">
@@ -85,19 +88,25 @@ const CardTask = (props: any) => {
             {item.name}
           </h1>
         </div>
-        <div className="flex items-center   ">
+        <div className="flex items-center space-x-3  ">
           <button className="px-4 py-2 text-orange-800 bg-orange-200 rounded-3xl mx-4  ">
             {item.status}
           </button>
           <button
+            className="px-2 py-2  text-orange-800 bg-orange-400 rounded-xl cursor-pointer "
+            onClick={() => setPopUp(!popup)}
+          >
+            <IoEyeSharp />
+          </button>
+          <button
             className="px-2 py-2 text-orange-800 bg-orange-400 rounded-xl cursor-pointer "
-            onClick={() => setShow(!show)}
+            onClick={() => setEdit(!edit)}
           >
             <FiEdit />
           </button>
         </div>
       </div>
-      {show && item && (
+      {edit && item && (
         <form onSubmit={formData.onSubmit(updateTaskHandler)}>
           <div className="bg-[#ededed] mt-4 rounded-3xl p-4">
             <div className="flex justify-between items-center border-b-2  py-4 ">
@@ -197,6 +206,13 @@ const CardTask = (props: any) => {
             </div>
           </div>
         </form>
+      )}
+      {popup && (
+        <IndividalTask
+          data={item}
+          showModal={popup}
+          handleCloseModal={() => setPopUp(!popup)}
+        />
       )}
     </div>
   );
