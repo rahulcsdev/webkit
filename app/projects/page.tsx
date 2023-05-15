@@ -25,23 +25,6 @@ const ITEMS_PER_PAGE = 9;
 const INITIAL_PAGE = 1;
 const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [projects, setProjects] = useState([]);
-<<<<<<< HEAD
-  const { data, loading, error } = useQuery(getProjectList, {
-    client,
-    // variables: { 
-    //   take: 8,
-    //   skip: 1 * 8,
-    // },
-  });
- 
- 
-  useEffect(()=>{
-    setProjects(data?.projects)
-  },[data,loading]);
-  const [isExpand, setIsExpand] = useState(false);
- 
-=======
->>>>>>> 598d46fdd76a865609286affd9b7b3be2a44c70e
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [status, setStatus] = useState('all')
