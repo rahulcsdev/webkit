@@ -263,15 +263,15 @@ const Projects = () => {
             },
           },
           projectType: item.projectType,
-          ...(item.projectType === "Internal project" && {
+          ...((item.projectType === "Internal project" || localStorage.getItem("userId") === await getProjectManagerId(item)) && {
             reviewedBy: {
               connect: {
                 id: await getReportingManagerId(item),
               },
             },
           }),
-          ...((item.projectType === "Hourly cost project" ||
-            item.projectType === "Fixed cost project") && {
+          ...(((item.projectType === "Hourly cost project" ||
+            item.projectType === "Fixed cost project") && localStorage.getItem("userId") !== await getProjectManagerId(item)  )&& {
             projectManager: await getProjectManagerId(item),
           }),
           userName: {
