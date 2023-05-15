@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
-import client from "../apolloClient/index";
+import client from "../../apolloClient/index";
 import { gql, useMutation } from "@apollo/client";
  
 import { MultiSelect, Input, Select, FileInput, rem } from "@mantine/core";

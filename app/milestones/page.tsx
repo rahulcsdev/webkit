@@ -6,10 +6,10 @@ import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
  
-import ModalMs from "../../components/ModalMs";
-import MsCardGrid from "../../components/MsCardGrid";
-import MsCardCol from "../../components/MsCardCol";
-import EditModalMs from "../../components/EditModalMs";
+import ModalMs from "../../components/milestone/ModalMs";
+import MsCardGrid from "../../components/milestone/MsCardGrid";
+import MsCardCol from "../../components/milestone/MsCardCol";
+import EditModalMs from "../../components/milestone/EditModalMs";
 import client from "@/apolloClient";
 import { getMilestone } from "@/services";
 import { useQuery } from "@apollo/client";

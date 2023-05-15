@@ -1,6 +1,6 @@
 import React from 'react'
 import {Roboto,Manrope} from 'next/font/google'
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../ProgressBar';
  
 const roboto = Roboto({weight:'400',subsets:['latin']});
 const manrope = Manrope({weight:'500',subsets:['latin']});

@@ -1,7 +1,7 @@
 "use client"
 import { useForm } from '@mantine/form';
 import React, { useEffect, useState } from 'react'
-import client from '../apolloClient/index'
+import client from '../../apolloClient/index'
 import { Input, MultiSelect, Select } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { Manrope, Roboto } from 'next/font/google';
