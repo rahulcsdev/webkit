@@ -17,8 +17,8 @@ import {
 
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalProject from "../../components/ModalProject";
-import DeskCarousal from "../../components/DeskCarousel";
+import ModalProject from "../../components/project/ModalProject";
+import DeskCarousal from "../../components/dashboard/DeskCarousel";
 import DeskCardCarousal from "../../components/DeskCardCarousel";
 import DesktaskCarousel from "../../components/DesktaskCarousel";
 import DeskMilestoneCarousel from "../../components/DeskMilestoneCarousel"

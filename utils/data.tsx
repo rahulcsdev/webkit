@@ -45,6 +45,16 @@ export const navLinks=[
    },
    {
     icon:<BsHourglass className='text-2xl'/>,
+    name:"approval as reporting Manager",
+    link:'/reportingManagerTimeLines'
+   },
+   {
+    icon:<BsHourglass className='text-2xl'/>,
+    name:"approval as project Manager",
+    link:'/projectManagerTimeLines'
+   },
+   {
+    icon:<BsHourglass className='text-2xl'/>,
     name:"Time Entry",
     link:'/timeline'
    },
@@ -353,22 +363,19 @@ export const deskCarousalData=[
 
 
 export const dropDown=[
+  
+   { label: "All", value: "all" },
+   { label: "New", value: "New" },
    {
-      name:'in Progress',
-      icon:<BsMic/>,
-      value:'progress'
-   },
-   {
-      name:'Priority',
-      icon:<RiLinksLine/>,
-      value:'priority'
-   },
-   {
-      name:'Category',
-      icon:<MdOutlineFileCopy/>,
-      value:'category'
+     label: "Design",
+     value: "Design Developement",
    },
 
+   { label: "In Progress", value: "In Progress" },
+
+   { label: "Testing", value: "Testing" },
+
+   { label: "Completed", value: "Completed" },
 ]
 
 export const deskDropDown=[
