@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import dynamic from "next/dynamic";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Box } from "@mantine/core";
-import Navbar from "../../components/Navbar";
-import ModalTasks from "../../components/tasks/ModalTasks";
-import CardTask from "../../components/tasks/CardTask";
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
+const ModalTasks = dynamic(() => import("../../components/tasks/ModalTasks"));
+const CardTask = dynamic(() => import("../../components/tasks/CardTask"));
 import { getTask } from "../../services";
 import { gql, useQuery } from "@apollo/client";
 import client from "@/apolloClient";
@@ -20,27 +21,9 @@ const Tasks = () => {
   const [tasklist, setTaskList] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPageNumber, setTotalPageNumber] = useState(0);
-  const handleDateChange = (date: Date) => {
-    setDate(date);
-  };
+ 
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const { current: myDiv } = myDivRef;
-      if (myDiv.scrollTop > 0) {
-        setIsScrolling(true);
-      } else {
-        setIsScrolling(false);
-      }
-    };
-
-    const { current: myDiv } = myDivRef;
-    myDiv.addEventListener("scroll", handleScroll);
-
-    return () => {
-      myDiv.removeEventListener("scroll", handleScroll);
-    };
-  }, [myDivRef]);
+ 
 
   const { data, loading, error, refetch } = useQuery(getTask, {
     client,
@@ -92,9 +75,9 @@ const Tasks = () => {
   }, []);
 
   return (
-    <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
-      <Navbar isScrolling={isScrolling} />
-      <div className="rounded-3xl flex items-center w-[95%] mx-auto p-4   justify-between shadow-xl  ">
+    <LayoutNav>
+    <div className="px-5 py-6">
+    <div className="rounded-3xl flex items-center w-[95%] mx-auto p-4   justify-between shadow-xl  ">
         <h1 className="font-semibold">Your Task</h1>
         <div>
           <button
@@ -134,6 +117,8 @@ const Tasks = () => {
         />
       </Box>
     </div>
+   
+      </LayoutNav>
   );
 };
 

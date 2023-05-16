@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Navbar from "../../components/Navbar";
+import dynamic from "next/dynamic";
+ 
 import { Manrope } from "next/font/google";
 import { dropDown, projectsData } from "../../utils/data";
 import { FiChevronDown, FiChevronRight } from "react-icons/fi";

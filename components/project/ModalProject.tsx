@@ -4,7 +4,7 @@ import { Manrope, Roboto } from "next/font/google";
 import client from "../../apolloClient/index";
 import { gql, useMutation } from "@apollo/client";
  
-import { MultiSelect, Input, Select, FileInput, rem } from "@mantine/core";
+import { MultiSelect, Input, Select, FileInput, rem, NativeSelect, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DateInput } from "@mantine/dates";
 import { addProject, getProjectList, getUser } from "@/services";
@@ -20,7 +20,7 @@ const ModalProject = (props: typeModal) => {
   const { showModal, handleCloseModal,refetch } = props;
   const [options, setOptions] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
-  const [showManager, setShowManager] = useState(false);
+ 
   const [selectedFile, setSelectedFile] = useState<File | null>();
   const managerOp = [{ value: "", label: "Choose One", disabled: true }];
 
@@ -223,12 +223,37 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                   onSubmit={form.onSubmit((values) => handleSubmit(values))}
                 >
                   <div className="relative w-full">
-                    <Input.Wrapper label="Project Name" required mx="auto">
+                    <Input.Wrapper  styles={()=>({
+                      label:{
+                        color:'#01041b',
+                        fontSize:'1.2em',
+                        fontWeight:500,
+                        lineHeight:1.2,
+                        marginBottom:10
+                      }
+                    })} label="Project Name" required mx="auto">
                       <Input
                         required
+                        
                         placeholder="Enter yout Project name"
                         {...form.getInputProps("projectName")}
-                        // sx={{padding:'2px 1px',backgroundColor:'green'}}
+                        variant="filled"
+                        styles={(theme) => ({
+                          input: {
+                            '&:focus-within': {
+                              borderColor: theme.colors.gray[6],
+                              backgroundColor:theme.white
+                            },
+                           height:50,
+                           backgroundColor:'#F8F7F7',
+                           borderRadius:16,
+                           border:'1px solid #E0E2DB',
+                           fontSize:16,
+                           lineHeight:50,
+                           color:'#605C8D'
+                           
+                          },
+                        })}
                       />
                     </Input.Wrapper>
                   </div>
@@ -241,6 +266,28 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                         label="Start Date"
                         placeholder="Start date"
                         {...form.getInputProps("startDate")}
+                        styles={(theme)=>({
+                          label:{
+                            color:'#01041b',
+                            fontSize:'1.2em',
+                            fontWeight:500,
+                            lineHeight:1.2,
+                            marginBottom:10
+                          },
+                          input:{
+                            '&:focus-within': {
+                              borderColor: theme.colors.gray[6],
+                              backgroundColor:theme.white
+                            },
+                           height:50,
+                           backgroundColor:'#F8F7F7',
+                           borderRadius:16,
+                           border:'1px solid #E0E2DB',
+                           fontSize:16,
+                           lineHeight:50,
+                           color:'#605C8D'
+                          }
+                        })}
                       />
                     </div>
                     <div className="basis-1/2">
@@ -248,6 +295,28 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                         mx="auto"
                         label="End Date"
                         placeholder="End date"
+                        styles={(theme)=>({
+                          label:{
+                            color:'#01041b',
+                            fontSize:'1.2em',
+                            fontWeight:500,
+                            lineHeight:1.2,
+                            marginBottom:10
+                          },
+                          input:{
+                            '&:focus-within': {
+                              borderColor: theme.colors.gray[6],
+                              backgroundColor:theme.white
+                            },
+                           height:50,
+                           backgroundColor:'#F8F7F7',
+                           borderRadius:16,
+                           border:'1px solid #E0E2DB',
+                           fontSize:16,
+                           lineHeight:50,
+                           color:'#605C8D'
+                          }
+                        })}
                         {...form.getInputProps("endDate")}
                       />
                     </div>
@@ -272,6 +341,28 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                           { label: "Completed", value: "Completed" },
                         ]}
                         {...form.getInputProps("status")}
+                        styles={(theme)=>({
+                          label:{
+                            color:'#01041b',
+                            fontSize:'1.2em',
+                            fontWeight:500,
+                            lineHeight:1.2,
+                            marginBottom:10
+                          },
+                          input:{
+                            '&:focus-within': {
+                              borderColor: theme.colors.gray[6],
+                              backgroundColor:theme.white
+                            },
+                           height:50,
+                           backgroundColor:'#F8F7F7',
+                           borderRadius:16,
+                           border:'1px solid #E0E2DB',
+                           fontSize:16,
+                           lineHeight:50,
+                           color:'#605C8D'
+                          }
+                        })}
                       />
                     </div>
                     <div className="basis-1/2">
@@ -295,35 +386,140 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                           },
                         ]}
                         {...form.getInputProps("type")}
+                        styles={(theme)=>({
+                          label:{
+                            color:'#01041b',
+                            fontSize:'1.2em',
+                            fontWeight:500,
+                            lineHeight:1.2,
+                            marginBottom:10
+                          },
+                          input:{
+                            '&:focus-within': {
+                              borderColor: theme.colors.gray[6],
+                              backgroundColor:theme.white
+                            },
+                           height:50,
+                           backgroundColor:'#F8F7F7',
+                           borderRadius:16,
+                           border:'1px solid #E0E2DB',
+                           fontSize:16,
+                           lineHeight:50,
+                           color:'#605C8D'
+                          }
+                        })}
                       />
                     </div>
                   </div>
                   {form.getInputProps("type").value !== "Internal project" && (
-                    <div className="relative w-full">
+                    <div className="relative mt-4 w-full">
                       <Select
                         label="Project Manager"
                         placeholder="Pick one"
                         data={users}
                         {...form.getInputProps("projectManager")}
+                        styles={(theme)=>({
+                          label:{
+                            color:'#01041b',
+                            fontSize:'1.2em',
+                            fontWeight:500,
+                            lineHeight:1.2,
+                            marginBottom:10
+                          },
+                          input:{
+                            '&:focus-within': {
+                              borderColor: theme.colors.gray[6],
+                              backgroundColor:theme.white
+                            },
+                           height:50,
+                           backgroundColor:'#F8F7F7',
+                           borderRadius:16,
+                           border:'1px solid #E0E2DB',
+                           fontSize:16,
+                           lineHeight:50,
+                           color:'#605C8D'
+                          }
+                        })}
                       />
                     </div>
                   )}
-                  <Input.Wrapper label="Project Description" required mx="auto">
-                    <Input
+                <div className="w-full mt-4 relative">
+                <Textarea
                       required
                       placeholder="Enter your Project description"
+                      label='Project description'
+                      autosize
+                      minRows={2}
+              
                       {...form.getInputProps("desc")}
-                      // sx={{padding:'2px 1px',backgroundColor:'green'}}
+                      styles={(theme)=>({
+                        label:{
+                          color:'#01041b',
+                          fontSize:'1.2em',
+                          fontWeight:500,
+                          lineHeight:1.2,
+                          marginBottom:10
+                        },
+                        // input:{
+                        //   '&:focus-within': {
+                        //     borderColor: theme.colors.gray[6],
+                        //     backgroundColor:theme.white
+                        //   },
+                     
+                        //  backgroundColor:'#F8F7F7',
+                        //  borderRadius:16,
+                        //  border:'1px solid #E0E2DB',
+                        //  fontSize:16,
+                        //  lineHeight:50,
+                        //  color:'#605C8D'
+                        // }
+                      })}
                     />
-                  </Input.Wrapper>
+               
+                </div>
+    
+
                   <MultiSelect
                     data={users}
                     label="Members"
-                    mx="auto"
+                   
                     searchable
                     placeholder="Pick all members you like"
                     {...form.getInputProps("members")}
+                    classNames={{
+                      
+                      searchInput: 'bg-transparent outline-none w-full ',
+                    }}
+                    styles={(theme)=>({
+                      label:{
+                        color:'#01041b',
+                        fontSize:'1.2em',
+                        fontWeight:500,
+                        lineHeight:1.2,
+                        marginBottom:10
+                      },
+                      input:{
+                        '&:focus-within': {
+                          borderColor: theme.colors.gray[6],
+                          backgroundColor:theme.white
+                        },
+                       width:'100%',
+                       backgroundColor:'#F8F7F7',
+                       borderRadius:16,
+                       border:'1px solid #E0E2DB',
+                       fontSize:16,
+                       lineHeight:50,
+                       color:'#605C8D',
+                       height:50,
+                       alignItems:'center',
+                       display:'flex',
+                       justifyContent: 'start',
+                       
+
+                      }
+                    })}
                   />
+         
                   {/* <div className="flex gap-2 items-end w-full">
                  <FileInput className="w-full" label="Your resume" onChange={(e)=>setSelectedFile(e)} placeholder="Choose file" icon={<FaUpload size={rem(14)} />} />
                  <input type="file"  onChange={handleFileChange} />
