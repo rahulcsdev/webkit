@@ -137,6 +137,12 @@ const ModalTasks = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
+                        styles={(theme) => ({
+                          input: {
+                            border: "1px solid black",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         radius="md"
                         size="lg"
                         {...formData.getInputProps("task")}
@@ -152,6 +158,12 @@ const ModalTasks = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
+                        styles={(theme) => ({
+                          input: {
+                            border: "1px solid black",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         radius="md"
                         size="lg"
                         data={ProjectArr}
@@ -168,6 +180,12 @@ const ModalTasks = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
+                        styles={(theme) => ({
+                          input: {
+                            border: "1px solid black",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         radius="md"
                         size="lg"
                         data={[
@@ -195,6 +213,12 @@ const ModalTasks = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
+                        styles={(theme) => ({
+                          input: {
+                            border: "1px solid black",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         radius="md"
                         size="lg"
                         data={[
@@ -224,6 +248,12 @@ const ModalTasks = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
+                        styles={(theme) => ({
+                          input: {
+                            border: "1px solid black",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         size="lg"
                         data={[
                           { value: "Frontend", label: "Frontend" },
@@ -247,6 +277,12 @@ const ModalTasks = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
+                        styles={(theme) => ({
+                          input: {
+                            border: "1px solid black",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         placeholder="Start date"
                         {...formData.getInputProps("start_date")}
                       />
@@ -265,6 +301,12 @@ const ModalTasks = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
+                        styles={(theme) => ({
+                          input: {
+                            border: "1px solid black",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         {...formData.getInputProps("end_date")}
                       />
                     </Grid.Col>
@@ -281,6 +323,12 @@ const ModalTasks = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
+                        styles={(theme) => ({
+                          input: {
+                            border: "1px solid black",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         data={mileStoneArr}
                         {...formData.getInputProps("mileStone")}
                       />
@@ -297,6 +345,12 @@ const ModalTasks = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
+                        styles={(theme) => ({
+                          input: {
+                            border: "1px solid black",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         {...formData.getInputProps("estimate_Time")}
                       />
                     </Grid.Col>
@@ -312,6 +366,12 @@ const ModalTasks = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
+                        styles={(theme) => ({
+                          input: {
+                            border: "1px solid black",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         {...formData.getInputProps("description")}
                       />
                     </Grid.Col>

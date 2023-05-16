@@ -16,19 +16,20 @@ const IndividalTask = (props: props) => {
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
             <div className="bg-white rounded-2xl w-[700px] overflow-hidden drop-shadow-md shadow-xl transform transition-all   mx-auto">
-              <Grid columns={24} className="p-4">
-                <Grid.Col span={24}>
-                  <Center className="border-b  py-4 capitalize">
-                    <Text className=" text-3xl font-semibold mx-4">
-                      Task Name
-                    </Text>
-                    <Text className="text-2xl text-blue-700 font-semibold">
-                      {data?.name}
-                    </Text>
-                  </Center>
+              <Grid columns={24} className="p-8">
+                <Grid.Col
+                  span={24}
+                  className="flex items-center capitalize border rounded-2xl p-4 "
+                >
+                  <Text className=" text-3xl font-semibold mx-4" size="lg">
+                    Task Name
+                  </Text>
+                  <Text className="text-2xl text-blue-700 font-semibold">
+                    {data?.name}
+                  </Text>
                 </Grid.Col>
                 <Grid.Col span={12}>
-                  <Box className="border rounded-2xl p-4 flex capitalize">
+                  <Box className="  border rounded-2xl p-4  capitalize">
                     <Text className="text-5 font-semibold mr-4">
                       Project Name
                     </Text>
@@ -36,7 +37,7 @@ const IndividalTask = (props: props) => {
                   </Box>
                 </Grid.Col>
                 <Grid.Col span={12}>
-                  <Box className="border rounded-2xl p-4 flex capitalize">
+                  <Box className="border rounded-2xl p-4  capitalize">
                     <Text className="text-5 font-semibold mr-4">
                       milestoneName
                     </Text>
@@ -44,25 +45,25 @@ const IndividalTask = (props: props) => {
                   </Box>
                 </Grid.Col>
                 <Grid.Col span={12}>
-                  <Box className="border rounded-2xl p-4 flex capitalize">
+                  <Box className="border rounded-2xl p-4  capitalize">
                     <Text className="text-5 font-semibold mr-4">Status</Text>
                     <Text>{data?.status}</Text>
                   </Box>
                 </Grid.Col>
                 <Grid.Col span={12}>
-                  <Box className="border rounded-2xl p-4 flex capitalize">
+                  <Box className="border rounded-2xl p-4  capitalize">
                     <Text className="text-5 font-semibold mr-4">priority</Text>
                     <Text>{data?.priority}</Text>
                   </Box>
                 </Grid.Col>
                 <Grid.Col span={12}>
-                  <Box className="border rounded-2xl p-4 flex capitalize">
+                  <Box className="border rounded-2xl p-4  capitalize">
                     <Text className="text-5 font-semibold mr-4">taskType</Text>
                     <Text>{data?.taskType}</Text>
                   </Box>
                 </Grid.Col>
                 <Grid.Col span={12}>
-                  <Box className="border rounded-2xl p-4 flex capitalize">
+                  <Box className="border rounded-2xl p-4  capitalize">
                     <Text className="text-5 font-semibold mr-4">
                       estimateTime
                     </Text>
@@ -70,7 +71,7 @@ const IndividalTask = (props: props) => {
                   </Box>
                 </Grid.Col>
                 <Grid.Col span={12}>
-                  <Box className="border rounded-2xl p-4 flex capitalize">
+                  <Box className="border rounded-2xl p-4  capitalize">
                     <Text className="text-5 font-semibold mr-4">
                       start Date
                     </Text>
@@ -78,7 +79,7 @@ const IndividalTask = (props: props) => {
                   </Box>
                 </Grid.Col>
                 <Grid.Col span={12}>
-                  <Box className="border rounded-2xl p-4 flex capitalize">
+                  <Box className="border rounded-2xl p-4  capitalize">
                     <Text className="text-5 font-semibold mr-4">End Date</Text>
                     <Text>{data?.endDate}</Text>
                   </Box>
