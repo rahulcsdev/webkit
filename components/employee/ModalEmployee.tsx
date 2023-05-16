@@ -262,6 +262,7 @@ const ModalEmployee = (props: typeModal) => {
                         { label: 'User Management', value: 'userManagement' },
                        
                         { label: 'Project Management', value: 'projectManagement' },
+                      
                         { label: 'Task Management', value: 'taskManagement' },
                        
                         { label: 'Milestone Management', value: 'milestoneManagement' },

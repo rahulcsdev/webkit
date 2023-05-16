@@ -71,7 +71,7 @@ const Employees = () => {
 
   const [datas, setData] = useState([]);
 
-  const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 9;
 const INITIAL_PAGE = 1;
 const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
 
@@ -93,6 +93,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
       query: getUser,
     }).then(({data})=>{
       setTotal(data?.users?.length);
+      console.log(data);
       
     })
   };
