@@ -16,7 +16,6 @@ export default config(
     server: {
       cors: { origin: ["http://localhost:4000"], credentials: true },
     },
-    //connect to the postgress database
     db: {
       provider: "postgresql",
       url: process.env.PostgressUrl || "",
@@ -26,12 +25,12 @@ export default config(
     },
 
     lists: {
-      User,// Register the User list
-      Project,// Register the Project list
-      Milestone,// Register the Milestone list
-      Task,// Register the Task list
-      TimeEntery,// Register the TimeEntry list
-      File,// Register the File list
+      User,
+      Project,
+      Milestone,
+      Task,
+      TimeEntery,
+      File,
     },
     storage: {
       my_local_images: {
@@ -53,7 +52,7 @@ export default config(
         storagePath: "public/file",
       },
     },
-    session,// Use the session configuration from the "auth" module
+    session,
     ui: {
       isAccessAllowed: (context: any) => !!context.session?.data,
     },

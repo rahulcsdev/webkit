@@ -19,9 +19,9 @@ import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
 import ModalProject from "../../components/project/ModalProject";
 import DeskCarousal from "../../components/dashboard/DeskCarousel";
-import DeskCardCarousal from "../../components/desk/DeskCardCarousel";
-import DesktaskCarousel from "../../components/desk/DesktaskCarousel";
-import DeskMilestoneCarousel from "../../components/desk/DeskMilestoneCarousel"
+import DeskCardCarousal from "../../components/DeskCardCarousel";
+import DesktaskCarousel from "../../components/DesktaskCarousel";
+import DeskMilestoneCarousel from "../../components/DeskMilestoneCarousel"
 
 const manrope = Manrope({ subsets: ["latin"] });
 const Desk = () => {
@@ -41,9 +41,9 @@ const Desk = () => {
     client,
   });
 
-  //console.log(projectData?.data?.projects)
+  // console.log(projectData?.data?.projects)
   // console.log(mileStoneData?.data?.milestones)
-  //console.log(taskData?.data?.tasks)
+  // console.log(taskData?.data?.tasks)
    
   
   const handleDateChange = (date: Date) => {
@@ -113,7 +113,7 @@ const Desk = () => {
                   </Popover.Target>
 
                   <Popover.Dropdown >
-                    {dropDown.map((item:any, index:any) => (
+                    {dropDown.map((item, index) => (
                       <div
                         key={index}
                         onClick={() => setdeskValue(item.value)}

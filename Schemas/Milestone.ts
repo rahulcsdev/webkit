@@ -2,14 +2,11 @@ import { list } from "@keystone-6/core";
 import { text, password, select } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { multiselect, relationship, timestamp } from "@keystone-6/core/fields";
-
-// Define the session object type
 type Session = {
   data: {
     role: string[];
   };
 };
-// Helper function to check if the user is an admin or milestone manager
 function isAdmin({ session }: { session: Session | undefined }) {
   const admin = session?.data.role.filter((el) =>
     ["admin", "milestoneManagement"].includes(el)
@@ -21,7 +18,6 @@ function isAdmin({ session }: { session: Session | undefined }) {
 }
 
 export default list({
-  // Set access control rules
   access: {
     operation: {
       create: isAdmin,
@@ -68,7 +64,6 @@ export default list({
         var projectCode = project.code;
       }
       const milestone = await context.db.Milestone.findMany({});
-        // If no time entries exist, set the code as "<projectCode>-MST001"
       if (milestone.length === 0) {
         return {
           ...resolvedData,

@@ -2,15 +2,11 @@ import { list } from "@keystone-6/core";
 import { text, password, select } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { multiselect, relationship, timestamp } from "@keystone-6/core/fields";
-
-
 type Session = {
   data: {
     role: string[];
   };
 };
-
-
 function isAdmin({ session }: { session: Session | undefined }) {
   const admin = session?.data.role.filter((el) =>
     ["admin", "taskManagement"].includes(el)
@@ -20,7 +16,6 @@ function isAdmin({ session }: { session: Session | undefined }) {
   return false;
 }
 export default list({
-   // Set access control rules for create, update, delete, and query operations
   access: {
     operation: {
       create: isAdmin,
@@ -32,11 +27,12 @@ export default list({
     },
   },
   fields: {
-    // Define fields for the task entity
     name: text(),
+
     code: text({ defaultValue: " ", ui: { itemView: { fieldMode: "read" } } }),
     File: relationship({ ref: "File", many: true }),
-     discription: text(),
+
+    discription: text(),
 
     project: relationship({
       ref: "Project",
@@ -99,7 +95,6 @@ export default list({
         var milestoneCode = milestone.code;
       }
       const tasks = await context.db.Task.findMany({});
-       // If no tasks exist, set the code as "<milestoneCode>-TSK0001"
       if (tasks.length === 0) {
         return {
           ...resolvedData,

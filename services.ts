@@ -135,7 +135,6 @@ export const getProjectList = gql`
     projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
       status
       startDate
-      endDate
       projectType
       projectManager {
         name
@@ -472,8 +471,6 @@ export const getTasks = gql`
         status
       }
       status
-      startDate
-      endDate
     }
   }
 `;
