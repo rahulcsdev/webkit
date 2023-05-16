@@ -1,7 +1,5 @@
 import React, { FormEventHandler, useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
-import { type, role, employeesData } from "../utils/data";
-import { useRouter } from "next/navigation";
 import {
   TextInput,
   Checkbox,
@@ -18,7 +16,7 @@ import {
 import { useForm } from "@mantine/form";
 import { DateInput } from "@mantine/dates";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import client from "../apolloClient/index";
+import client from "../../apolloClient/index";
 import {
   getUser,
   addNewUser,
@@ -26,7 +24,7 @@ import {
   getspecficUser,
   addUser,
   updateUser
-} from "../services";
+} from "../../services";
 
 interface formTypes {
   // id: string;
@@ -35,14 +33,14 @@ interface formTypes {
   password: string;
   designation: string;
   role: string;
-  dateofjoining: Date;
-  reportingmanager: string;
+  dateOfJoining: Date;
+  reportingManager: string;
 }
 
 interface typeModal {
   showEditModal: Boolean;
   handleCloseModal: () => void;
-  id: any;
+  id: string;
   fetchUser: () => void;
 }
 
@@ -60,7 +58,6 @@ const ModalEditEmployee = (props: typeModal) => {
   const reportManager = [{ value: "", label: "Choose One", disabled: true }];
 
   const reportingManagerOptions = (users: any) => {
-    console.log(users);
     for (let i = 0; i < users?.length; i++) {
       reportManager.push({
         value: users[i]?.id,
@@ -74,14 +71,13 @@ const ModalEditEmployee = (props: typeModal) => {
   
   const form = useForm({
     initialValues: {
-      // entries: [{ roles:"", key: 0 }],
       name: "",
       email: "",
       password: "",
       designation: "",
       role: "",
-      dateofjoining: new Date(),
-      reportingmanager: "",
+      dateOfJoining: new Date(),
+      reportingManager: "",
     },
 
     // validate: {
@@ -100,15 +96,17 @@ const ModalEditEmployee = (props: typeModal) => {
           },
         },
       });
+      // console.log(data);
+      
       form.setFieldValue("name", data?.user.name);
       form.setFieldValue("email", data?.user.email);
       form.setFieldValue("designation", data?.user.designation);
       form.setFieldValue("role", data?.user.role);
 
-      form.setFieldValue("dateOfJoining", new Date(data?.user?.dateOfJoining));
-      form.setFieldValue("reportingManager", data?.user.reportingManager);
+      form.setFieldValue("dateOfJoining", new Date(data?.user.dateOfJoining));
+      data.user.reportingManager &&
+      form.setFieldValue("reportingManager", data?.user.reportingManager.id);
 
-      console.log(data?.user.designation);
       setDetails(data?.user);
       setLoading(false);
     } catch (error) {
@@ -121,7 +119,7 @@ const ModalEditEmployee = (props: typeModal) => {
     const getReportingReportingManger = async () => {
       const info: string[] = [];
       const { data } = await client.query({
-        query: getUser,
+        query:getUser,
       });
       // console.log(data)
 
@@ -142,29 +140,8 @@ const ModalEditEmployee = (props: typeModal) => {
   
   }, [id]);
 
-  // console.log(id);
-
-  // useEffect(()=>{
-  //   fetchDetails();
-  // },[id])
-
   const updateUserHandler = async (formData: formTypes) => {
-    console.log(formData);
-
-    // const projectUpdate = {
-    //   name: formData.name,
-    //   email: formData.email,
-    //   password: formData.password,
-    //   designation: formData.designation,
-    //   role: formData.role,
-    //   dateOfJoining: formData.dateofjoining.toISOString(),
-    //   reportingManager: {
-    //     connect: {
-    //       id: formData.reportingmanager,
-    //     },
-    //   },
-    // };
-
+    // console.log(formData);
     try {
       const { data } = await client.mutate({
         mutation: updateUser,
@@ -176,29 +153,21 @@ const ModalEditEmployee = (props: typeModal) => {
             role: formData.role,
             reportingManager: {
               connect: {
-                id: formData.reportingmanager,
+                id: formData.reportingManager,
               },
             },
             name: formData.name,
             email: formData.email,
             designation: formData.designation,
-            dateOfJoining:formData.dateofjoining.toISOString(),         
+            dateOfJoining:formData.dateOfJoining.toISOString(),         
           },
         },
-        refetchQueries: [{ query: getUserDetails }],
-        // update: (cache, { data }) => {
-        //   const newEmployee = data.createUser;
-        //   const { users } = cache.readQuery({ query: getUserDetails });
-        //   const updatedUsers = [...users, newEmployee];
-        //   cache.writeQuery({
-        //     query: getUserDetails,
-        //     data: { users: updatedUsers },
-        //   });
-        // }
-      });
-      console.log(data);
+        refetchQueries: [{ query: getUser }],
+      })
+      // console.log(data);
       handleCloseModal();
-    } catch (error) {
+    } 
+    catch (error) {
       console.log(error);
     }
   };
@@ -281,8 +250,6 @@ const ModalEditEmployee = (props: typeModal) => {
 
                     <Grid.Col span={6}>
                       <DateInput
-                        // value={value}
-                        // onChange={setValue}
                         label="Date of Joining"
                         placeholder="Date of Joining"
                         maw={400}
@@ -295,7 +262,7 @@ const ModalEditEmployee = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
-                        {...form.getInputProps("dateofjoining")}
+                        {...form.getInputProps("dateOfJoining")}
                       />
                     </Grid.Col>
 
@@ -351,7 +318,7 @@ const ModalEditEmployee = (props: typeModal) => {
                           },
                         }}
                         data={users}
-                        {...form.getInputProps("reportingmanager")}
+                        {...form.getInputProps("reportingManager")}
                       />
                     </Grid.Col>
 

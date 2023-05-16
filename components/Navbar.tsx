@@ -35,7 +35,9 @@ const Navbar = (props: Props) => {
     const data = await client.query({
       query: getspecficUser,
       variables: {
-        id: id,
+        where:{
+          id: id,
+        }
       },
     });
 
@@ -66,7 +68,7 @@ const Navbar = (props: Props) => {
           }
         })
         .catch((err) => {
-          console.log("error");
+          console.log("error",err);
         });
     } else {
       router.push("/login");

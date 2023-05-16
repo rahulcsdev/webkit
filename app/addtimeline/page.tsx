@@ -49,7 +49,9 @@ const Projects = () => {
       .query({
         query: getspecficUser,
         variables: {
-          id: localStorage.getItem("userId"),
+            where:{
+              id: localStorage.getItem("userId"),
+            }
         },
       })
       .then((res: any) => {
