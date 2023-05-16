@@ -163,6 +163,11 @@ export const getUser = gql`
     users(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
       id
       name
+      email
+      code
+      designation
+      role
+      dateOfJoining
     }
   }
 `;
@@ -310,20 +315,6 @@ export const getspecficUser = gql`
   }
 `;
 
-<<<<<<< HEAD
-export const getUserDetails=gql`
-query Query {
-  users {
-    id
-    name
-    email
-    designation
-    role
-    dateOfJoining
-    reportingManager {
-      id
-      name
-=======
 export const getUserDetails = gql`
   query Query {
     users {
@@ -334,7 +325,6 @@ export const getUserDetails = gql`
       designation
       role
       dateOfJoining
->>>>>>> bdd9c00a90d6829e9008942a559b9b7c008400cd
     }
   }
 `;

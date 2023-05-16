@@ -1,7 +1,5 @@
 import React, { FormEventHandler, useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
-// import { type, role, employeesData } from "../utils/data";
-import { useRouter } from "next/navigation";
 import {
   TextInput,
   Checkbox,
@@ -60,7 +58,6 @@ const ModalEditEmployee = (props: typeModal) => {
   const reportManager = [{ value: "", label: "Choose One", disabled: true }];
 
   const reportingManagerOptions = (users: any) => {
-    console.log("check Users "+ users);
     for (let i = 0; i < users?.length; i++) {
       reportManager.push({
         value: users[i]?.id,
@@ -74,7 +71,6 @@ const ModalEditEmployee = (props: typeModal) => {
   
   const form = useForm({
     initialValues: {
-      // entries: [{ roles:"", key: 0 }],
       name: "",
       email: "",
       password: "",
@@ -100,7 +96,7 @@ const ModalEditEmployee = (props: typeModal) => {
           },
         },
       });
-      console.log(data);
+      // console.log(data);
       
       form.setFieldValue("name", data?.user.name);
       form.setFieldValue("email", data?.user.email);
@@ -111,7 +107,6 @@ const ModalEditEmployee = (props: typeModal) => {
       data.user.reportingManager &&
       form.setFieldValue("reportingManager", data?.user.reportingManager.id);
 
-      console.log(data?.user.designation);
       setDetails(data?.user);
       setLoading(false);
     } catch (error) {
@@ -124,7 +119,7 @@ const ModalEditEmployee = (props: typeModal) => {
     const getReportingReportingManger = async () => {
       const info: string[] = [];
       const { data } = await client.query({
-        query: getUser,
+        query:getUser,
       });
       // console.log(data)
 
@@ -145,14 +140,8 @@ const ModalEditEmployee = (props: typeModal) => {
   
   }, [id]);
 
-  // console.log(id);
-
-  // useEffect(()=>{
-  //   fetchDetails();
-  // },[id])
-
   const updateUserHandler = async (formData: formTypes) => {
-    console.log(formData);
+    // console.log(formData);
     try {
       const { data } = await client.mutate({
         mutation: updateUser,
@@ -173,18 +162,9 @@ const ModalEditEmployee = (props: typeModal) => {
             dateOfJoining:formData.dateOfJoining.toISOString(),         
           },
         },
-        refetchQueries: [{ query: getUserDetails }],
-        // update: (cache, { data }) => {
-        //   const newEmployee = data.updateUser;
-        //   const { users } = cache.readQuery({ query: getUserDetails });
-        //   const updatedUsers = [...users, newEmployee];
-        //   cache.writeQuery({
-        //     query: getUserDetails,
-        //     data: { users: updatedUsers },
-        //   });
-        // }
+        refetchQueries: [{ query: getUser }],
       })
-      console.log(data);
+      // console.log(data);
       handleCloseModal();
     } 
     catch (error) {
@@ -270,8 +250,6 @@ const ModalEditEmployee = (props: typeModal) => {
 
                     <Grid.Col span={6}>
                       <DateInput
-                        // value={value}
-                        // onChange={setValue}
                         label="Date of Joining"
                         placeholder="Date of Joining"
                         maw={400}
