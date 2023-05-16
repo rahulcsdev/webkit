@@ -1,17 +1,19 @@
 "use client";
+import dynamic from "next/dynamic";
 import React, { useEffect, useRef, useState , useCallback } from "react";
 import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalEmployee from "../../components/employee/ModalEmployee";
-import { employeesData } from "../../utils/data";
-import EmployeesCardData from "../../components/employee/EmployeesCardData";
-import EmployeesCardListView from "../../components/employee/EmployeeCardListView";
+const ModalEmployee = dynamic(() => import("../../components/employee/ModalEmployee"));
+const EmployeesCardData = dynamic(() => import("../../components/employee/EmployeesCardData"));
+const EmployeesCardListView = dynamic(() => import("../../components/employee/EmployeeCardListView"));
+const ModalEditEmployee = dynamic(() => import("../../components/employee/ModalEditEmployee"));
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
 import { gql , useQuery } from "@apollo/client";
 import client from "../../apolloClient/index";
 import { getUser, getUserDetails } from "@/services";
-import ModalEditEmployee from "../../components/employee/ModalEditEmployee";
+ 
 import { Pagination } from "@mantine/core";
 import Footer from "@/components/Footer";
 
@@ -30,27 +32,7 @@ const Employees = () => {
   const [selectedFeild, setSelectedFeild] = useState<string | null>();
   const [total, setTotal] = useState(0);
 
-  const handleDateChange = (date: Date) => {
-    setDate(date);
-  };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const { current: myDiv } = myDivRef;
-      if (myDiv.scrollTop > 0) {
-        setIsScrolling(true);
-      } else {
-        setIsScrolling(false);
-      }
-    };
-
-    const { current: myDiv } = myDivRef;
-    myDiv.addEventListener("scroll", handleScroll);
-
-    return () => {
-      myDiv.removeEventListener("scroll", handleScroll);
-    };
-  }, [myDivRef]);
 
   const openDetails = (id: string) => {
     setSelectedFeild(id);
@@ -111,10 +93,11 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   
 
   return (
-    <>
-      <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
-        <Navbar isScrolling={isScrolling} />
-        
+    <LayoutNav>
+    <div className="px-5 py-6">
+       
+        <div className="px-5 py-6">
+
         <div className="px-5 py-6">
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="flex items-center justify-between">
@@ -195,9 +178,9 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
           handleCloseModal={handleCloseModalEdit}
         />
       )}
-
-      <Footer/>
-    </>
+</div>
+     
+    </LayoutNav>
   );
 };
 
