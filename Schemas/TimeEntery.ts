@@ -8,18 +8,25 @@ type Session = {
   };
 };
 function isAdmin({ session }: { session: Session | undefined }) {
+    // Filter the session roles to find admin or timeEntryManagement roles
   const admin = session?.data.role.filter((el) =>
     ["admin", "timeEntryManagement"].includes(el)
   );
 
+  // If session is not defined, consider the user as a non-admin
   if (!session) return false;
+
+  // If admin roles are found, consider the user as an admin
   if (admin?.length != 0) return true;
+
+  // Otherwise, consider the user as a non-admin
   return false;
 }
 
 export default list({
   access: {
     operation: {
+       // Set access control rules for create, update, delete, and query operations
       create: isAdmin,
       update: isAdmin,
       delete: isAdmin,
@@ -29,6 +36,7 @@ export default list({
     },
   },
   fields: {
+    // Define fields for the timeEntry entity
     project: relationship({ ref: "Project" }),
     task: relationship({ ref: "Task" }),
     activities: text(),
@@ -39,6 +47,7 @@ export default list({
     duration: text(),
 
     projectType: select({
+       // Define options for the projectType field
       options: [
         { label: "Internal project", value: "Internal project" },
 
@@ -52,6 +61,7 @@ export default list({
 
     userName: relationship({ ref: "User" }),
     reviewStatus: select({
+        // Define options for the reviewStatus field
       options: [
         { label: "Approved", value: "Approved" },
 
@@ -82,6 +92,7 @@ export default list({
         var taskCode = task.code;
       }
       const timeEnteries = await context.db.TimeEntery.findMany({});
+        // If no time entries exist, set the code as "<taskCode>-TSE0001"
       if (timeEnteries.length === 0) {
         return {
           ...resolvedData,
