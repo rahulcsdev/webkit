@@ -23,15 +23,7 @@ model User {
   dateOfJoining               DateTime?
   reportingManager            User?        @relation("User_reportingManager", fields: [reportingManagerId], references: [id])
   reportingManagerId          String?      @map("reportingManager")
-<<<<<<< HEAD
-  createdDate                 DateTime?    @default("2023-05-15T15:16:13.388Z")
-=======
-<<<<<<< HEAD
-  createdDate                 DateTime?    @default("2023-05-15T15:05:15.634Z")
-=======
-  createdDate                 DateTime?    @default("2023-05-15T14:51:53.050Z")
->>>>>>> 17b575ee06fb9eba374806f53ddeed26dc915773
->>>>>>> bdd9c00a90d6829e9008942a559b9b7c008400cd
+  createdDate                 DateTime?    @default("2023-05-16T07:44:47.379Z")
   from_User_reportingManager  User[]       @relation("User_reportingManager")
   from_Project_member         Project[]    @relation("Project_member")
   from_Project_projectManager Project[]    @relation("Project_projectManager")
@@ -45,15 +37,7 @@ model Project {
   id                      String       @id @default(cuid())
   name                    String       @default("")
   member                  User[]       @relation("Project_member")
-<<<<<<< HEAD
-  createAt                DateTime?    @default("2023-05-15T15:16:13.389Z")
-=======
-<<<<<<< HEAD
-  createAt                DateTime?    @default("2023-05-15T15:05:15.634Z")
-=======
-  createAt                DateTime?    @default("2023-05-15T14:51:53.053Z")
->>>>>>> 17b575ee06fb9eba374806f53ddeed26dc915773
->>>>>>> bdd9c00a90d6829e9008942a559b9b7c008400cd
+  createAt                DateTime?    @default("2023-05-16T07:44:47.381Z")
   projectManager          User?        @relation("Project_projectManager", fields: [projectManagerId], references: [id])
   projectManagerId        String?      @map("projectManager")
   code                    String       @default(" ")
@@ -61,18 +45,8 @@ model Project {
   status                  String?      @default("New")
   projectType             String?
   projectDiscription      String       @default("")
-<<<<<<< HEAD
-  startDate               DateTime?    @default("2023-05-15T15:16:13.390Z")
-  endDate                 DateTime?    @default("2023-05-15T15:16:13.390Z")
-=======
-<<<<<<< HEAD
-  startDate               DateTime?    @default("2023-05-15T15:05:15.634Z")
-  endDate                 DateTime?    @default("2023-05-15T15:05:15.634Z")
-=======
-  startDate               DateTime?    @default("2023-05-15T14:51:53.054Z")
-  endDate                 DateTime?    @default("2023-05-15T14:51:53.054Z")
->>>>>>> 17b575ee06fb9eba374806f53ddeed26dc915773
->>>>>>> bdd9c00a90d6829e9008942a559b9b7c008400cd
+  startDate               DateTime?    @default("2023-05-16T07:44:47.382Z")
+  endDate                 DateTime?    @default("2023-05-16T07:44:47.382Z")
   from_Milestone_project  Milestone[]  @relation("Milestone_project")
   from_Task_project       Task[]       @relation("Task_project")
   from_TimeEntery_project TimeEntery[] @relation("TimeEntery_project")
@@ -88,18 +62,8 @@ model Milestone {
   code                String    @default(" ")
   File                File[]    @relation("Milestone_File")
   status              String?   @default("New")
-<<<<<<< HEAD
-  startDate           DateTime? @default("2023-05-15T15:16:13.390Z")
-  endDate             DateTime? @default("2023-05-15T15:16:13.390Z")
-=======
-<<<<<<< HEAD
-  startDate           DateTime? @default("2023-05-15T15:05:15.635Z")
-  endDate             DateTime? @default("2023-05-15T15:05:15.635Z")
-=======
-  startDate           DateTime? @default("2023-05-15T14:51:53.055Z")
-  endDate             DateTime? @default("2023-05-15T14:51:53.055Z")
->>>>>>> 17b575ee06fb9eba374806f53ddeed26dc915773
->>>>>>> bdd9c00a90d6829e9008942a559b9b7c008400cd
+  startDate           DateTime? @default("2023-05-16T07:44:47.383Z")
+  endDate             DateTime? @default("2023-05-16T07:44:47.383Z")
   from_Task_milestone Task[]    @relation("Task_milestone")
 
   @@index([projectId])

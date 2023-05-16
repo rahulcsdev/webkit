@@ -55,11 +55,11 @@ const Projects = () => {
         },
       })
       .then((res: any) => {
-        console.log("res", res);
+        // console.log("res", res);
         return res.data?.user?.reportingManager.id;
       })
       .catch((err) => {
-        console.log("err", err);
+        // console.log("err", err);
       });
   };
 
@@ -74,11 +74,11 @@ const Projects = () => {
         },
       })
       .then((res: any) => {
-        console.log("res", res);
+        // console.log("res", res);
         return res.data?.project?.projectManager.id;
       })
       .catch((err) => {
-        console.log("err", err);
+        // console.log("err", err);
       });
   };
 
@@ -88,7 +88,7 @@ const Projects = () => {
         query: getProjects,
       })
       .then((res: any) => {
-        console.log("res", res);
+        // console.log("res", res);
         setProjects(
           res.data.projects.map((item: any) => {
             return {
@@ -99,7 +99,7 @@ const Projects = () => {
         );
       })
       .catch((err) => {
-        console.log("err", err);
+        // console.log("err", err);
       });
   };
 
@@ -118,11 +118,11 @@ const Projects = () => {
         },
       })
       .then((res: any) => {
-        console.log("tasks", res);
+        // console.log("tasks", res);
         return res.data.tasks;
       })
       .catch((err) => {
-        console.log("err", err);
+        // console.log("err", err);
       });
   };
 
@@ -221,16 +221,16 @@ const Projects = () => {
         },
       })
       .then((res: any) => {
-        console.log("res", res.data?.project?.projectType);
+        // console.log("res", res.data?.project?.projectType);
         return res.data?.project?.projectType;
       })
       .catch((err) => {
-        console.log("err", err);
+        // console.log("err", err);
       });
   };
 
   const deleteEntry = (Id: string) => {
-    console.log("delete", Id);
+    // console.log("delete", Id);
 
     const FilteredArray = entry.filter((item: any) => item.id !== Id);
 
@@ -238,9 +238,9 @@ const Projects = () => {
   };
 
   const addEntry = () => {
-    // // console.log('form',form.values)
+    // console.log('form',form.values)
 
-    console.log("form", form.values);
+    // console.log("form", form.values);
     form.insertListItem("entries", {
       project: "",
       task: "",
@@ -254,12 +254,12 @@ const Projects = () => {
   };
 
   const saveAll = async () => {
-    console.log("here ", form.validate());
+    // console.log("here ", form.validate());
 
     if (form.validate().hasErrors) {
       return;
     } else {
-      console.log("no errors");
+      // console.log("no errors");
 
       const Mutatedata = form.values.entries.map(async (item) => {
         return {
@@ -299,21 +299,21 @@ const Projects = () => {
       });
 
       Promise.all(Mutatedata).then((values) => {
-        console.log(values);
+        // console.log(values);
         createTimesheets({
           variables: {
             data: values,
           },
         })
           .then((res: any) => {
-            console.log("timelines added", res);
+            // console.log("timelines added", res);
             refetch1();
             refetch2();
             refetch3();
-            alert("timeline added");
+            router.push('/timeline')
           })
           .catch((err) => {
-            console.log("err", err);
+            // console.log("err", err);
           });
       });
     }
@@ -324,18 +324,18 @@ const Projects = () => {
   }
 
   const getFilteredTasks = () => {
-    console.log("jj");
+    // console.log("jj");
   };
 
   const selectProject = async (e: any, index: number) => {
-    console.log("number", index);
+    // console.log("number", index);
 
     form.setFieldValue(`entries.${index}.project`, e);
     form.setFieldValue(`entries.${index}.task`, "");
 
     const tasks = await getProjectsTasks(e);
 
-    console.log("tasks", tasks);
+    // console.log("tasks", tasks);
 
     const TasksDropDownData = tasks.map((item: any) => {
       return {
@@ -370,6 +370,7 @@ const Projects = () => {
 
                 <div className="relative">
                   <button
+                    type="button"
                     className={`${clickS} px-3 py-2 rounded-lg capitalize mr-6`}
                     onClick={() => router.push("/timeline")}
                   >
@@ -452,7 +453,6 @@ const Projects = () => {
                       </td>
                       <td className="px-6 py-4">
                         <NumberInput
-                          defaultValue={18}
                           placeholder="choose duration"
                           type="number"
                           withAsterisk
@@ -502,7 +502,6 @@ const Projects = () => {
                               </td>
                               <td className="px-6 py-4">
                                 <NumberInput
-                                  defaultValue={18}
                                   placeholder="choose duration"
                                   type="number"
                                   withAsterisk
@@ -553,7 +552,7 @@ const Projects = () => {
           showModal={showModal}
           handleCloseModal={handleCloseModal}
         />  */}
-        <Footer />
+   
       </form>
     </LayoutNav>
   );

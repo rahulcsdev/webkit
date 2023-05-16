@@ -51,11 +51,11 @@ export const addTimesheet = gql`
 `;
 
 export const updateTimesheet = gql`
-  mutation ($where: TimeSheetWhereUniqueInput!, $data: TimeSheetUpdateInput!) {
-    updateTimeSheet(where: $where, data: $data) {
-      id
-    }
+mutation Mutation($data: TimeEnteryUpdateInput!, $where: TimeEnteryWhereUniqueInput!) {
+  updateTimeEntery(data: $data, where: $where) {
+    id
   }
+}
 `;
 
 export const updateAllTimeEntry = gql`
@@ -286,9 +286,7 @@ export const getMilestoneDetails = gql`
 export const getAll = gql`
   query TimeEnteries {
     timeEnteries {
-      userName {
-        email
-      }
+     id
     }
   }
 `;
@@ -310,20 +308,6 @@ export const getspecficUser = gql`
   }
 `;
 
-<<<<<<< HEAD
-export const getUserDetails=gql`
-query Query {
-  users {
-    id
-    name
-    email
-    designation
-    role
-    dateOfJoining
-    reportingManager {
-      id
-      name
-=======
 export const getUserDetails = gql`
   query Query {
     users {
@@ -334,15 +318,13 @@ export const getUserDetails = gql`
       designation
       role
       dateOfJoining
->>>>>>> bdd9c00a90d6829e9008942a559b9b7c008400cd
     }
   }
 `;
 
 export const getTimesheetDetails = gql`
-  query ($where: TimeSheetWhereUniqueInput!) {
-    timeSheet(where: $where) {
-      timeEntry {
+  query ($where: TimeEnteryWhereUniqueInput!) {
+    timeEntery(where: $where) {
         id
         project {
           name
@@ -355,6 +337,7 @@ export const getTimesheetDetails = gql`
         activities
         duration
         reviewStatus
+        projectType
         remarks
         reviewedAt
         reviewedBy {
@@ -362,7 +345,6 @@ export const getTimesheetDetails = gql`
           name
         }
       }
-    }
   }
 `;
 

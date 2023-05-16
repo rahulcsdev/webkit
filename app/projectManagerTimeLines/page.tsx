@@ -57,7 +57,7 @@ const TimeEntries = () => {
   });
 
   useEffect(()=>{
-    console.log('l')
+    // console.log('l')
      const userId = localStorage.getItem("userId")
      if(userId){
       form.setFieldValue("userId", userId)
@@ -81,7 +81,7 @@ const TimeEntries = () => {
 
 
 
-  console.log(data);
+  // console.log(data);
 
   const [createProject, {}] = useMutation(updateTimeEntry);
 
@@ -111,7 +111,7 @@ const TimeEntries = () => {
       refetchQueries: [getSpecificManagerTimeEntries],
     })
       .then(() => {
-        console.log("j");
+        // console.log("j");
         close();
         // getTimeEntries()
       })
@@ -124,10 +124,10 @@ const TimeEntries = () => {
       <form
         onSubmit={form.onSubmit(
           (values, _event) => {
-            console.log("h", values, _event);
+            // console.log("h", values, _event);
           },
           (validationErrors, _values, _event) => {
-            console.log(validationErrors);
+            // console.log(validationErrors);
           }
         )}
       >
@@ -289,7 +289,7 @@ const TimeEntries = () => {
           showModal={showModal}
           handleCloseModal={handleCloseModal}
         /> */}
-        <Footer />
+
       </form>
     </LayoutNav>
   );
