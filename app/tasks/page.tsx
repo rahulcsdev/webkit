@@ -11,22 +11,20 @@ import client from "@/apolloClient";
 import { Pagination } from "@mantine/core";
 
 const Tasks = () => {
-  const myDivRef = useRef<any>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [date, setDate] = useState<Date>(new Date());
-  const [isExpand, setIsExpand] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [projectList, setProjectList] = useState([]);
   const [milestoneList, setMileStoneList] = useState([]);
   const [tasklist, setTaskList] = useState([]);
-  const [page, setPage] = useState(1);
+  const INITIAL_PAGE = 1;
+  const ITEMS_PER_PAGE = 9;
+  const [page, setPage] = useState(INITIAL_PAGE);
   const [totalPageNumber, setTotalPageNumber] = useState(0);
 
   const { data, loading, error, refetch } = useQuery(getTask, {
     client,
     variables: {
-      take: 9,
-      skip: (page - 1) * 9,
+      take: ITEMS_PER_PAGE,
+      skip: (page - 1) * ITEMS_PER_PAGE,
     },
   });
   function handleCloseModal() {
@@ -110,7 +108,7 @@ const Tasks = () => {
           <Pagination
             value={page}
             onChange={setPage}
-            total={Math.ceil(totalPageNumber / 9)}
+            total={Math.ceil(totalPageNumber / ITEMS_PER_PAGE)}
           />
         </Box>
       </div>
