@@ -432,6 +432,11 @@ export const getTasks = gql`
     tasks {
       name
       id
+      project {
+        name
+        status
+      }
+      status
     }
   }
 `;

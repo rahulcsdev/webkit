@@ -5,6 +5,9 @@ import { Manrope } from "next/font/google";
 import { dropDown } from "../../utils/data";
 import { deskDropDown, deskCarousalData } from "../../utils/data";
 import { Popover, Button } from "@mantine/core";
+import { gql, useQuery } from "@apollo/client";
+import { getProjectList ,getTasks,getMilestone} from "@/services";
+import client from '../../apolloClient/index'
 
 import {
   FiChevronDown,
@@ -17,13 +20,32 @@ import { HiBars3 } from "react-icons/hi2";
 import ModalProject from "../../components/ModalProject";
 import DeskCarousal from "../../components/DeskCarousel";
 import DeskCardCarousal from "../../components/DeskCardCarousel";
+import DesktaskCarousel from "../../components/DesktaskCarousel";
+import DeskMilestoneCarousel from "../../components/DeskMilestoneCarousel"
 
 const manrope = Manrope({ subsets: ["latin"] });
 const Desk = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
+  
 
+
+  const projectData= useQuery(getProjectList, {
+    client,
+  });
+  const mileStoneData = useQuery(getMilestone, {
+    client,
+  });
+  const taskData = useQuery(getTasks, {
+    client,
+  });
+
+  // console.log(projectData?.data?.projects)
+  // console.log(mileStoneData?.data?.milestones)
+  // console.log(taskData?.data?.tasks)
+   
+  
   const handleDateChange = (date: Date) => {
     setDate(date);
   };
@@ -37,6 +59,7 @@ const Desk = () => {
         setIsScrolling(false);
       }
     };
+    
 
     const { current: myDiv } = myDivRef;
     myDiv.addEventListener("scroll", handleScroll);
@@ -55,9 +78,9 @@ const Desk = () => {
   const [showModal, setShowModal] = useState(false);
   const [opened, setOpened] = useState(false);
 
-  function handleCloseModal() {
-    setShowModal(false);
-  }
+  // function handleCloseModal() {
+  //   setShowModal(false);
+  // }
 
   return (
     <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
@@ -130,7 +153,7 @@ const Desk = () => {
             <h1
               className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.className} `}
             >
-              Open Projects ( 05 )
+               Projects 
             </h1>
             <div className="flex items-center gap-4 justify-center">
               <Popover
@@ -168,7 +191,7 @@ const Desk = () => {
             <h1
               className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.className} `}
             >
-              In Progress ( 03 )
+              Tasks
             </h1>
             <div className="flex items-center gap-4 justify-center relative ...">
               <Popover
@@ -206,7 +229,7 @@ const Desk = () => {
             <h1
               className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.className} `}
             >
-              Compeleted ( 05 )
+              Milestone
             </h1>
             <div className="flex items-center gap-4 justify-center">
               <Popover
@@ -241,17 +264,27 @@ const Desk = () => {
         </div>
       </div>
 
-      <div className="my-2">
+      <div className="grid grid-cols-3  gap-3">
         {/* Carousal part */}
-        <div className="w-full grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-1">
-          {deskCarousalData.map((item, index) => (
+        <div className=" flex flex-col  gap-1">
+          {projectData?.data?.projects.map((item:any, index:any) => (
             <DeskCardCarousal key={index} data={item} />
           ))}
         </div>
-        <ModalProject
+        <div className=" flex flex-col  gap-1">
+          {taskData?.data?.tasks.map((item:any, index:any) => (
+            <DesktaskCarousel key={index} data={item} />
+          ))}
+        </div>
+        <div className=" flex flex-col gap-1">
+          {mileStoneData?.data?.milestones.map((item:any, index:any) => (
+            <DeskMilestoneCarousel key={index} data={item} />
+          ))}
+        </div>
+        {/* <ModalProject
           showModal={showModal}
           handleCloseModal={handleCloseModal}
-        />
+        /> */}
       </div>
     </div>
   );
