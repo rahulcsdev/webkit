@@ -1,6 +1,5 @@
 import React  , { useState , useEffect} from "react";
 import { Manrope, Roboto } from "next/font/google";
-import { type, role } from "../utils/data";
 import {
   TextInput,
   Checkbox,
@@ -17,65 +16,32 @@ import {
 import { useForm } from "@mantine/form";
 import { DateInput } from '@mantine/dates';
 import { gql, useQuery, useMutation } from "@apollo/client";
-import client from '../apolloClient/index';
-import { addNewUser , getUser, getUserDetails, getspecficUser } from '../services';
-// import { finduserRole } from '../services';
+import client from '../../apolloClient/index';
+import { addNewUser , getUser, getUserDetails, getspecficUser } from '../../services';
 
 
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: ()=>void;
-  fetchUser:()=>void;
+  refetch:any
 }
-
-interface UserData {
-  id: string;
-  reportingManager: {
-    id: string;
-    name: string;
-  };
-}
-
-interface User {
-  id: number;
-  name: string;
-  role: string;
-}
-
-interface QueryData {
-  users: User[];
-}
-
-
-const finduserRole =gql`
-query Query {
-  users {
-    id
-    name
-    role
-  }
-}`;
 
 interface formTypes {
-  // id: string;
   name: string;
   email: string;
   password:string;
   designation: string;
   role: string;
-  dateofjoining: Date;
-  reportingmanager: string;
+  dateOfJoining: Date;
+  reportingManager: string;
 };
-
-
-
 
 
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Manrope({ weight: "400", subsets: ["latin"] });
 
 const ModalEmployee = (props: typeModal) => {
-  const { fetchUser ,showModal, handleCloseModal   } = props;
+  const { showModal, handleCloseModal  , refetch  } = props;
 
   const [users, setUsers] = useState<any>([])
   const [options, setOptions] = useState<any>([]);
@@ -85,7 +51,7 @@ const ModalEmployee = (props: typeModal) => {
   ];
 
   const reportingManagerOptions=(users:any)=>{
-    console.log(users);
+    // console.log(users);
     for (let i = 0; i < users?.length; i++) {
       reportManager.push({value: users[i]?.id,label:users[i].name,disabled:false});
     }
@@ -98,8 +64,7 @@ const ModalEmployee = (props: typeModal) => {
         const {data}=await client.query({
           query:getUser
           });
-          // console.log(data)
-   
+
           reportingManagerOptions(data.users);
         for (let i = 0; i < data?.users?.length; i++) {
           info.push(data?.users[i]?.name);
@@ -114,14 +79,13 @@ const ModalEmployee = (props: typeModal) => {
 
   const form = useForm({
     initialValues: {
-      // entries: [{ roles:"", key: 0 }],
       name: "",
       email: "",
       password: "",
       designation: "",
       role: "",
-      dateofjoining: new Date(),
-      reportingmanager: "",
+      dateOfJoining: new Date(),
+      reportingManager: "",
     },
 
     
@@ -131,55 +95,37 @@ const ModalEmployee = (props: typeModal) => {
     // },
   });
 
+  const [createUser, { loading, data, error }] = useMutation(addNewUser);
 
- 
- 
-  const createUser = async (formData: formTypes) => {
-    console.log(formData);
-    try {
-      const { data } = await client.mutate({
-        mutation: addNewUser,
-        variables: {
-          data: {
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            designation: formData.designation,
-            role: formData.role,
-            dateOfJoining: formData.dateofjoining.toISOString(),
-            reportingManager: {
-              connect: {
-                id: formData.reportingmanager
-              }
+  const handleSubmit = (formData:formTypes) => {
+    // console.log(formData);
+
+    createUser({
+      variables: {
+        data: {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          designation: formData.designation,
+          role: formData.role,
+          dateOfJoining: formData.dateOfJoining.toISOString(),
+          reportingManager: {
+            connect: {
+              id: formData.reportingManager
             }
           }
-        },
-        refetchQueries: [{ query: getUserDetails }],
-        // update: (cache, { data }) => {
-        //   const newEmployee = data.createUser;
-        //   const { users } = cache.readQuery({ query: getUserDetails });
-        //   const updatedUsers = [...users, newEmployee];
-        //   cache.writeQuery({
-        //     query: getUserDetails,
-        //     data: { users: updatedUsers },
-        //   });
-        // }
-      });
+        }
+      },
+      refetchQueries: [{ query: getUser }],
+      onCompleted:()=>{
+        refetch();
+      }
+    })
+    .then(() => handleCloseModal())
+    .catch((error) => console.log(error));
+  };
+
   
-      console.log(data);
-      fetchUser();
-      handleCloseModal();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  
-
-
-
- 
-
-
   return (
     <>
       {showModal && (
@@ -201,7 +147,7 @@ const ModalEmployee = (props: typeModal) => {
               </div>
               <div className="p-4">
 
-                <form onSubmit={form.onSubmit((values) =>createUser(values))}>
+                <form onSubmit={form.onSubmit((values) =>handleSubmit(values))}>
                   <Grid>
                     <Grid.Col span={12}>
                       <TextInput
@@ -216,7 +162,6 @@ const ModalEmployee = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
-                        //   style={{ width: "400px" }}
                         {...form.getInputProps("name")}
                       />
                     </Grid.Col>
@@ -286,15 +231,13 @@ const ModalEmployee = (props: typeModal) => {
                           },
                         }}
                         data={users}
-                        {...form.getInputProps("reportingmanager")}
+                        {...form.getInputProps("reportingManager")}
                       />
                     </Grid.Col>
 
                     <Grid.Col span={6}>
                      
                     <DateInput
-                        // value={value}
-                        // onChange={setValue}
                         label="Date of Joining"
                         placeholder="Date of Joining"
                         maw={400}
@@ -307,7 +250,7 @@ const ModalEmployee = (props: typeModal) => {
                             fontSize: "1.2rem", // increase label font size
                           },
                         }}
-                        {...form.getInputProps("dateofjoining")}
+                        {...form.getInputProps("dateOfJoining")}
                       />
                     </Grid.Col>
 
@@ -341,21 +284,15 @@ const ModalEmployee = (props: typeModal) => {
                     />
                     </Grid.Col>
 
-                    {/* <Checkbox
-              mt="md"
-              label="I agree to sell my privacy"
-              {...form.getInputProps("termsOfService", { type: "checkbox" })}
-            /> */}
-
                     <Grid.Col
                       span={12}
                       style={{ display: "flex", justifyContent: "center" }}
                     >
                       <Group position="right" mt="md">
                         <Button type="submit" size="lg" className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none">
-                          Save
+                        {loading?'Creating...':'Create'}
                         </Button>
-                        <Button type="submit" size="lg" className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none"  onClick={() => form.reset()} >
+                        <Button size="lg" className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none"  onClick={() => form.reset()} >
                           Reset
                         </Button>
                       </Group>

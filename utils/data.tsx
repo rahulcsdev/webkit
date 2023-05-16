@@ -11,52 +11,52 @@ export const navLinks=[
    {
     icon:<IoHomeOutline className='text-2xl' />,
     name:"dashboard",
-    link:'/'
+    link:''
    },
    {
     icon:<IoPrint className='text-2xl'/>,
     name:"projects",
-    link:'/projects'
+    link:'projects'
    },
    {
     icon:<BsClipboardCheck className='text-2xl'/>,
     name:"tasks",
-    link:'/tasks'
+    link:'tasks'
    },
    {
     icon:<BsPersonPlus className='text-2xl'/>,
-    name:"Employees",
-    link:'/employees'
+    name:"employees",
+    link:'employees'
    },
    {
       icon:<GiStairsGoal className='text-2xl'/>,
       name:"milestones",
-      link:'/milestones'
+      link:'milestones'
      },
    {
     icon:<RxCube className='text-2xl'/>,
     name:"desk",
-    link:'/desk'
+    link:'desk'
    },
    {
     icon:<BsCalendarEvent className='text-2xl'/>,
     name:"calender",
-    link:'/calender'
+    link:'calender'
    },
    {
     icon:<BsHourglass className='text-2xl'/>,
     name:"approval as reporting Manager",
-    link:'/reportingManagerTimeLines'
+    link:'reportingManagerTimeLines'
    },
    {
     icon:<BsHourglass className='text-2xl'/>,
     name:"approval as project Manager",
-    link:'/projectManagerTimeLines'
+    link:'projectManagerTimeLines'
    },
    {
     icon:<BsHourglass className='text-2xl'/>,
     name:"Time Entry",
-    link:'/timeline'
+    link:'timeline'
    },
    // {
    //  icon:<BsFolder2Open className='text-2xl'/>,

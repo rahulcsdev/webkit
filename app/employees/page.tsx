@@ -1,33 +1,24 @@
 "use client";
+import dynamic from "next/dynamic";
 import React, { useEffect, useRef, useState , useCallback } from "react";
 import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalEmployee from "../../components/ModalEmployee";
-import { employeesData } from "../../utils/data";
-import EmployeesCardData from "../../components/EmployeesCardData";
-import EmployeesCardListView from "../../components/EmployeeCardListView";
-import { gql } from "@apollo/client";
+const ModalEmployee = dynamic(() => import("../../components/employee/ModalEmployee"));
+const EmployeesCardData = dynamic(() => import("../../components/employee/EmployeesCardData"));
+const EmployeesCardListView = dynamic(() => import("../../components/employee/EmployeeCardListView"));
+const ModalEditEmployee = dynamic(() => import("../../components/employee/ModalEditEmployee"));
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
+import { gql , useQuery } from "@apollo/client";
 import client from "../../apolloClient/index";
-import { getUserDetails } from "@/services";
-import ModalEditEmployee from "@/components/ModalEditEmployee";
+import { getUser, getUserDetails } from "@/services";
+ 
 import { Pagination } from "@mantine/core";
 import Footer from "@/components/Footer";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
-interface UserData {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  designation: string;
-  code: string;
-  role: string;
-  dateofjoining: Date;
-  reportingmanager: string;
-}
 
 const Employees = () => {
   const myDivRef = useRef<any>(null);
@@ -39,28 +30,9 @@ const Employees = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [selectedFeild, setSelectedFeild] = useState<string | null>();
+  const [total, setTotal] = useState(0);
 
-  const handleDateChange = (date: Date) => {
-    setDate(date);
-  };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const { current: myDiv } = myDivRef;
-      if (myDiv.scrollTop > 0) {
-        setIsScrolling(true);
-      } else {
-        setIsScrolling(false);
-      }
-    };
-
-    const { current: myDiv } = myDivRef;
-    myDiv.addEventListener("scroll", handleScroll);
-
-    return () => {
-      myDiv.removeEventListener("scroll", handleScroll);
-    };
-  }, [myDivRef]);
 
   const openDetails = (id: string) => {
     setSelectedFeild(id);
@@ -79,56 +51,53 @@ const Employees = () => {
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
 
-  const [datas, setData] = useState<UserData[]>([]);
-  const [activePage, setPage] = useState(1);
-  
-  const PAGE_SIZE = 9; // Number of items per page
+  const [datas, setData] = useState([]);
+
+  const ITEMS_PER_PAGE = 9;
+const INITIAL_PAGE = 1;
+const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
+
+  const { data, loading, error, refetch } = useQuery(getUser, {
+    client,
+    variables: {
+      skip: (currentPage - 1) * ITEMS_PER_PAGE,
+      take: ITEMS_PER_PAGE,
+    },
+  });
+
+
+  const handlePageChange = (page:any) => {
+    setCurrentPage(page);
+  };
  
   const fetchUser = async () => {
-    const { data } = await client.query({
-      query: getUserDetails,
-      variables: {
-        take: PAGE_SIZE,
-        skip: (activePage - 1) * PAGE_SIZE,
-      },
-    });
-    setData(data.users);
-    console.log(data.users);
+   client.query({
+      query: getUser,
+    }).then(({data})=>{
+      setTotal(data?.users?.length);
+      
+    })
   };
 
-  // const fetchUser = useCallback(async () => {
-  //   const { data } = await client.query({
-  //     query: getUserDetails,
-  //     variables: {
-  //       take: PAGE_SIZE,
-  //       skip: (activePage - 1) * PAGE_SIZE,
-  //     },
-  //   });
-
-    
-  //   setData(data.users);
-  //   // setTotalCount(data.totalCount.aggregate.count);
-  //   console.log(data.users);
-  // }, [activePage, client]);
-  
 
   useEffect(() => {
     fetchUser();
-  }, [fetchUser]);
+  }, [currentPage]);
 
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
-  };
+  useEffect(()=>{
+    setData(data?.users);
+  },[data,loading]);
 
-  const startIndex = (activePage - 1) * PAGE_SIZE;
-  const endIndex = startIndex + PAGE_SIZE;
-  const displayedData = datas.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+  const visibleTotal = currentPage === totalPages ? total % ITEMS_PER_PAGE : ITEMS_PER_PAGE;
+  
 
   return (
-    <>
-      <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
-        <Navbar isScrolling={isScrolling} />
-        
+    <LayoutNav>
+    <div className="px-5 py-6">
+       
+        <div className="px-5 py-6">
+
         <div className="px-5 py-6">
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="flex items-center justify-between">
@@ -172,18 +141,15 @@ const Employees = () => {
         {/* Employee Cards */}
 
         <div className="px-5 py-6 ">
-          {viewMode ? (
+          {loading?<h1 className="">Loading...</h1>:datas?.length==0?<h1 className="">No Data found</h1>:viewMode ? (
             <div className="grid grid-cols-3  gap-5">
-              {displayedData.map((item, index) => (
+              {datas && datas.map((item, index) => (
                 <EmployeesCardData key={index} data={item} />
               ))}
-              
-            
-
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-5">
-              {displayedData.map((item, index) => (
+              {datas && datas.map((item, index) => (
                 <EmployeesCardListView
                   openDetails={openDetails}
                   key={index}
@@ -192,14 +158,14 @@ const Employees = () => {
               ))}
             </div>
           )}
-           <div className="flex justify-center items-center mt-5">
-            <Pagination value={activePage} onChange={setPage} total={10} />
-          </div>
         </div>
+        <div className="my-5 flex items-center justify-center">
+         <Pagination total={totalPages}   onChange={handlePageChange} value={currentPage} />
+       </div>
       </div>
       </div>
       <ModalEmployee
-        fetchUser={fetchUser}
+        refetch={refetch}
         showModal={showModal}
         handleCloseModal={handleCloseModal}
       />
@@ -212,9 +178,9 @@ const Employees = () => {
           handleCloseModal={handleCloseModalEdit}
         />
       )}
-
-      <Footer/>
-    </>
+</div>
+     
+    </LayoutNav>
   );
 };
 

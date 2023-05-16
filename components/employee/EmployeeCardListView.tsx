@@ -8,8 +8,7 @@ import { BsPersonCheck } from "react-icons/bs";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import ModalEditEmployee from "./ModalEditEmployee";
-import { employeesData } from "../utils/data";
-// import { useRouter } from 'next/router';
+
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const manrope = Manrope({ weight: "500", subsets: ["latin"] });
@@ -33,7 +32,7 @@ interface Props {
 }
 
 const EmployeesCardListView = (props: Props) => {
-  const { data:{id , name , email ,code , designation , role  } , openDetails } = props;
+  const { data:{id , name , email ,code , designation , role , dateofjoining , reportingmanager  } , openDetails } = props;
  
 
   return (
@@ -108,14 +107,6 @@ const EmployeesCardListView = (props: Props) => {
 
           <div className="flex items-center space-x-1 w-[5%]">
             <div>
-              {/* {
-             employeesData.map((item , index)=>(
-              <div className="p-2 rounded-full cursor-pointer bg-[#5776ff] text-xl text-white mr-4 " onClick={()=>handleEdit(item.id,item.name , item.phone , item.email)}>
-              <MdOutlineModeEditOutline   />
-            </div>
-             ))
-            } */}
-
               <div
                 className="p-2 rounded-full cursor-pointer bg-[#5776ff] text-xl text-white mr-4 "
                
@@ -126,9 +117,6 @@ const EmployeesCardListView = (props: Props) => {
             </div>
 
             <div>
-              {/* <div className="p-2 rounded-full cursor-pointer  bg-[#ff7957] text-xl text-white mr-4">
-                <RiDeleteBin5Line />
-              </div> */}
             </div>
           </div>
         </div>

@@ -163,6 +163,11 @@ export const getUser = gql`
     users(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
       id
       name
+      email
+      code
+      designation
+      role
+      dateOfJoining
     }
   }
 `;
@@ -439,11 +444,18 @@ export const addUser = gql`
 `;
 
 export const updateUser = gql`
-  mutation UpdateUser($where: UserWhereUniqueInput!, $data: UserUpdateInput!) {
-    updateUser(where: $where, data: $data) {
+mutation UpdateUser($where: UserWhereUniqueInput!, $data: UserUpdateInput!) {
+  updateUser(where: $where, data: $data) {
+    id
+    name
+    email
+    designation
+    dateOfJoining
+    reportingManager {
       id
     }
   }
+}
 `;
 
 export const getTasks = gql`
@@ -451,6 +463,11 @@ export const getTasks = gql`
     tasks {
       name
       id
+      project {
+        name
+        status
+      }
+      status
     }
   }
 `;

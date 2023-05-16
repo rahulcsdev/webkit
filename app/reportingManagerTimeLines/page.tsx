@@ -2,38 +2,32 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm, isNotEmpty } from "@mantine/form";
 import DatePicker from "react-datepicker";
+import dynamic from "next/dynamic";
 import {
   Textarea,
-  NumberInput,
+ 
   Select,
-  Button,
+ 
   Modal,
   Group,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import "react-datepicker/dist/react-datepicker.css";
-import Navbar from "../../components/Navbar";
-import { randomId } from "@mantine/hooks";
+ 
 import { Manrope } from "next/font/google";
-import { dropDown, projectsData } from "../../utils/data";
-import { FiChevronDown, FiChevronRight, FiEdit } from "react-icons/fi";
-import { RxDashboard } from "react-icons/rx";
-import { HiBars3 } from "react-icons/hi2";
+ 
+import {   FiEdit } from "react-icons/fi";
+ 
 import ModalProject from "../../components/project/ModalProject";
-import ProjectCard from "../../components/project/ProjectCard";
-import ProjectCardCol from "../../components/project/ProjectCardCol";
-import Footer from "../../components/Footer";
-import LayoutNav from "../../components/LayoutNav";
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
 import { useRouter } from "next/navigation";
 import { gql, useMutation, useQuery } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
-import client from "../../apolloClient/index";
+
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 
 const TimeEntries = () => {
-  const myDivRef = useRef<any>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [isExpand, setIsExpand] = useState(false);
+ 
   const [showModal, setShowModal] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -284,8 +278,13 @@ const TimeEntries = () => {
         <ModalProject
           showModal={showModal}
           handleCloseModal={handleCloseModal}
+<<<<<<< HEAD
           refetch={refetch:any}
         /> */}
+=======
+        />
+     
+>>>>>>> 1800432ff83532b3648467f45c6cd049ab8336d1
       </form>
     </LayoutNav>
   );

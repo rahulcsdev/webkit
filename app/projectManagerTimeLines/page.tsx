@@ -10,24 +10,19 @@ import {
   Modal,
   Group,
 } from "@mantine/core";
+import dynamic from "next/dynamic";
 import { useDisclosure } from "@mantine/hooks";
 import "react-datepicker/dist/react-datepicker.css";
-import Navbar from "../../components/Navbar";
-import { randomId } from "@mantine/hooks";
+ 
 import { Manrope } from "next/font/google";
-import { dropDown, projectsData } from "../../utils/data";
-import { FiChevronDown, FiChevronRight, FiEdit } from "react-icons/fi";
-import { RxDashboard } from "react-icons/rx";
-import { HiBars3 } from "react-icons/hi2";
-import ModalProject from "../../components/project/ModalProject";
-import ProjectCard from "../../components/project/ProjectCard";
-import ProjectCardCol from "../../components/project/ProjectCardCol";
-import Footer from "../../components/Footer";
-import LayoutNav from "../../components/LayoutNav";
+ 
+import {   FiEdit } from "react-icons/fi";
+ 
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
 import { useRouter } from "next/navigation";
 import { gql, useMutation, useQuery } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
-import client from "../../apolloClient/index";
+ 
 import {
   getSpecificManagerTimeEntries,
   updateTimeEntry,
@@ -289,7 +284,11 @@ const TimeEntries = () => {
           showModal={showModal}
           handleCloseModal={handleCloseModal}
         /> */}
+<<<<<<< HEAD
 
+=======
+       
+>>>>>>> 1800432ff83532b3648467f45c6cd049ab8336d1
       </form>
     </LayoutNav>
   );
