@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { Manrope, Roboto } from "next/font/google";
 import { useForm } from "@mantine/form";
-import { TextInput, Select, Box, Button, Textarea } from "@mantine/core";
+import {
+  TextInput,
+  Select,
+  Box,
+  Button,
+  Textarea,
+  Grid,
+  Center,
+} from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useMutation } from "@apollo/client";
 import { addTask, getTask } from "../../services";
@@ -115,128 +123,231 @@ const ModalTasks = (props: typeModal) => {
               </div>
               <div className="p-4 ">
                 <form
-                  className="grid grid-cols-2 place-content-center  gap-4 "
+                  // className="grid grid-cols-2 place-content-center gap-x-6 gap-y-3  "
                   onSubmit={formData.onSubmit(formSubmitHandler)}
                 >
-                  <TextInput
-                    label="Task"
-                    placeholder="Enter your task name"
-                    radius="md"
-                    {...formData.getInputProps("task")}
-                  />
-                  <Select
-                    label="Project"
-                    placeholder="select Project "
-                    radius="md"
-                    data={ProjectArr}
-                    {...formData.getInputProps("project")}
-                  />
-                  <Box className="col-span-2 grid grid-cols-3 gap-5 place-content-center">
-                    <Select
-                      label="Priority"
-                      placeholder="priority"
-                      radius="md"
-                      data={[
-                        { label: "Urgent", value: "Urgent" },
+                  <Grid columns={24}>
+                    <Grid.Col span={24}>
+                      <TextInput
+                        label="Task"
+                        placeholder="Enter your task name"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
+                        radius="md"
+                        size="lg"
+                        {...formData.getInputProps("task")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={12}>
+                      <Select
+                        label="Project"
+                        placeholder="select Project "
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
+                        radius="md"
+                        size="lg"
+                        data={ProjectArr}
+                        {...formData.getInputProps("project")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={12}>
+                      <Select
+                        label="Priority"
+                        placeholder="priority"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
+                        radius="md"
+                        size="lg"
+                        data={[
+                          { label: "Urgent", value: "Urgent" },
 
-                        { label: "High", value: "High" },
+                          { label: "High", value: "High" },
 
-                        { label: "Medium", value: "Medium" },
+                          { label: "Medium", value: "Medium" },
 
-                        { label: "No priority", value: "No priority" },
+                          { label: "No priority", value: "No priority" },
 
-                        { label: "Backlog", value: "Backlog" },
-                      ]}
-                      {...formData.getInputProps("priority")}
-                    />
-                    <Select
-                      label="Status"
-                      placeholder="select status"
-                      radius="md"
-                      data={[
-                        { label: "Open", value: "Open" },
-                        {
-                          label: "Document Analysis",
-                          value: "Document Analysis",
-                        },
-                        { label: "In Progress", value: "In Progress" },
+                          { label: "Backlog", value: "Backlog" },
+                        ]}
+                        {...formData.getInputProps("priority")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={12}>
+                      {" "}
+                      <Select
+                        label="Status"
+                        placeholder="select status"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
+                        radius="md"
+                        size="lg"
+                        data={[
+                          { label: "Open", value: "Open" },
+                          {
+                            label: "Document Analysis",
+                            value: "Document Analysis",
+                          },
+                          { label: "In Progress", value: "In Progress" },
 
-                        { label: "Code Review", value: "Code Review" },
+                          { label: "Code Review", value: "Code Review" },
 
-                        { label: "Completed", value: "Completed" },
-                      ]}
-                      {...formData.getInputProps("status")}
-                    />
-                    <Select
-                      label="Task type"
-                      placeholder="select task type"
-                      radius="md"
-                      data={[
-                        { value: "Frontend", label: "Frontend" },
-                        { value: "Backend", label: "Backend" },
-                        { value: "Bug", label: "Bug" },
-                      ]}
-                      {...formData.getInputProps("task_type")}
-                    />
-                  </Box>
-                  <div className=" col-span-2 flex flex-row gap-2 mt-4">
-                    <div className="basis-1/2">
+                          { label: "Completed", value: "Completed" },
+                        ]}
+                        {...formData.getInputProps("status")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={12}>
+                      {" "}
+                      <Select
+                        label="Task type"
+                        placeholder="select task type"
+                        radius="md"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
+                        size="lg"
+                        data={[
+                          { value: "Frontend", label: "Frontend" },
+                          { value: "Backend", label: "Backend" },
+                          { value: "Bug", label: "Bug" },
+                        ]}
+                        {...formData.getInputProps("task_type")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={12}>
+                      {" "}
                       <DatePickerInput
                         mx="auto"
                         maw={400}
+                        radius="md"
+                        size="lg"
                         label="Start date"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
                         placeholder="Start date"
                         {...formData.getInputProps("start_date")}
                       />
-                    </div>
-                    <div className="basis-1/2">
+                    </Grid.Col>
+                    <Grid.Col span={12}>
+                      {" "}
                       <DatePickerInput
                         mx="auto"
                         label="End date"
+                        radius="md"
+                        size="lg"
                         placeholder="End date"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
                         {...formData.getInputProps("end_date")}
                       />
-                    </div>
-                  </div>
-                  <Select
-                    label="MileStone"
-                    placeholder="select MileStone "
-                    radius="md"
-                    data={mileStoneArr}
-                    {...formData.getInputProps("mileStone")}
-                  />
-                  <TextInput
-                    label="Estimate Time"
-                    placeholder="Enter Estimate time"
-                    radius="md"
-                    {...formData.getInputProps("estimate_Time")}
-                  />
-                  <Textarea
-                    label="Desciption"
-                    placeholder="Enter description"
-                    radius="md"
-                    {...formData.getInputProps("description")}
-                  />
-                  {errMessage && (
-                    <div className="col-span-2 flex justify-center items-center">
-                      <h1 className="text-red-500">{errMessage}</h1>
-                    </div>
-                  )}
-                  <Box className="col-span-2  flex justify-center items-center">
-                    <Button type="submit" radius="md" className="bg-blue-500">
-                      Save
-                    </Button>
-                    <Button
-                      radius="md"
-                      className="px-4 py-2 mx-4 bg-blue-500 "
-                      onClick={() => {
-                        formData.reset();
-                        setErrMessage("");
-                      }}
-                    >
-                      Reset
-                    </Button>
-                  </Box>
+                    </Grid.Col>
+                    <Grid.Col span={12}>
+                      {" "}
+                      <Select
+                        label="MileStone"
+                        placeholder="select MileStone "
+                        radius="md"
+                        size="lg"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
+                        data={mileStoneArr}
+                        {...formData.getInputProps("mileStone")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={12}>
+                      <TextInput
+                        label="Estimate Time"
+                        placeholder="Enter Estimate time"
+                        radius="md"
+                        size="lg"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
+                        {...formData.getInputProps("estimate_Time")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={24}>
+                      <Textarea
+                        label="Desciption"
+                        placeholder="Enter description"
+                        radius="md"
+                        size="lg"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
+                        {...formData.getInputProps("description")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={24}>
+                      <Center>
+                        {errMessage && (
+                          <div className="col-span-2 flex justify-center items-center">
+                            <h1 className="text-red-500">{errMessage}</h1>
+                          </div>
+                        )}
+                      </Center>
+                    </Grid.Col>
+                    <Grid.Col span={24}>
+                      <Center>
+                        <Button
+                          type="submit"
+                          radius="md"
+                          size="lg"
+                          className="bg-blue-500"
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          radius="md"
+                          size="lg"
+                          className="px-4 py-2 mx-4 bg-blue-500 "
+                          onClick={() => {
+                            formData.reset();
+                            setErrMessage("");
+                          }}
+                        >
+                          Reset
+                        </Button>
+                      </Center>
+                    </Grid.Col>
+                  </Grid>
                 </form>
               </div>
             </div>

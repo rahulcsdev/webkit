@@ -113,6 +113,9 @@ const Tasks = () => {
       />
 
       <div className="bg-white p-4 mt-4 shadow-md w-[95%] mx-auto rounded-3xl">
+        {tasklist.length == 0 && (
+          <h1 className="text-2xl font-semibold text-center">No Task</h1>
+        )}
         {tasklist &&
           tasklist.map((item: any, index: number) => (
             <CardTask
