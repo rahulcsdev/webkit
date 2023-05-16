@@ -20,7 +20,7 @@ const ModalProject = (props: typeModal) => {
   const { showModal, handleCloseModal,refetch } = props;
   const [options, setOptions] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
-  const [showManager, setShowManager] = useState(false);
+ 
   const [selectedFile, setSelectedFile] = useState<File | null>();
   const managerOp = [{ value: "", label: "Choose One", disabled: true }];
 
