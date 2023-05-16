@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
  
 import { Manrope } from "next/font/google";
 import { dropDown, projectsData } from "../../utils/data";
-import { FiChevronDown, FiChevronRight } from "react-icons/fi";
+import { FiChevronDown, FiChevronRight, FiEdit } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
 import ModalProject from "../../components/project/ModalProject";
@@ -14,7 +14,7 @@ import Footer from "../../components/Footer";
 import { useForm, isNotEmpty } from "@mantine/form";
 import { gql, useMutation, useQuery } from "@apollo/client";
 
-import LayoutNav from "../../components/LayoutNav";
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
 const manrope = Manrope({ subsets: ["latin"] });
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 import { useRouter } from "next/navigation";
@@ -52,8 +52,9 @@ const Projects = () => {
       },
       orderBy: [
         {
-          date: "asc"
-        }]
+          date: "asc",
+        },
+      ],
     },
   });
 
@@ -64,7 +65,7 @@ const Projects = () => {
   };
 
   useEffect(() => {
-    console.log("l");
+    // console.log("l");
     const userId = localStorage.getItem("userId");
     if (userId) {
       form.setFieldValue("userId", userId);
@@ -81,10 +82,10 @@ const Projects = () => {
       <form
         onSubmit={form.onSubmit(
           (values, _event) => {
-            console.log("h", values, _event);
+            // console.log("h", values, _event);
           },
           (validationErrors, _values, _event) => {
-            console.log(validationErrors);
+            // console.log(validationErrors);
           }
         )}
       >
@@ -110,49 +111,86 @@ const Projects = () => {
             </div>
           </div>
 
-          {data?.timeEnteries.length === 0 && "no Time entries"}
-          {data?.timeEnteries.length > 0 &&
-            data.timeEnteries.map((item: any, index: number) => {
-              if (item.key === 0) {
-              } else {
-                return (
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {item.project?.name}
-                    </th>
-                    <td className="px-6 py-4">{item.task?.name}</td>
-                    <td className="px-6 py-4">{item.date.slice(0, 10)}</td>
-                    <td className="px-6 py-4"> {item.userName.name}</td>
-                    <td className="px-6 py-4">{item.duration}</td>
-                    <td className="px-6 py-4">{item.activities}</td>
-                    <td className="px-6 py-4">{item.reviewStatus}</td>
-                    <td>
-                      <button
-                        className={`${clickS} px-3 py-2 rounded-lg capitalize ml-6`}
-                        type="button"
-                        onClick={() => {
-                          form.setFieldValue("status", item.reviewStatus);
-                          form.setFieldValue("id", item.id);
-                          form.setFieldValue("taskId", item.task.id);
-                          form.setFieldValue("remark", "");
-                          open();
-                        }}
-                      ></button>
-                    </td>
-                  </tr>
-                );
-              }
-            })}
+          <div className="p-5 bg-white drop-shadow-md rounded-xl rounded mt-8">
+            {data?.timeEnteries.length === 0 && "no Time entries"}
+
+            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 rounded">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    Project
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Task
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    date
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    createdBy
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Duration
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Activities
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    status
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Edit
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="rounded">
+                {data?.timeEnteries.length > 0 &&
+                  data.timeEnteries.map((item: any, index: number) => {
+                    if (item.key === 0) {
+                    } else {
+                      return (
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                          >
+                            {item.project?.name}
+                          </th>
+                          <td className="px-6 py-4">{item.task?.name}</td>
+                          <td className="px-6 py-4">
+                            {item.date.slice(0, 10)}
+                          </td>
+                          <td className="px-6 py-4"> {item.userName.name}</td>
+                          <td className="px-6 py-4">{item.duration}</td>
+                          <td className="px-6 py-4">{item.activities}</td>
+                          <td className="px-6 py-4">{item.reviewStatus}</td>
+                          <td>
+                            {item.reviewStatus === "Rejected" && (
+                              <button
+                                className={`${clickS} px-3 py-2 rounded-lg capitalize ml-6`}
+                                type="button"
+                                onClick={() =>
+                                  router.push(`/edittimeline/${item.id}`)
+                                }
+                              >
+                                <FiEdit />
+                              </button>
+                            )}
+                          </td>
+                          <td></td>
+                        </tr>
+                      );
+                    }
+                  })}
+              </tbody>
+            </table>
+          </div>
         </div>
         {/* <ModalProject
           showModal={showModal}
           handleCloseModal={handleCloseModal}
           refetch={refetch}
         /> */}
-        <Footer />
       </form>
     </LayoutNav>
   );

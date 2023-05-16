@@ -71,7 +71,7 @@ const TimeEntries = () => {
     },
   });
 
-  console.log(data);
+  // console.log(data);
 
   const [createProject, {}] = useMutation(updateTimeEntry);
 
@@ -101,11 +101,11 @@ const TimeEntries = () => {
       refetchQueries: [getSpecificManagerTimeEntries],
     })
       .then(() => {
-        console.log("j");
+        // console.log("j");
         close();
         // getTimeEntries()
       })
-      .catch((error) => console.log(error));
+      // .catch((error) => console.log(error));
   };
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
@@ -114,10 +114,10 @@ const TimeEntries = () => {
       <form
         onSubmit={form.onSubmit(
           (values, _event) => {
-            console.log("h", values, _event);
+            // console.log("h", values, _event);
           },
           (validationErrors, _values, _event) => {
-            console.log(validationErrors);
+            // console.log(validationErrors);
           }
         )}
       >
@@ -274,12 +274,17 @@ const TimeEntries = () => {
             </div>
           </div>
         </div>
-
+{/* 
         <ModalProject
           showModal={showModal}
           handleCloseModal={handleCloseModal}
+<<<<<<< HEAD
+          refetch={refetch:any}
+        /> */}
+=======
         />
      
+>>>>>>> 1800432ff83532b3648467f45c6cd049ab8336d1
       </form>
     </LayoutNav>
   );
