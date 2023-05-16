@@ -284,11 +284,6 @@ const TimeEntries = () => {
           showModal={showModal}
           handleCloseModal={handleCloseModal}
         /> */}
-<<<<<<< HEAD
-
-=======
-       
->>>>>>> 1800432ff83532b3648467f45c6cd049ab8336d1
       </form>
     </LayoutNav>
   );

@@ -14,7 +14,7 @@ import Footer from "../../components/Footer";
 import { useForm, isNotEmpty } from "@mantine/form";
 import { gql, useMutation, useQuery } from "@apollo/client";
 
-import LayoutNav from "../../components/LayoutNav";
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
 const manrope = Manrope({ subsets: ["latin"] });
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 import { useRouter } from "next/navigation";
