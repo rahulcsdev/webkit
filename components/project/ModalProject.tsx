@@ -20,7 +20,7 @@ const ModalProject = (props: typeModal) => {
   const { showModal, handleCloseModal,refetch } = props;
   const [options, setOptions] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
-  const [showManager, setShowManager] = useState(false);
+ 
   const [selectedFile, setSelectedFile] = useState<File | null>();
   const managerOp = [{ value: "", label: "Choose One", disabled: true }];
 
@@ -335,7 +335,7 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                       type="submit"
                       className={`text-base font-normal ${roboto.className} text-white px-2 bg-[#5773FF] rounded-md py-1 border-none`}
                     >
-                      {loading?'Creating...':'Create'}
+                      {loading ? "Creating..." : "Create"}
                     </button>
                     <button
                       onClick={() => form.reset()}

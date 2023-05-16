@@ -1,20 +1,20 @@
 "use client";
 import React, { useState } from "react";
- 
+import Link from 'next/link'
 import Image from "next/image";
 import { Manrope,Roboto } from "next/font/google";
 import { navLinks } from "../utils/data";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import {useRouter} from 'next/navigation'
+ 
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({weight:'500',subsets:['latin']});
 const Sidebar = () => {
   const [active, setActive] = useState("dashboard");
-const router=useRouter();
-  const changeState = (value: string,link:string) => {
+ 
+  const changeState = (value: string) => {
     setActive(value);
-    router.push(link);
+    
   };
   const percentage = 66;
   return (
@@ -31,8 +31,9 @@ const router=useRouter();
       <div className="h-full pb-12 overflow-y-scroll ">
       <div className=" flex flex-col items-start justify-center gap-2  w-full ">
         {navLinks.map((item, index) => (
-          <div
-            onClick={() => changeState(item.name,item.link)}
+           <Link href={`/${item.link}`} className="w-full" key={index} onClick={()=>changeState(item.name)} >
+           <div
+            
             key={index}
             className={`${
               active === item.name
@@ -40,6 +41,8 @@ const router=useRouter();
                 : "border-none  text-gray-600 "
             } hover:text-[#5773FF] hover:bg-sky-50  flex justify-start cursor-pointer  items-center gap-3 px-3 py-4 w-full `}
           >
+           
+
             {item.icon}
             <h1 className={`text-md font-medium capitalize ${roboto.className} `}>
             
@@ -47,6 +50,7 @@ const router=useRouter();
               
             </h1>
           </div>
+            </Link>
         ))}
       </div>
       <div className="mt-6 flex items-center justify-center flex-col">
