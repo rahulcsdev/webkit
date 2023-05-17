@@ -33,12 +33,34 @@ const Desk = () => {
 
   const projectData= useQuery(getProjectList, {
     client,
+    variables:{
+      "orderBy": [
+        {
+          "createAt": "desc"
+        }
+      ]
+    }
+
   });
   const mileStoneData = useQuery(getMilestone, {
     client,
+    variables:{
+      "orderBy": [
+        {
+          "code": "desc"
+        }
+      ]
+    }
   });
   const taskData = useQuery(getTasks, {
     client,
+    variables:{
+      "orderBy": [
+        {
+          "code": "desc"
+        }
+      ]
+    }
   });
 
   //console.log(projectData?.data?.projects)
