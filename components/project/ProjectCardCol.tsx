@@ -5,7 +5,7 @@ import { Manrope, Roboto } from "next/font/google";
 import Image from "next/image";
 import pic1 from "../assets/picOne.jpg";
 import pic2 from "../assets/picTwo.jpg";
-import { FiEdit } from "react-icons/fi";
+import { FiEdit, FiEyeOff } from "react-icons/fi";
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 interface projectTypes {
@@ -138,11 +138,11 @@ const ProjectCardCol: React.FC<Props> = ({ data, openDetais }) => {
               <span className="font-medium">Manager :</span>{" "}
               {projectManager ? projectManager.name : "Non"}
             </p>
-            <p
+            {/* <p
               className={`text-[#605C8D] text-base ${roboto.className} max-h-[70px] overflow-y-scroll mt-1`}
             >
               {projectDiscription}
-            </p>
+            </p> */}
           </div>
       </div>
       {/* Footer/Bottom */}
@@ -169,12 +169,20 @@ const ProjectCardCol: React.FC<Props> = ({ data, openDetais }) => {
                 </div>
               )}
             </div>
-            <button
-              onClick={() => openDetais(id)}
-              className={`px-2 py-1 rounded-md bg-transparent text-[${bg}] hover:bg-[#e1e5f7] transition-all delay-75 ease-in duration-100`}
-            >
-              <FiEdit size={20} />
-            </button>
+            <div className="flex items-center gap-2 justify-center">
+        <button
+          onClick={()=>openDetais(id)}
+          className={`px-2 py-1 rounded-md bg-transparent text-[#336B87] hover:bg-slate-100 transition-all delay-75 ease-in duration-100`}
+        >
+      <FiEdit size={20} />
+        </button>
+        <button
+          // onClick={()=>openDetais(id)}
+          className={`px-2 py-1 rounded-md  text-slate-100 bg-[#336B87] transition-all delay-75 ease-in duration-100`}
+        >
+      <FiEyeOff size={20} />
+        </button>
+        </div>
       </div>
       
     </div>

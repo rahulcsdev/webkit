@@ -1,20 +1,21 @@
 "use client";
+import dynamic from "next/dynamic";
 import React, { useEffect, useRef, useState , useCallback } from "react";
 import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalEmployee from "../../components/employee/ModalEmployee";
-import { employeesData } from "../../utils/data";
-import EmployeesCardData from "../../components/employee/EmployeesCardData";
-import EmployeesCardListView from "../../components/employee/EmployeeCardListView";
+const ModalEmployee = dynamic(() => import("../../components/employee/ModalEmployee"));
+const EmployeesCardData = dynamic(() => import("../../components/employee/EmployeesCardData"));
+const EmployeesCardListView = dynamic(() => import("../../components/employee/EmployeeCardListView"));
+const ModalEditEmployee = dynamic(() => import("../../components/employee/ModalEditEmployee"));
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
 import { gql , useQuery } from "@apollo/client";
 import client from "../../apolloClient/index";
 import { getUser, getUserDetails } from "@/services";
-import ModalEditEmployee from "../../components/employee/ModalEditEmployee";
+ 
 import { Pagination } from "@mantine/core";
 import Footer from "@/components/Footer";
-import LayoutNav from "@/components/LayoutNav";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
