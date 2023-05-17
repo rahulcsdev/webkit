@@ -13,20 +13,18 @@ import {
 import dynamic from "next/dynamic";
 import { useDisclosure } from "@mantine/hooks";
 import "react-datepicker/dist/react-datepicker.css";
- 
+
 import { Manrope } from "next/font/google";
- 
-import {   FiEdit } from "react-icons/fi";
- 
-const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
+
+import { FiEdit } from "react-icons/fi";
+
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 import { useRouter } from "next/navigation";
 import { gql, useMutation, useQuery } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
- 
-import {
-  getSpecificManagerTimeEntries,
-  updateTimeEntry,
-} from "@/services";
+
+import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
+import { TableSkeleton } from "@/utils/skeleton";
 
 const TimeEntries = () => {
   const myDivRef = useRef<any>(null);
@@ -43,7 +41,7 @@ const TimeEntries = () => {
       remark: "",
       taskId: "",
       id: "",
-      userId:""
+      userId: "",
     },
 
     validate: {
@@ -51,16 +49,15 @@ const TimeEntries = () => {
     },
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     // console.log('l')
-     const userId = localStorage.getItem("userId")
-     if(userId){
-      form.setFieldValue("userId", userId)
-   
-     }
-  },[])
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      form.setFieldValue("userId", userId);
+    }
+  }, []);
 
-  const { data, refetch  } = useQuery(getSpecificManagerTimeEntries, {
+  const { data, refetch, loading } = useQuery(getSpecificManagerTimeEntries, {
     variables: {
       where: {
         projectManager: {
@@ -69,12 +66,11 @@ const TimeEntries = () => {
       },
       orderBy: [
         {
-          date: "asc"
-        }]
+          date: "asc",
+        },
+      ],
     },
   });
-
-
 
   // console.log(data);
 
@@ -114,7 +110,34 @@ const TimeEntries = () => {
   };
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
-  return (
+
+  const getStatus = (status: string) => {
+    if (status === "Pending") {
+      return (
+        <p className="bg-orange-500 text-white rounded px-2 py-[1px]">
+          {status}
+        </p>
+      );
+    }
+
+    if (status === "Approved") {
+      return (
+        <p className="bg-green-500 text-white rounded px-2 py-[1px]">
+          {status}
+        </p>
+      );
+    }
+
+    if (status === "Rejected") {
+      return (
+        <p className="bg-red-600 text-white rounded px-2 py-[1px]">{status}</p>
+      );
+    }
+  };
+
+  return loading ? (
+    TableSkeleton
+  ) : (
     <LayoutNav>
       <form
         onSubmit={form.onSubmit(
@@ -250,7 +273,10 @@ const TimeEntries = () => {
                               </td>
                               <td className="px-6 py-4">{item.duration}</td>
                               <td className="px-6 py-4">{item.activities}</td>
-                              <td className="px-6 py-4">{item.reviewStatus}</td>
+                              <td className="px-6 py-4">
+                                {" "}
+                                {getStatus(item.reviewStatus)}{" "}
+                              </td>
                               <td>
                                 <button
                                   className={`${clickS} px-3 py-2 rounded-lg capitalize ml-6`}

@@ -3,23 +3,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { useForm, isNotEmpty } from "@mantine/form";
 import DatePicker from "react-datepicker";
 import dynamic from "next/dynamic";
-import {
-  Textarea,
- 
-  Select,
- 
-  Modal,
-  Group,
-} from "@mantine/core";
+import { TableSkeleton } from "@/utils/skeleton";
+import { Textarea, Select, Modal, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import "react-datepicker/dist/react-datepicker.css";
- 
+
 import { Manrope } from "next/font/google";
- 
-import {   FiEdit } from "react-icons/fi";
- 
+
+import { FiEdit } from "react-icons/fi";
+
 import ModalProject from "../../components/project/ModalProject";
-const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 import { useRouter } from "next/navigation";
 import { gql, useMutation, useQuery } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
@@ -27,7 +21,6 @@ const manrope = Manrope({ subsets: ["latin"] });
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 
 const TimeEntries = () => {
- 
   const [showModal, setShowModal] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -54,7 +47,7 @@ const TimeEntries = () => {
     }
   }, []);
 
-  const { data } = useQuery(getSpecificManagerTimeEntries, {
+  const { data, loading } = useQuery(getSpecificManagerTimeEntries, {
     variables: {
       where: {
         reviewedBy: {
@@ -99,17 +92,43 @@ const TimeEntries = () => {
         },
       },
       refetchQueries: [getSpecificManagerTimeEntries],
-    })
-      .then(() => {
-        // console.log("j");
-        close();
-        // getTimeEntries()
-      })
-      // .catch((error) => console.log(error));
+    }).then(() => {
+      // console.log("j");
+      close();
+      // getTimeEntries()
+    });
+    // .catch((error) => console.log(error));
   };
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
-  return (
+
+  const getStatus = (status: string) => {
+    if (status === "Pending") {
+      return (
+        <p className="bg-orange-500 text-white rounded px-2 py-[1px]">
+          {status}
+        </p>
+      );
+    }
+
+    if (status === "Approved") {
+      return (
+        <p className="bg-green-500 text-white rounded px-2 py-[1px]">
+          {status}
+        </p>
+      );
+    }
+
+    if (status === "Rejected") {
+      return (
+        <p className="bg-red-600 text-white rounded px-2 py-[1px]">{status}</p>
+      );
+    }
+  };
+
+  return loading ? (
+    TableSkeleton
+  ) : (
     <LayoutNav>
       <form
         onSubmit={form.onSubmit(
@@ -245,7 +264,10 @@ const TimeEntries = () => {
                               </td>
                               <td className="px-6 py-4">{item.duration}</td>
                               <td className="px-6 py-4">{item.activities}</td>
-                              <td className="px-6 py-4">{item.reviewStatus}</td>
+                              <td className="px-6 py-4">
+                                {" "}
+                                {getStatus(item.reviewStatus)}{" "}
+                              </td>
                               <td>
                                 <button
                                   className={`${clickS} px-3 py-2 rounded-lg capitalize ml-6`}
@@ -274,7 +296,7 @@ const TimeEntries = () => {
             </div>
           </div>
         </div>
-{/* 
+        {/* 
         <ModalProject
           showModal={showModal}
           handleCloseModal={handleCloseModal}

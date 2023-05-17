@@ -40,7 +40,7 @@ const Login = () => {
         router.refresh();
       }, 1000);
     }
-    console.log(data);
+    // console.log(data);
   };
 
   const form = useForm({

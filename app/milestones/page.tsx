@@ -31,7 +31,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [selectedFeild, setSelectedFeild] = useState<string | null >()
   const [mileData, setMileData] = useState([])
   const openDetails = (id: string) => {
-    // console.log(id)
+    console.log(id)
     setSelectedFeild(id);
     setShowModalEdit(true);
   };
@@ -78,7 +78,7 @@ const fetchData=async()=>{
    },
    
  }).then(({data})=>{
-   console.log(data);
+  //  console.log(data);
  setTotal(data?.milestones?.length);
  })
 
