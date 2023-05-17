@@ -118,7 +118,7 @@ const EmployeesCardData = (props: Props) => {
             </div>
           </div>
           <div className="flex flex-grow">
-            <div className="overflow-y-scroll max-h-[50px] mt-1">
+            <div className="overflow-y-scroll max-h-[50px] mt-1 w-[100%]">
               {Array.isArray(roleLabels) ? (
                roleLabels.map((item) => (
                   <p key={item} className={`text-lg ${manrope.className}`}>
