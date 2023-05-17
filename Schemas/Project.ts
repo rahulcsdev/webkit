@@ -2,11 +2,15 @@ import { list } from '@keystone-6/core';
 import { text, password, select } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
 import { multiselect ,relationship,timestamp } from '@keystone-6/core/fields';
+
+// Define the session object type
 type Session = {
   data: {
     role: string[];
   };
 };
+
+// Helper function to check if the user is an admin or project manager
 function isAdmin({ session }: { session: Session | undefined }) {
    
    const admin= session?.data.role.filter((el) => ["admin","projectManagement"].includes(el))
@@ -17,35 +21,21 @@ function isAdmin({ session }: { session: Session | undefined }) {
 }
 
 export default list({
+  // Set access control rules
   access:{operation: {
     create: isAdmin,
     update:isAdmin,
     delete:isAdmin,
     query:()=>{return true}
   }},
+  // Define the fields of the list
      fields: {
-   name: text(),
-
-    member: relationship({
-
-  ref: 'User',
-
-  many: true,
-
- }),
+     name: text(),
+   member: relationship({ref: 'User',many: true,}),
  createAt:timestamp({ defaultValue: new Date().toISOString() }),
 
- projectManager: relationship({
-
-  ref: 'User',
-
- ui: {
-
-  hideCreate: true,
-
-  },
-
- }),
+ projectManager: relationship({ref: 'User',
+ui: {hideCreate: true,},}),
 
  code:text({defaultValue: ' ',ui: { itemView: { fieldMode: 'read' } }}),
  File: relationship({ ref: 'File', many: true }),
@@ -86,6 +76,7 @@ export default list({
  endDate: timestamp({ defaultValue: new Date().toISOString() }), }, ui: {
 
  labelField: 'name', },
+ // Define a hook to generate project codes
 hooks:{
     resolveInput: async({ resolvedData,context }) => {
       const Projects=await context.db.Project.findMany({})

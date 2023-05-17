@@ -1,13 +1,12 @@
-"use client"
+"use client";
 
-import {useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Roboto, Manrope } from "next/font/google";
 import { IoMailOpenOutline } from "react-icons/io5";
 import { BiMessageRounded } from "react-icons/bi";
 import { BsTelephone } from "react-icons/bs";
 import { BsPersonCheck } from "react-icons/bs";
 import { BsPersonLinesFill } from "react-icons/bs";
-
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const manrope = Manrope({ weight: "500", subsets: ["latin"] });
@@ -16,23 +15,45 @@ interface UserData {
   id: string;
   name: string;
   email: string;
-  password:string;
+  password: string;
   designation: string;
-  code:string;
+  code: string;
   role: string;
   dateofjoining: Date;
-  reportingmanager: string;
+  reportingManager: string;
 }
-
 
 interface Props {
   data: UserData;
 }
 
+const options = [
+  { label: "Admin", value: "admin" },
+  { label: "User Management", value: "userManagement" },
+  { label: "Project Management", value: "projectManagement" },
+  { label: "Task Management", value: "taskManagement" },
+  { label: "Milestone Management", value: "milestoneManagement" },
+  { label: "Time Entry Management", value: "timeEntryManagement" },
+];
+
 const EmployeesCardData = (props: Props) => {
   const { data } = props;
 
+  const getRoleLabel = (role: string | string[]) => {
+    if (Array.isArray(role)) {
+      return role.map((value) => {
+        const option = options.find((opt) => opt.value === value);
+        return option ? option.label : "";
+      });
+    } else {
+      const option = options.find((opt) => opt.value === role);
+      return option ? option.label : "";
+    }
+  };
 
+  const roleLabels = getRoleLabel(data.role);
+
+  
   return (
     <>
       <div
@@ -96,10 +117,18 @@ const EmployeesCardData = (props: Props) => {
               <BsPersonLinesFill />
             </div>
           </div>
-          <div className="mt-2">
-            <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-              {data.role} <br/>
-            </p>
+          <div className="flex flex-grow">
+            <div className="overflow-y-scroll max-h-[50px] mt-1">
+              {Array.isArray(roleLabels) ? (
+               roleLabels.map((item) => (
+                  <p key={item} className={`text-lg ${manrope.className}`}>
+                    {item}
+                  </p>
+                ))
+              ) : (
+                <p className={`text-lg ${manrope.className}`}>{roleLabels}</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

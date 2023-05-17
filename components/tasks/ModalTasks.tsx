@@ -392,7 +392,7 @@ const ModalTasks = (props: typeModal) => {
                           size="lg"
                           className="bg-blue-500"
                         >
-                          Save
+                          {loading ? "Saving..." : "Save"}
                         </Button>
                         <Button
                           radius="md"
