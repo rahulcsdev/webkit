@@ -3,24 +3,32 @@ import React, { useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
 import client from "../../apolloClient/index";
 import { gql, useMutation } from "@apollo/client";
- 
-import { MultiSelect, Input, Select, FileInput, rem, NativeSelect, Textarea } from "@mantine/core";
+
+import {
+  MultiSelect,
+  Input,
+  Select,
+  FileInput,
+  rem,
+  NativeSelect,
+  Textarea,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DateInput } from "@mantine/dates";
 import { addProject, getProjectList, getUser } from "@/services";
-import {FaUpload} from 'react-icons/fa'
+import { FaUpload } from "react-icons/fa";
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: () => void;
-  refetch:any
+  refetch: any;
 }
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const ModalProject = (props: typeModal) => {
-  const { showModal, handleCloseModal,refetch } = props;
+  const { showModal, handleCloseModal, refetch } = props;
   const [options, setOptions] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
- 
+
   const [selectedFile, setSelectedFile] = useState<File | null>();
   const managerOp = [{ value: "", label: "Choose One", disabled: true }];
 
@@ -65,7 +73,7 @@ const ModalProject = (props: typeModal) => {
       members: [],
       desc: "",
       code: "",
-      file:""
+      file: "",
     },
   });
   interface formTypes {
@@ -78,68 +86,68 @@ const ModalProject = (props: typeModal) => {
     members: Array<string>;
     desc: string;
     code: string;
-    file:string,
+    file: string;
   }
 
-const UPLOAD_QUERY=gql`mutation Mutation($data: FileCreateInput!) {
-  createFile(data: $data) {
-    id
-    documents {
-      url
-      filesize
-      filename
+  const UPLOAD_QUERY = gql`
+    mutation Mutation($data: FileCreateInput!) {
+      createFile(data: $data) {
+        id
+        documents {
+          url
+          filesize
+          filename
+        }
+      }
     }
-  }
-}`;
- 
-const [file, setFile] = useState<File | null>(null);
-const [uploadFile] = useMutation(UPLOAD_QUERY);
+  `;
 
-const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const selectedFile = event.target.files?.[0];
-  if (selectedFile) {
-    setFile(selectedFile);
-  }
-};
+  const [file, setFile] = useState<File | null>(null);
+  const [uploadFile] = useMutation(UPLOAD_QUERY);
 
-// const convertBase64 = (file) => {
-//     return new Promise((resolve, reject) => {
-//         const fileReader = new FileReader();
-//         fileReader.readAsDataURL(file);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
+  };
 
-//         fileReader.onload = () => {
-//             resolve(fileReader.result);
-//         };
+  // const convertBase64 = (file) => {
+  //     return new Promise((resolve, reject) => {
+  //         const fileReader = new FileReader();
+  //         fileReader.readAsDataURL(file);
 
-//         fileReader.onerror = (error) => {
-//             reject(error);
-//         };
-//     });
-// };
+  //         fileReader.onload = () => {
+  //             resolve(fileReader.result);
+  //         };
 
+  //         fileReader.onerror = (error) => {
+  //             reject(error);
+  //         };
+  //     });
+  // };
 
-// const upload=async()=>{
-//   console.log(file)
-//   const base64=await convertBase64(file);
-//   console.log(base64)
-//   if (file) {
-//     try {
-//       await uploadFile({ variables: {
-//         "data": {
-//           "documents": {
-//             "upload": file
-//           }
-//         }
-//       } });
-//       // Handle successful upload
-//       console.log("Completed")
-//     } catch (error) {
-//       // Handle upload error
-//       console.log(error)
-//     }
-//   }
-// }
-
+  // const upload=async()=>{
+  //   console.log(file)
+  //   const base64=await convertBase64(file);
+  //   console.log(base64)
+  //   if (file) {
+  //     try {
+  //       await uploadFile({ variables: {
+  //         "data": {
+  //           "documents": {
+  //             "upload": file
+  //           }
+  //         }
+  //       } });
+  //       // Handle successful upload
+  //       console.log("Completed")
+  //     } catch (error) {
+  //       // Handle upload error
+  //       console.log(error)
+  //     }
+  //   }
+  // }
 
   const [createProject, { loading, data, error }] = useMutation(addProject);
 
@@ -176,7 +184,7 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       status: formData.status,
       endDate: formData.endDate.toISOString(),
       projectDiscription: formData.desc,
-      
+
       member: {
         connect: membersObj,
       },
@@ -187,17 +195,15 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         data: formData.projectManager === "" ? withOutManager : withManager,
       },
       refetchQueries: [{ query: getProjectList }],
-      onCompleted:()=>{
+      onCompleted: () => {
         refetch();
-      }
+      },
     })
       .then(() => handleCloseModal())
       .catch((error) => console.log(error));
   };
   //  console.log(form.getInputProps('type').value)
 
-
- 
   return (
     <>
       {showModal && (
@@ -209,7 +215,7 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             >
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-            <div className="bg-white max-h-[550px] overflow-y-scroll rounded-lg w-[500px] overflow-hidden drop-shadow-md shadow-xl transform transition-all   mx-auto">
+            <div className="bg-white max-h-[700px] overflow-y-scroll rounded-lg w-[600px] overflow-hidden drop-shadow-md shadow-xl transform transition-all   mx-auto">
               <div className="py-5 border-b-2 border-gray-200">
                 <h2
                   className={`font-semibold mb-2 text-center text-[#140F49] text-2xl ${manrope.className}`}
@@ -223,35 +229,30 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                   onSubmit={form.onSubmit((values) => handleSubmit(values))}
                 >
                   <div className="relative w-full">
-                    <Input.Wrapper  styles={()=>({
-                      label:{
-                        color:'#01041b',
-                        fontSize:'1.2em',
-                        fontWeight:500,
-                        lineHeight:1.2,
-                        marginBottom:10
-                      }
-                    })} label="Project Name" required mx="auto">
+                    <Input.Wrapper
+                      styles={() => ({
+                        label: {
+                          color: "#01041b",
+                          fontSize: "1.2em",
+                          fontWeight: 500,
+                          lineHeight: 1.2,
+                          marginBottom: 10,
+                        },
+                      })}
+                      label="Project Name"
+                      required
+                      mx="auto"
+                    >
                       <Input
                         required
-                        
                         placeholder="Enter yout Project name"
                         {...form.getInputProps("projectName")}
-                        variant="filled"
                         styles={(theme) => ({
                           input: {
-                            '&:focus-within': {
-                              borderColor: theme.colors.gray[6],
-                              backgroundColor:theme.white
-                            },
-                           height:50,
-                           backgroundColor:'#F8F7F7',
-                           borderRadius:16,
-                           border:'1px solid #E0E2DB',
-                           fontSize:16,
-                           lineHeight:50,
-                           color:'#605C8D'
-                           
+                            height: 50,
+
+                            fontSize: 16,
+                            lineHeight: 50,
                           },
                         })}
                       />
@@ -266,27 +267,20 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                         label="Start Date"
                         placeholder="Start date"
                         {...form.getInputProps("startDate")}
-                        styles={(theme)=>({
-                          label:{
-                            color:'#01041b',
-                            fontSize:'1.2em',
-                            fontWeight:500,
-                            lineHeight:1.2,
-                            marginBottom:10
+                        styles={(theme) => ({
+                          label: {
+                            color: "#01041b",
+                            fontSize: "1.2em",
+                            fontWeight: 500,
+                            lineHeight: 1.2,
+                            marginBottom: 10,
                           },
-                          input:{
-                            '&:focus-within': {
-                              borderColor: theme.colors.gray[6],
-                              backgroundColor:theme.white
-                            },
-                           height:50,
-                           backgroundColor:'#F8F7F7',
-                           borderRadius:16,
-                           border:'1px solid #E0E2DB',
-                           fontSize:16,
-                           lineHeight:50,
-                           color:'#605C8D'
-                          }
+                          input: {
+                            height: 50,
+
+                            fontSize: 16,
+                            lineHeight: 50,
+                          },
                         })}
                       />
                     </div>
@@ -295,27 +289,20 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                         mx="auto"
                         label="End Date"
                         placeholder="End date"
-                        styles={(theme)=>({
-                          label:{
-                            color:'#01041b',
-                            fontSize:'1.2em',
-                            fontWeight:500,
-                            lineHeight:1.2,
-                            marginBottom:10
+                        styles={(theme) => ({
+                          label: {
+                            color: "#01041b",
+                            fontSize: "1.2em",
+                            fontWeight: 500,
+                            lineHeight: 1.2,
+                            marginBottom: 10,
                           },
-                          input:{
-                            '&:focus-within': {
-                              borderColor: theme.colors.gray[6],
-                              backgroundColor:theme.white
-                            },
-                           height:50,
-                           backgroundColor:'#F8F7F7',
-                           borderRadius:16,
-                           border:'1px solid #E0E2DB',
-                           fontSize:16,
-                           lineHeight:50,
-                           color:'#605C8D'
-                          }
+                          input: {
+                            height: 50,
+
+                            fontSize: 16,
+                            lineHeight: 50,
+                          },
                         })}
                         {...form.getInputProps("endDate")}
                       />
@@ -341,27 +328,19 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                           { label: "Completed", value: "Completed" },
                         ]}
                         {...form.getInputProps("status")}
-                        styles={(theme)=>({
-                          label:{
-                            color:'#01041b',
-                            fontSize:'1.2em',
-                            fontWeight:500,
-                            lineHeight:1.2,
-                            marginBottom:10
+                        styles={(theme) => ({
+                          label: {
+                            color: "#01041b",
+                            fontSize: "1.2em",
+                            fontWeight: 500,
+                            lineHeight: 1.2,
+                            marginBottom: 10,
                           },
-                          input:{
-                            '&:focus-within': {
-                              borderColor: theme.colors.gray[6],
-                              backgroundColor:theme.white
-                            },
-                           height:50,
-                           backgroundColor:'#F8F7F7',
-                           borderRadius:16,
-                           border:'1px solid #E0E2DB',
-                           fontSize:16,
-                           lineHeight:50,
-                           color:'#605C8D'
-                          }
+                          input: {
+                            height: 50,
+
+                            fontSize: 16,
+                          },
                         })}
                       />
                     </div>
@@ -386,27 +365,19 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                           },
                         ]}
                         {...form.getInputProps("type")}
-                        styles={(theme)=>({
-                          label:{
-                            color:'#01041b',
-                            fontSize:'1.2em',
-                            fontWeight:500,
-                            lineHeight:1.2,
-                            marginBottom:10
+                        styles={(theme) => ({
+                          label: {
+                            color: "#01041b",
+                            fontSize: "1.2em",
+                            fontWeight: 500,
+                            lineHeight: 1.2,
+                            marginBottom: 10,
                           },
-                          input:{
-                            '&:focus-within': {
-                              borderColor: theme.colors.gray[6],
-                              backgroundColor:theme.white
-                            },
-                           height:50,
-                           backgroundColor:'#F8F7F7',
-                           borderRadius:16,
-                           border:'1px solid #E0E2DB',
-                           fontSize:16,
-                           lineHeight:50,
-                           color:'#605C8D'
-                          }
+                          input: {
+                            height: 50,
+
+                            fontSize: 16,
+                          },
                         })}
                       />
                     </div>
@@ -418,108 +389,84 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                         placeholder="Pick one"
                         data={users}
                         {...form.getInputProps("projectManager")}
-                        styles={(theme)=>({
-                          label:{
-                            color:'#01041b',
-                            fontSize:'1.2em',
-                            fontWeight:500,
-                            lineHeight:1.2,
-                            marginBottom:10
+                        styles={(theme) => ({
+                          label: {
+                            color: "#01041b",
+                            fontSize: "1.2em",
+                            fontWeight: 500,
+                            lineHeight: 1.2,
+                            marginBottom: 10,
                           },
-                          input:{
-                            '&:focus-within': {
-                              borderColor: theme.colors.gray[6],
-                              backgroundColor:theme.white
-                            },
-                           height:50,
-                           backgroundColor:'#F8F7F7',
-                           borderRadius:16,
-                           border:'1px solid #E0E2DB',
-                           fontSize:16,
-                           lineHeight:50,
-                           color:'#605C8D'
-                          }
+                          input: {
+                            height: 50,
+
+                            fontSize: 16,
+                          },
                         })}
                       />
                     </div>
                   )}
-                <div className="w-full mt-4 relative">
-                <Textarea
+                  <div className="w-full mt-4 relative">
+                    <Textarea
                       required
                       placeholder="Enter your Project description"
-                      label='Project description'
+                      label="Project description"
                       autosize
                       minRows={2}
-              
                       {...form.getInputProps("desc")}
-                      styles={(theme)=>({
-                        label:{
-                          color:'#01041b',
-                          fontSize:'1.2em',
-                          fontWeight:500,
-                          lineHeight:1.2,
-                          marginBottom:10
+                      styles={(theme) => ({
+                        label: {
+                          color: "#01041b",
+                          fontSize: "1.2em",
+                          fontWeight: 500,
+                          lineHeight: 1.2,
+                          marginBottom: 10,
                         },
-                        // input:{
-                        //   '&:focus-within': {
-                        //     borderColor: theme.colors.gray[6],
-                        //     backgroundColor:theme.white
-                        //   },
-                     
-                        //  backgroundColor:'#F8F7F7',
-                        //  borderRadius:16,
-                        //  border:'1px solid #E0E2DB',
-                        //  fontSize:16,
-                        //  lineHeight:50,
-                        //  color:'#605C8D'
-                        // }
+                        input: {
+                          fontSize: 16,
+                          outline: "none",
+                        },
                       })}
                     />
-               
-                </div>
-    
+                  </div>
 
-                  <MultiSelect
-                    data={users}
-                    label="Members"
-                   
-                    searchable
-                    placeholder="Pick all members you like"
-                    {...form.getInputProps("members")}
-                    classNames={{
-                      
-                      searchInput: 'bg-transparent outline-none w-full ',
-                    }}
-                    styles={(theme)=>({
-                      label:{
-                        color:'#01041b',
-                        fontSize:'1.2em',
-                        fontWeight:500,
-                        lineHeight:1.2,
-                        marginBottom:10
-                      },
-                      input:{
-                        '&:focus-within': {
-                          borderColor: theme.colors.gray[6],
-                          backgroundColor:theme.white
+                  <div className="mt-4">
+                    <MultiSelect
+                      data={users}
+                      label="Members"
+                      searchable
+                      placeholder="Pick all members you like"
+                      {...form.getInputProps("members")}
+                      classNames={{
+                        searchInput: "bg-transparent outline-none w-full ",
+                      }}
+                      styles={(theme) => ({
+                        label: {
+                          color: "#01041b",
+                          fontSize: "1.2em",
+                          fontWeight: 500,
+                          lineHeight: 1.2,
+                          marginBottom: 10,
                         },
-                       width:'100%',
-                       backgroundColor:'#F8F7F7',
-                       borderRadius:16,
-                       border:'1px solid #E0E2DB',
-                       fontSize:16,
-                       lineHeight:50,
-                       color:'#605C8D',
-                       height:50,
-                       alignItems:'center',
-                       display:'flex',
-                       justifyContent: 'start',
-                       
+                        input: {
+                          "&:focus-within": {
+                            borderColor: theme.colors.gray[6],
+                            backgroundColor: theme.white,
+                          },
+                          width: "100%",
 
-                      }
-                    })}
-                  />
-         
+                          fontSize: 16,
+                          lineHeight: 50,
+
+                          height: 50,
+                          alignItems: "center",
+                          display: "flex",
+                          justifyContent: "start",
+                        },
+                      })}
+                    />
+                  </div>
+
                   {/* <div className="flex gap-2 items-end w-full">
                  <FileInput className="w-full" label="Your resume" onChange={(e)=>setSelectedFile(e)} placeholder="Choose file" icon={<FaUpload size={rem(14)} />} />
                  <input type="file"  onChange={handleFileChange} />
@@ -529,13 +476,13 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                   <div className="flex items-center justify-center mt-4 gap-4 ">
                     <button
                       type="submit"
-                      className={`text-base font-normal ${roboto.className} text-white px-2 bg-[#5773FF] rounded-md py-1 border-none`}
+                      className={`text-md font-normal ${roboto.className} text-white px-4 bg-[#5773FF] rounded-md py-2 border-none`}
                     >
                       {loading ? "Creating..." : "Create"}
                     </button>
                     <button
                       onClick={() => form.reset()}
-                      className={`text-base font-normal ${roboto.className} text-white px-2 bg-[#5773FF] rounded-md py-1 border-none`}
+                      className={`text-md font-normal ${roboto.className} text-white px-4 bg-[#5773FF] rounded-md py-2 border-none`}
                     >
                       Reset
                     </button>
