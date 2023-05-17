@@ -29,8 +29,9 @@ const Sidebar = () => {
         </h3>
       </div>
       <div className="h-full pb-12 overflow-y-scroll ">
-      <div className=" flex flex-col items-start justify-center gap-2  w-full ">
+      <ul className=" flex flex-col items-start justify-center gap-2  w-full ">
         {navLinks.map((item, index) => (
+          <li key={item.name} className="w-full" >
            <Link href={`/${item.link}`} className="w-full" key={index} onClick={()=>changeState(item.name)} >
            <div
             
@@ -49,10 +50,11 @@ const Sidebar = () => {
               {item.name}
               
             </h1>
-          </div>
+            </div>
             </Link>
+            </li>
         ))}
-      </div>
+      </ul>
       <div className="mt-6 flex items-center justify-center flex-col">
         <h1 className={`text-xl font-medium text-center text-gray-700 ${roboto.className} `} >Task Performed</h1>
         <div className="h-[120px] w-[120px] mt-6" >
