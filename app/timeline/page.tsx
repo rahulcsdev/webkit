@@ -13,6 +13,7 @@ import ProjectCardCol from "../../components/project/ProjectCardCol";
 import Footer from "../../components/Footer";
 import { useForm, isNotEmpty } from "@mantine/form";
 import { gql, useMutation, useQuery } from "@apollo/client";
+import { TableSkeleton } from "@/utils/skeleton";
 
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
 const manrope = Manrope({ subsets: ["latin"] });
@@ -41,7 +42,7 @@ const Projects = () => {
     },
   });
 
-  const { data } = useQuery(getSpecificManagerTimeEntries, {
+  const { data,loading } = useQuery(getSpecificManagerTimeEntries, {
     variables: {
       where: {
         userName: {
@@ -77,8 +78,7 @@ const Projects = () => {
   }
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
-  return (
-    <LayoutNav>
+  return ( loading ? <TableSkeleton/> :  <LayoutNav>
       <form
         onSubmit={form.onSubmit(
           (values, _event) => {
