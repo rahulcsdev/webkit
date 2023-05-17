@@ -310,7 +310,9 @@ const Projects = () => {
             refetch1();
             refetch2();
             refetch3();
-            router.push('/timeline')
+             setTimeout(()=>{
+              router.push('/timeline')
+             },1000)
           })
           .catch((err) => {
             // console.log("err", err);
