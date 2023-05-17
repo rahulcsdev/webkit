@@ -1,19 +1,16 @@
 "use client"
 import { Manrope } from "next/font/google";
-import { boxCardData, cartData, dataDev, progressData } from "./utils/data";
-import Card from "./components/Card";
+import dynamic from "next/dynamic";
+import { boxCardData, cartData, dataDev, progressData } from "../utils/data";
+ 
+const Card = dynamic(() => import("../components/dashboard/Card"))
+const CardPro = dynamic(() => import("../components/dashboard/CardPro"))
+const BoxCard = dynamic(() => import("../components/dashboard/BoxCard"))
+const CustomCalender = dynamic(() => import("../components/CustomCalender"))
+const DataCard = dynamic(() => import("../components/dashboard/DataCard"))
+const MyCarousal = dynamic(() => import("../components/dashboard/MyCarousal"))
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
 import {useState} from 'react'
-import CardPro from "./components/CardPro";
- 
-import BoxCard from "./components/BoxCard";
-import CustomCalender from "./components/CustomCalender";
-import DataCard from "./components/DataCard";
-import MyCarousal from "./components/MyCarousal";
- 
-import LayoutNav from "@/app/components/LayoutNav";
-import Footer from "@/app/components/Footer";
- 
-
 const manrope = Manrope({ subsets: ["latin"] });
 
 export default function Home() { 
@@ -88,7 +85,6 @@ const handleDateChange=(date:Date)=>{
       </div>
 
     </div>
-    <Footer  />
     </LayoutNav>
   );
 }
