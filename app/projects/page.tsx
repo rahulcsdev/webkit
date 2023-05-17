@@ -1,17 +1,18 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import Navbar from "../../components/Navbar";
+import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+ 
 import { Manrope } from "next/font/google";
 import { dropDown } from "../../utils/data";
 import {Pagination} from '@mantine/core'
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalProject from "../../components/project/ModalProject";
-import ProjectCard from "@/components/project/ProjectCard";
-import ProjectCardCol from "@/components/project/ProjectCardCol";
-import Footer from "@/components/Footer";
-import LayoutNav from "@/components/LayoutNav";
-import EditModalProject from "@/components/project/EditModalProject";
+ 
+const ModalProject = dynamic(() => import("../../components/project/ModalProject"))
+const ProjectCard = dynamic(() => import("@/components/project/ProjectCard"))
+const ProjectCardCol = dynamic(() => import("@/components/project/ProjectCardCol"))
+const EditModalProject = dynamic(() => import("@/components/project/EditModalProject"))
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
 import client from '../../apolloClient/index'
 import { gql, useQuery } from "@apollo/client";
 import { getProjectList } from "@/services";

@@ -3,7 +3,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { AiFillStar } from "react-icons/ai";
 import { Manrope, Roboto } from "next/font/google";
 import {GrEdit} from 'react-icons/gr'
-import { FiEdit } from "react-icons/fi";
+import { FiEdit, FiEye, FiEyeOff } from "react-icons/fi";
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 interface projectTypes   {
@@ -121,20 +121,20 @@ const ProjectCard:React.FC<Props> = ({data,openDetais}) => {
         <p className={`text-[#605C8D] text-base ${roboto.className} mt-1`}>
          <span className="font-medium" >Manager :</span> {projectManager?projectManager.name:'Non'}
         </p>
-        <p className={`text-[#605C8D] text-base ${roboto.className} max-h-[70px] overflow-y-scroll mt-1`}>
+        {/* <p className={`text-[#605C8D] text-base ${roboto.className} max-h-[70px] overflow-y-scroll mt-1`}>
           {projectDiscription}
-        </p>
+        </p> */}
       </div>
       <div className="mt-4 flex justify-between items-start">
       <div className="grid grid-cols-2 gap-2 items-start justify-start "> 
           {member.slice(0,3).map((item, index) => (
             <div key={index}
               className={`text-white text-sm px-2 py-1 rounded-md ${
-                index % 2 == 0
-                  ? "bg-sky-400 "
-                  : index % 3 == 0
-                  ? "bg-orange-600"
-                  : "bg-yellow-500"
+                index % 2 !== 0
+                  ? "bg-[#4681f4]"
+                  : index % 3 !== 0
+                  ? "bg-[#5adbb5]"
+                  : "bg-[#dd7973]"
               }`}
             >
               {item.name}
@@ -147,12 +147,20 @@ const ProjectCard:React.FC<Props> = ({data,openDetais}) => {
            
         
         </div>
+        <div className="flex items-center gap-2 justify-center">
         <button
           onClick={()=>openDetais(id)}
-          className={`px-2 py-1 rounded-md bg-transparent text-[${bg}] hover:bg-[#e1e5f7] transition-all delay-75 ease-in duration-100`}
+          className={`px-2 py-1 rounded-md bg-transparent text-[#336B87] hover:bg-slate-100 transition-all delay-75 ease-in duration-100`}
         >
       <FiEdit size={20} />
         </button>
+        <button
+          // onClick={()=>openDetais(id)}
+          className={`px-2 py-1 rounded-md  text-slate-100 bg-[#336B87] transition-all delay-75 ease-in duration-100`}
+        >
+      <FiEyeOff size={20} />
+        </button>
+        </div>
       </div>
     </div>
   );

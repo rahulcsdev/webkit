@@ -1,15 +1,17 @@
 "use client";
-import LayoutNav from "@/components/LayoutNav";
+import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
-import { dropDown, milestones } from "../../utils/data";
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
+const ModalMs = dynamic(() => import("../../components/milestone/ModalMs"))
+const MsCardGrid = dynamic(() => import("../../components/milestone/MsCardGrid"))
+const MsCardCol = dynamic(() => import("../../components/milestone/MsCardCol"))
+const EditModalMs = dynamic(() => import("../../components/milestone/EditModalMs"))
+ 
+import { dropDown } from "../../utils/data";
 import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
  
-import ModalMs from "../../components/milestone/ModalMs";
-import MsCardGrid from "../../components/milestone/MsCardGrid";
-import MsCardCol from "../../components/milestone/MsCardCol";
-import EditModalMs from "../../components/milestone/EditModalMs";
 import client from "@/apolloClient";
 import { getMilestone } from "@/services";
 import { useQuery } from "@apollo/client";
@@ -17,7 +19,7 @@ import { Pagination } from "@mantine/core";
 
 const manrope = Manrope({ subsets: ["latin"] });
 const MildStone = () => {
-  const [isExpand, setIsExpand] = useState(false);
+ 
   const ITEMS_PER_PAGE = 9;
 const INITIAL_PAGE = 1;
 const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
