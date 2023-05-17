@@ -46,7 +46,7 @@ const Navbar = (props: Props) => {
 
   const navigateToPage = (item: any) => {
     if (item.link === "/login") {
-      console.log('jjj')
+      // console.log('jjj')
         localStorage.removeItem("userId")
         setReload(!reload)
     } else {
@@ -55,7 +55,7 @@ const Navbar = (props: Props) => {
   };
 
   useEffect(() => {
-    console.log("in nav");
+    // console.log("in nav");
     const id = localStorage.getItem("userId");
     if (id) {
       const data = getUserData(id);
@@ -64,11 +64,11 @@ const Navbar = (props: Props) => {
         .then((res: any) => {
           if (res) {
             setUser(res.data.user);
-            console.log(res);
+            // console.log(res);
           }
         })
         .catch((err) => {
-          console.log("error",err);
+          // console.log("error",err);
         });
     } else {
       router.push("/login");
