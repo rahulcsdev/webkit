@@ -18,7 +18,7 @@ export const addNewUser = gql`
     }
   }
 `;
-
+  
 export const addProject = gql`
   mutation ($data: ProjectCreateInput!) {
     createProject(data: $data) {
@@ -135,6 +135,7 @@ export const getProjectList = gql`
     projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
       status
       startDate
+      endDate
       projectType
       projectManager {
         name
@@ -157,7 +158,7 @@ export const getUser = gql`
   query (
     $where: UserWhereInput
     $take: Int
-    $skip: Int
+    $skip: Int 
     $orderBy: [UserOrderByInput!]
   ) {
     users(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
@@ -468,6 +469,8 @@ export const getTasks = gql`
         status
       }
       status
+      startDate
+      endDate
     }
   }
 `;

@@ -9,7 +9,6 @@ import { MdOutlineModeEditOutline } from "react-icons/md";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import ModalEditEmployee from "./ModalEditEmployee";
 
-
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const manrope = Manrope({ weight: "500", subsets: ["latin"] });
 
@@ -17,7 +16,7 @@ interface UserData {
   id: string;
   name: string;
   email: string;
-  password:string;
+  password: string;
   designation: string;
   role: string;
   code: string;
@@ -26,14 +25,47 @@ interface UserData {
 }
 
 interface Props {
-  
   data: UserData;
-  openDetails:any
+  openDetails: any;
 }
 
+const options = [
+  { label: "Admin", value: "admin" },
+  { label: "User Management", value: "userManagement" },
+  { label: "Project Management", value: "projectManagement" },
+  { label: "Task Management", value: "taskManagement" },
+  { label: "Milestone Management", value: "milestoneManagement" },
+  { label: "Time Entry Management", value: "timeEntryManagement" },
+];
+
 const EmployeesCardListView = (props: Props) => {
-  const { data:{id , name , email ,code , designation , role , dateofjoining , reportingmanager  } , openDetails } = props;
- 
+  const {
+    data: {
+      id,
+      name,
+      email,
+      code,
+      designation,
+      role,
+      dateofjoining,
+      reportingmanager,
+    },
+    openDetails,
+  } = props;
+
+  const getRoleLabel = (role: string | string[]) => {
+    if (Array.isArray(role)) {
+      return role.map((value) => {
+        const option = options.find((opt) => opt.value === value);
+        return option ? option.label : "";
+      });
+    } else {
+      const option = options.find((opt) => opt.value === role);
+      return option ? option.label : "";
+    }
+  };
+
+  const roleLabels = getRoleLabel(role);
 
   return (
     <>
@@ -99,9 +131,19 @@ const EmployeesCardListView = (props: Props) => {
               </div>
             </div>
             <div className="mt-2">
-              <p className={`mb-5 text-lg text-center  ${manrope.className}`}>
-                {role}
-              </p>
+              <div
+                className={`text-lg ${manrope.className} max-h-[70px] overflow-y-scroll`}
+              >
+                {roleLabels && Array.isArray(roleLabels) ? (
+                  roleLabels.map((item) => (
+                    <p key={item} className="mb-2 text-start">
+                      {item}
+                    </p>
+                  ))
+                ) : (
+                  <p className="mb-2 text-start">Invalid role data</p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -109,21 +151,16 @@ const EmployeesCardListView = (props: Props) => {
             <div>
               <div
                 className="p-2 rounded-full cursor-pointer bg-[#5776ff] text-xl text-white mr-4 "
-               
-                onClick={()=>openDetails(id)}
+                onClick={() => openDetails(id)}
               >
                 <MdOutlineModeEditOutline />
               </div>
             </div>
 
-            <div>
-            </div>
+            <div></div>
           </div>
         </div>
       </div>
-
-      
-     
     </>
   );
 };

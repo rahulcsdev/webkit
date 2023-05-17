@@ -267,6 +267,24 @@ const ModalEditEmployee = (props: typeModal) => {
                     </Grid.Col>
 
                     <Grid.Col span={6}>
+                      <Select
+                        label="Reporting Manager"
+                        variant="filled"
+                        placeholder="Reporting Manager"
+                        radius="md"
+                        size="lg"
+                        labelProps={{
+                          style: {
+                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
+                            fontSize: "1.2rem", // increase label font size
+                          },
+                        }}
+                        data={users}
+                        {...form.getInputProps("reportingManager")}
+                      />
+                    </Grid.Col>
+
+                    <Grid.Col span={6}>
                       <MultiSelect
                         data={[
                           { label: "Admin", value: "admin" },
@@ -301,24 +319,6 @@ const ModalEditEmployee = (props: typeModal) => {
                           },
                         }}
                         {...form.getInputProps("role")}
-                      />
-                    </Grid.Col>
-
-                    <Grid.Col span={6}>
-                      <Select
-                        label="Reporting Manager"
-                        variant="filled"
-                        placeholder="Reporting Manager"
-                        radius="md"
-                        size="lg"
-                        labelProps={{
-                          style: {
-                            marginBottom: "0.5rem", // add margin bottom to create space between label and input
-                            fontSize: "1.2rem", // increase label font size
-                          },
-                        }}
-                        data={users}
-                        {...form.getInputProps("reportingManager")}
                       />
                     </Grid.Col>
 
