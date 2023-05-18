@@ -59,7 +59,7 @@ const ContentPart:React.FC<props> = ({  viewMode,
          },
          
        }).then(({data})=>{
-         console.log(data);
+        //  console.log(data);
        setTotal(data?.milestones?.length);
        })
       

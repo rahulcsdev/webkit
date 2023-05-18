@@ -13,7 +13,7 @@ const ProjectCardCol = dynamic(() => import("./ProjectCardCol"))
 interface props {
   viewMode: Boolean;
   openDetails: any;
-  openViewMode: any;
+  
   status: string;
   showModal:any;
   handleCloseModal:any;
@@ -22,7 +22,7 @@ interface props {
 const ContentPart: React.FC<props> = ({
   viewMode,
   openDetails,
-  openViewMode,
+ 
   status,
   showModal,
   handleCloseModal
@@ -103,7 +103,7 @@ const ContentPart: React.FC<props> = ({
           {projects?.map((data, index) => (
             <ProjectCard
               openDetais={openDetails}
-              openView={openViewMode}
+             
               key={index}
               data={data}
             />
