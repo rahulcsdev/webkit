@@ -6,9 +6,7 @@ const EditModalProject = dynamic(
   () => import("@/components/project/EditModalProject")
 );
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
-const ProjectViewModal = dynamic(
-  () => import("@/components/project/ProjectViewModal")
-);
+
 const SecondNav = dynamic(() => import("@/components/SecondNav"));
 const ContentPart = dynamic(() => import("@/components/project/ContentPart"));
 
@@ -20,16 +18,14 @@ const Projects = () => {
   const [status, setStatus] = useState("all");
   const [viewMode, setViewMode] = useState(true);
 
-  const [selectedId, setSelectedId] = useState<string | null>();
+ const [type, setType] = useState<string | null>(null)
   const [selectedFeild, setSelectedFeild] = useState<string | null>();
-  const openDetails = (title: string) => {
+  const openDetails = (title: string,type:string) => {
     setSelectedFeild(title);
     setShowModalEdit(true);
+    setType(type);
   };
-  const openViewMode = (title: string) => {
-    setSelectedId(title);
-    setShowModalView(true);
-  };
+ 
 
   function handleCloseModal() {
     setShowModal(false);
@@ -39,11 +35,7 @@ const Projects = () => {
     setShowModalEdit(false);
     setSelectedFeild(null);
   }
-  function handleCloseModalView() {
-    setShowModalView(false);
-    setSelectedId(null);
-  }
-
+ 
   return (
     <LayoutNav>
       <div className="px-5 py-6">
@@ -60,7 +52,7 @@ const Projects = () => {
         <ContentPart
           handleCloseModal={handleCloseModal}
           openDetails={openDetails}
-          openViewMode={openViewMode}
+          
           showModal={showModal}
           status={status}
           viewMode={viewMode}
@@ -72,15 +64,10 @@ const Projects = () => {
           id={selectedFeild}
           showModal={showModalEdit}
           handleCloseModal={handleCloseModalEdit}
+          type={type}
         />
       )}
-      {selectedId && (
-        <ProjectViewModal
-          id={selectedId}
-          showModal={showModalView}
-          handleCloseModal={handleCloseModalView}
-        />
-      )}
+
     </LayoutNav>
   );
 };
