@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Roboto, Manrope } from "next/font/google";
 import { IoMailOpenOutline } from "react-icons/io5";
 import { BiMessageRounded } from "react-icons/bi";
@@ -19,7 +18,7 @@ interface UserData {
   designation: string;
   code: string;
   role: string;
-  dateofjoining: Date;
+  dateOfJoining: Date;
   reportingManager: string;
 }
 
