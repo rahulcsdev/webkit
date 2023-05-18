@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Skeleton } from '@mantine/core';
-import { useQuery, gql } from "@apollo/client";
+
 import { Manrope } from "next/font/google";
 import { HiOutlineSearch } from "react-icons/hi";
 import { MdOutlineEmail } from "react-icons/md";
@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { FiChevronDown } from "react-icons/fi";
 import Image from "next/image";
 import girl from "../public/assets/girl.jpg";
-import { Popover, Button } from "@mantine/core";
+import { Popover } from "@mantine/core";
 import { profileLinks } from "../utils/data";
 import client from "@/apolloClient/index";
 import { getspecficUser } from "@/services";

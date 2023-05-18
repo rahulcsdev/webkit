@@ -67,13 +67,7 @@ const Projects = () => {
           type={type}
         />
       )}
-      {/* {selectedId && (
-        <ProjectViewModal
-          id={selectedId}
-          showModal={showModalView}
-          handleCloseModal={handleCloseModalView}
-        />
-      )} */}
+
     </LayoutNav>
   );
 };
