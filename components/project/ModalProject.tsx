@@ -85,18 +85,18 @@ const ModalProject = (props: typeModal) => {
     file: string;
   }
 
-  const UPLOAD_QUERY = gql`
-    mutation Mutation($data: FileCreateInput!) {
-      createFile(data: $data) {
-        id
-        documents {
-          url
-          filesize
-          filename
-        }
-      }
-    }
-  `;
+  // const UPLOAD_QUERY = gql`
+  //   mutation Mutation($data: FileCreateInput!) {
+  //     createFile(data: $data) {
+  //       id
+  //       documents {
+  //         url
+  //         filesize
+  //         filename
+  //       }
+  //     }
+  //   }
+  // `;
 
 
   const [createProject, { loading, data, error }] = useMutation(addProject);
