@@ -41,7 +41,7 @@ const EditModalProject: React.FC<typeModal> = ({
  
 
   const managerOptions = (users: any) => {
-    // console.log(users);
+ 
     const managerOp = [{ value: "", label: "Choose One", disabled: true }];
     for (let i = 0; i < users?.length; i++) {
       managerOp.push({
@@ -91,12 +91,12 @@ const EditModalProject: React.FC<typeModal> = ({
         "members",
         data.project.member.map((item: { id: any; }) => item.id)
       );
-      // console.log(data);
+     
       // setDetails(data?.project);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      // console.log(error);
+ 
     }
   };
   // Get all employee info for options
@@ -107,7 +107,7 @@ const EditModalProject: React.FC<typeModal> = ({
       const { data } = await client.query({
         query: GET_USERS,
       });
-      // console.log(data)
+ 
 
       managerOptions(data.users);
       for (let i = 0; i < data?.users?.length; i++) {
@@ -139,7 +139,7 @@ const EditModalProject: React.FC<typeModal> = ({
   const [updateProject, { data, error, loading }] = useMutation(UPDATE_PROJECT);
 
   const updatedProject =  (formData: formTypes) => {
-    // console.log(formData);
+ 
     let membersObj = [{ id: formData.members[0] }];
 
     for (let i = 1; i < formData.members.length; i++) {
