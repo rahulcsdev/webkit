@@ -48,7 +48,8 @@ const Navbar = (props: Props) => {
     if (item.link === "/login") {
       // console.log('jjj')
         localStorage.removeItem("userId")
-        setReload(!reload)
+        router.push(item.link);
+        // setReload(!reload)
     } else {
       router.push(item.link);
     }
@@ -70,10 +71,8 @@ const Navbar = (props: Props) => {
         .catch((err) => {
           // console.log("error",err);
         });
-    } else {
-      router.push("/login");
-    }
-  }, [reload]);
+    } 
+  }, []);
 
   return (
     <div
