@@ -55,7 +55,7 @@ const EditModalMs = (props: typeModal) => {
         });
       }
       setProjects(projectOp);
-      // console.log(data);
+ 
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -108,7 +108,7 @@ const EditModalMs = (props: typeModal) => {
 
 
 const handleEdit=async(formData:formTypes)=>{
-  // console.log(formData);
+ 
 
   updateMilestone({
     variables:{

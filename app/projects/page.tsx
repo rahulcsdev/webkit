@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import client from "@/apolloClient";
 import { gql, useQuery } from "@apollo/client";
-import { getProjectList } from "@/services";
+import { getProjectList, getProjects } from "@/services";
 import { Pagination } from "@mantine/core";
  
 
@@ -16,10 +16,9 @@ const SecondNav = dynamic(() => import("@/components/SecondNav"));
 const ContentPart = dynamic(() => import("@/components/project/ContentPart"));
 
 const Projects = () => {
-  const [value, setValue] = useState("");
+ 
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
-  const [showModalView, setShowModalView] = useState(false);
   const [status, setStatus] = useState("all");
   const [viewMode, setViewMode] = useState(true);
   const ITEMS_PER_PAGE = 9;
@@ -57,21 +56,7 @@ const Projects = () => {
   const handlePageChange = (page: any) => {
     setCurrentPage(page);
   };
-  const getProjects = gql`
-  query (
-    $where: ProjectWhereInput
-    $take: Int
-    $skip: Int
-    $orderBy: [ProjectOrderByInput!]
-  ) {
-    projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
-     
-      id
-     
-    }
-  }
-`;
-console.log(status)
+ 
   const fetchData = async () => {
     client
       .query({
@@ -89,7 +74,7 @@ console.log(status)
               },
       })
       .then(({ data }) => {
-        console.log(data);
+        
         setTotal(data?.projects?.length);
       });
   };
@@ -99,14 +84,12 @@ console.log(status)
     refetch()
   }, [status, currentPage]);
   useEffect(() => {
-    console.log(data)
+ 
     setProjects(data?.projects);
   }, [data, loading]);
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
-  const visibleTotal = currentPage === totalPages ? total % ITEMS_PER_PAGE : ITEMS_PER_PAGE;
-console.log(total)
-console.log(totalPages)
-console.log(visibleTotal)
+  // const visibleTotal = currentPage === totalPages ? total % ITEMS_PER_PAGE : ITEMS_PER_PAGE;
+
   function handleCloseModal() {
     setShowModal(false);
   }

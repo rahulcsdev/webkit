@@ -55,7 +55,7 @@ const ModalMs = (props: typeModal) => {
         });
       }
       setProjects(projectOp);
-      // console.log(data);
+ 
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

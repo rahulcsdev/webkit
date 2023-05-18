@@ -24,12 +24,11 @@ const ModalProject = (props: typeModal) => {
   const { showModal, handleCloseModal, refetch } = props;
   const [options, setOptions] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
-
-  const [selectedFile, setSelectedFile] = useState<File | null>();
+ 
   const managerOp = [{ value: "", label: "Choose One", disabled: true }];
 
   const managerOptions = (users: any) => {
-    // console.log(users);
+ 
     for (let i = 0; i < users?.length; i++) {
       managerOp.push({
         value: users[i]?.id,
@@ -46,7 +45,7 @@ const ModalProject = (props: typeModal) => {
       const { data } = await client.query({
         query: GET_USERS,
       });
-      // console.log(data)
+ 
 
       managerOptions(data.users);
       for (let i = 0; i < data?.users?.length; i++) {
@@ -102,7 +101,7 @@ const ModalProject = (props: typeModal) => {
   const [createProject, { loading, data, error }] = useMutation(addProject);
 
   const handleSubmit = (formData: formTypes) => {
-    // console.log(formData);
+ 
 
     let membersObj = [{ id: formData.members[0] }];
 
@@ -152,7 +151,7 @@ const ModalProject = (props: typeModal) => {
       .then(() => handleCloseModal())
       .catch((error) => console.log(error));
   };
-  //  console.log(form.getInputProps('type').value)
+ 
 
   return (
     <>
