@@ -1,11 +1,17 @@
 import type { Context } from '.keystone/types';
 import dotenv from "dotenv"
 import { role } from './utils/data';
-dotenv.config({path:"./.env"});
-export async function superAdminData(context: Context) {
-  const UserData= await context.db.User.findMany({});
-  if ((await context.db.User.count()) > 0) return;
 
+// Load environment variables from .env file
+dotenv.config({path:"./.env"});
+
+// Function to create super admin data
+export async function superAdminData(context: Context) {
+
+  // Check if there are existing users in the database
+  const UserData= await context.db.User.findMany({});
+  if ((await context.db.User.count()) > 0) return;// If there are existing users, return early and do not proceed with creating the super admin data
+  // Create a single user with super admin privileges
   for (const user of [
     {
         name: process.env.name,
@@ -15,6 +21,6 @@ export async function superAdminData(context: Context) {
         role:["admin","userManagement","projectManagement","taskManagement","milestoneManagement","timeEntryManagement"]
     }
   ] as const) {
-    await context.db.User.createOne({ data: user });
+    await context.db.User.createOne({ data: user }); // Add the user to the database
   }
 }

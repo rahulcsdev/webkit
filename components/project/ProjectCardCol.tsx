@@ -2,9 +2,6 @@ import React from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 import { Manrope, Roboto } from "next/font/google";
-import Image from "next/image";
-import pic1 from "../assets/picOne.jpg";
-import pic2 from "../assets/picTwo.jpg";
 import { FiEdit, FiEyeOff } from "react-icons/fi";
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });

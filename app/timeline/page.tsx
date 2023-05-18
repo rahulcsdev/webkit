@@ -13,6 +13,7 @@ import ProjectCardCol from "../../components/project/ProjectCardCol";
 import Footer from "../../components/Footer";
 import { useForm, isNotEmpty } from "@mantine/form";
 import { gql, useMutation, useQuery } from "@apollo/client";
+import { TableSkeleton } from "@/utils/skeleton";
 
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
 const manrope = Manrope({ subsets: ["latin"] });
@@ -41,7 +42,32 @@ const Projects = () => {
     },
   });
 
-  const { data } = useQuery(getSpecificManagerTimeEntries, {
+  const getStatus = (status: string) => {
+    if (status === "Pending") {
+      return (
+        <p className="bg-orange-500 text-white rounded px-2 py-[1px]">
+          {status}
+        </p>
+      );
+    }
+
+    if (status === "Approved") {
+      return (
+        <p className="bg-green-500 text-white rounded px-2 py-[1px]">
+          {status}
+        </p>
+      );
+    }
+
+    if (status === "Rejected") {
+      return (
+        <p className="bg-red-600 text-white rounded px-2 py-[1px]">{status}</p>
+      );
+    }
+  };
+
+
+  const { data,loading } = useQuery(getSpecificManagerTimeEntries, {
     variables: {
       where: {
         userName: {
@@ -77,8 +103,7 @@ const Projects = () => {
   }
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
-  return (
-    <LayoutNav>
+  return ( loading ? <TableSkeleton/> :  <LayoutNav>
       <form
         onSubmit={form.onSubmit(
           (values, _event) => {
@@ -163,7 +188,7 @@ const Projects = () => {
                           <td className="px-6 py-4"> {item.userName.name}</td>
                           <td className="px-6 py-4">{item.duration}</td>
                           <td className="px-6 py-4">{item.activities}</td>
-                          <td className="px-6 py-4">{item.reviewStatus}</td>
+                          <td className="px-6 py-4">  {getStatus(item.reviewStatus)}</td>
                           <td>
                             {item.reviewStatus === "Rejected" && (
                               <button

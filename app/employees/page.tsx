@@ -33,6 +33,27 @@ const Employees = () => {
   const [total, setTotal] = useState(0);
 
 
+  const handleDateChange = (date: Date) => {
+    setDate(date);
+  };
+
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const { current: myDiv } = myDivRef;
+  //     if (myDiv.scrollTop > 0) {
+  //       setIsScrolling(true);
+  //     } else {
+  //       setIsScrolling(false);
+  //     }
+  //   };
+
+  //   const { current: myDiv } = myDivRef;
+  //   myDiv.addEventListener("scroll", handleScroll);
+
+  //   return () => {
+  //     myDiv.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, [myDivRef]);
 
   const openDetails = (id: string) => {
     setSelectedFeild(id);
@@ -53,7 +74,7 @@ const Employees = () => {
 
   const [datas, setData] = useState([]);
 
-  const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 9;
 const INITIAL_PAGE = 1;
 const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
 
@@ -75,6 +96,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
       query: getUser,
     }).then(({data})=>{
       setTotal(data?.users?.length);
+      console.log(data);
       
     })
   };
@@ -93,11 +115,10 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   
 
   return (
-    <LayoutNav>
-    <div className="px-5 py-6">
-       
-        <div className="px-5 py-6">
-
+    <>
+      {/* <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
+        <Navbar isScrolling={isScrolling} /> */}
+        <LayoutNav>
         <div className="px-5 py-6">
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="flex items-center justify-between">
@@ -163,7 +184,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
          <Pagination total={totalPages}   onChange={handlePageChange} value={currentPage} />
        </div>
       </div>
-      </div>
+      {/* </div> */}
       <ModalEmployee
         refetch={refetch}
         showModal={showModal}
@@ -178,9 +199,9 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
           handleCloseModal={handleCloseModalEdit}
         />
       )}
-</div>
-     
-    </LayoutNav>
+
+</LayoutNav>
+    </>
   );
 };
 

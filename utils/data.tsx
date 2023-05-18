@@ -39,11 +39,6 @@ export const navLinks=[
     link:'desk'
    },
    {
-    icon:<BsCalendarEvent className='text-2xl'/>,
-    name:"calender",
-    link:'calender'
-   },
-   {
     icon:<BsHourglass className='text-2xl'/>,
     name:"approval as reporting Manager",
     link:'reportingManagerTimeLines'
@@ -58,11 +53,11 @@ export const navLinks=[
     name:"Time Entry",
     link:'timeline'
    },
-   // {
-   //  icon:<BsFolder2Open className='text-2xl'/>,
-   //  name:"others",
-   //  link:'/'
-   // },
+   {
+    icon:<BsFolder2Open className='text-2xl'/>,
+    name:"test",
+    link:'test'
+   },
 
     
 ]

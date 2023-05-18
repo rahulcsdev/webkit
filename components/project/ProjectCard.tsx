@@ -2,8 +2,9 @@ import React from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { AiFillStar } from "react-icons/ai";
 import { Manrope, Roboto } from "next/font/google";
-import {GrEdit} from 'react-icons/gr'
+
 import { FiEdit, FiEye, FiEyeOff } from "react-icons/fi";
+import { FaCalendarMinus, FaCalendarPlus } from "react-icons/fa";
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 interface projectTypes   {
@@ -14,7 +15,7 @@ interface projectTypes   {
     name: string,
     id: string
   },
-  projectDiscription: string,
+
   name: string,
   memberCount: number,
   member: [
@@ -35,13 +36,14 @@ interface projectTypes   {
   endDate: string
 }
 interface Props {
-  data: projectTypes,
-  openDetais:any
+  data: projectTypes;
+  openDetais:any;
+  openView:any
 }
 
-const ProjectCard:React.FC<Props> = ({data,openDetais}) => {
+const ProjectCard:React.FC<Props> = ({data,openDetais,openView}) => {
  
-  const {name,status,projectDiscription,member,memberCount,projectManager,projectType,startDate,endDate,id} =data;
+  const {name,status,member,memberCount,projectManager,projectType,startDate,endDate,id} =data;
  let percentage=0;
  
     switch(status){
@@ -66,14 +68,14 @@ const ProjectCard:React.FC<Props> = ({data,openDetais}) => {
     }
   const bg =
     percentage > 0 && percentage < 20
-      ? "#FFCF52"
-      : percentage >= 20 && percentage < 30
-      ? "#5773FF"
-      : percentage >= 30 && percentage < 40
       ? "#F35421"
+      : percentage >= 20 && percentage < 40
+      ? "#5773FF"
       : percentage >= 40 && percentage < 60
+      ? "#FFCF52"
+      : percentage >= 60 && percentage < 80
       ? "#50C6B4"
-      : "#5773FF";
+      : "#50C878";
   
 
   return (
@@ -93,13 +95,13 @@ const ProjectCard:React.FC<Props> = ({data,openDetais}) => {
             })}
           />
         </div>
-        <AiFillStar className="text-yellow-400 text-xl" />
+       {projectType!=='Internal project' && <AiFillStar className="text-yellow-400 text-xl" />} 
       </div>
       <div className="mt-4 pb-5 border-b-2 border-gray-200">
         <div className="flex justify-between items-center">
 
         <h2
-          className={`text-[#140F49] ${manrope.className} font-semibold text-[1.2em] `}
+          className={`text-[#140F49] capitalize ${manrope.className} font-semibold text-[1.2em] `}
         >
           {name}
         </h2>
@@ -111,12 +113,13 @@ const ProjectCard:React.FC<Props> = ({data,openDetais}) => {
         </div>
            <div className="flex justify-between items-center">
 
-        <p className={`text-green-400 text-base ${roboto.className} mt-1`}>
-         <span className="font-medium" >P.SD:</span> {new Date(startDate).toLocaleDateString()}
+        <p className={`text-green-400 flex items-center gap-2 px-2 py-1 rounded-md bg-green-50 text-base ${roboto.className} mt-1`}>
+         <span className="font-medium" ><FaCalendarPlus /></span> {new Date(startDate).toLocaleDateString()}
         </p>
-        <p className={`text-red-400 text-base ${roboto.className} mt-1`}>
-         <span className="font-medium" >P.ED :</span> {new Date(endDate).toLocaleDateString()}
+          <p className={`text-red-400 flex items-center rounded-md gap-2 px-2 py-1 bg-red-50 text-base ${roboto.className} mt-1`}>
+         <span className="font-medium" ><FaCalendarMinus /></span> {new Date(endDate).toLocaleDateString()}
         </p>
+      
            </div>
         <p className={`text-[#605C8D] text-base ${roboto.className} mt-1`}>
          <span className="font-medium" >Manager :</span> {projectManager?projectManager.name:'Non'}
@@ -131,10 +134,10 @@ const ProjectCard:React.FC<Props> = ({data,openDetais}) => {
             <div key={index}
               className={`text-white text-sm px-2 py-1 rounded-md ${
                 index % 2 !== 0
-                  ? "bg-[#4681f4]"
+                  ? "bg-[#FFCF52]"
                   : index % 3 !== 0
-                  ? "bg-[#5adbb5]"
-                  : "bg-[#dd7973]"
+                  ? "bg-[#50C6B4]"
+                  : "bg-[#51BBFE]"
               }`}
             >
               {item.name}
@@ -150,15 +153,15 @@ const ProjectCard:React.FC<Props> = ({data,openDetais}) => {
         <div className="flex items-center gap-2 justify-center">
         <button
           onClick={()=>openDetais(id)}
-          className={`px-2 py-1 rounded-md bg-transparent text-[#336B87] hover:bg-slate-100 transition-all delay-75 ease-in duration-100`}
+          className={`px-2 py-1 rounded-md bg-transparent text-[#cf9700] hover:bg-[#fff2cf] transition-all delay-75 ease-in duration-100`}
         >
       <FiEdit size={20} />
         </button>
         <button
-          // onClick={()=>openDetais(id)}
-          className={`px-2 py-1 rounded-md  text-slate-100 bg-[#336B87] transition-all delay-75 ease-in duration-100`}
+          onClick={()=>openView(id)}
+          className={`px-2 py-1 rounded-md  text-[#007ece] hover:bg-[#ceecff] transition-all delay-75 ease-in duration-100`}
         >
-      <FiEyeOff size={20} />
+         <FiEyeOff size={20} />
         </button>
         </div>
       </div>
