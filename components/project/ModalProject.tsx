@@ -3,20 +3,16 @@ import React, { useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
 import client from "../../apolloClient/index";
 import { gql, useMutation } from "@apollo/client";
-
 import {
   MultiSelect,
   Input,
   Select,
-  FileInput,
-  rem,
-  NativeSelect,
   Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DateInput } from "@mantine/dates";
-import { addProject, getProjectList, getUser } from "@/services";
-import { FaUpload } from "react-icons/fa";
+import { addProject, getProjectList, GET_USERS } from "@/services";
+
 interface typeModal {
   showModal: Boolean;
   handleCloseModal: () => void;
@@ -48,7 +44,7 @@ const ModalProject = (props: typeModal) => {
     const getEmployeeInfo = async () => {
       const info: string[] = [];
       const { data } = await client.query({
-        query: getUser,
+        query: GET_USERS,
       });
       // console.log(data)
 
@@ -102,57 +98,11 @@ const ModalProject = (props: typeModal) => {
     }
   `;
 
-  const [file, setFile] = useState<File | null>(null);
-  const [uploadFile] = useMutation(UPLOAD_QUERY);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-    }
-  };
-
-  // const convertBase64 = (file) => {
-  //     return new Promise((resolve, reject) => {
-  //         const fileReader = new FileReader();
-  //         fileReader.readAsDataURL(file);
-
-  //         fileReader.onload = () => {
-  //             resolve(fileReader.result);
-  //         };
-
-  //         fileReader.onerror = (error) => {
-  //             reject(error);
-  //         };
-  //     });
-  // };
-
-  // const upload=async()=>{
-  //   console.log(file)
-  //   const base64=await convertBase64(file);
-  //   console.log(base64)
-  //   if (file) {
-  //     try {
-  //       await uploadFile({ variables: {
-  //         "data": {
-  //           "documents": {
-  //             "upload": file
-  //           }
-  //         }
-  //       } });
-  //       // Handle successful upload
-  //       console.log("Completed")
-  //     } catch (error) {
-  //       // Handle upload error
-  //       console.log(error)
-  //     }
-  //   }
-  // }
 
   const [createProject, { loading, data, error }] = useMutation(addProject);
 
   const handleSubmit = (formData: formTypes) => {
-    console.log(formData);
+    // console.log(formData);
 
     let membersObj = [{ id: formData.members[0] }];
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
 
 import client from "@/apolloClient";
-import { getProjectDetail, getProjectList, getUser } from "@/services";
+import { GET_USERS, getProjectDetail, getProjectList } from "@/services";
 
 import { MultiSelect, Input, Select, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -33,14 +33,14 @@ const EditModalProject: React.FC<typeModal> = ({
   id,
   showModal,
 }) => {
-  const [options, setOptions] = useState<any>([]);
-  const [details, setDetails] = useState<object>([]);
+ 
   const [users, setUsers] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const managerOp = [{ value: "", label: "Choose One", disabled: true }];
+ 
 
   const managerOptions = (users: any) => {
-    console.log(users);
+    // console.log(users);
+    const managerOp = [{ value: "", label: "Choose One", disabled: true }];
     for (let i = 0; i < users?.length; i++) {
       managerOp.push({
         value: users[i]?.id,
@@ -89,20 +89,21 @@ const EditModalProject: React.FC<typeModal> = ({
         "members",
         data.project.member.map((item: { id: any; }) => item.id)
       );
-      console.log(data);
-      setDetails(data?.project);
+      // console.log(data);
+      // setDetails(data?.project);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.log(error);
+      // console.log(error);
     }
   };
   // Get all employee info for options
+
   useEffect(() => {
     const getEmployeeInfo = async () => {
       const info: string[] = [];
       const { data } = await client.query({
-        query: getUser,
+        query: GET_USERS,
       });
       // console.log(data)
 
@@ -111,7 +112,7 @@ const EditModalProject: React.FC<typeModal> = ({
         info.push(data?.users[i]?.name);
       }
 
-      setOptions(info);
+      // setOptions(info);
     };
 
     getEmployeeInfo();
@@ -135,7 +136,7 @@ const EditModalProject: React.FC<typeModal> = ({
   `;
   const [updateProject, { data, error, loading }] = useMutation(UPDATE_PROJECT);
 
-  const updatedProject = async (formData: formTypes) => {
+  const updatedProject =  (formData: formTypes) => {
     console.log(formData);
     let membersObj = [{ id: formData.members[0] }];
 

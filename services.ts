@@ -26,7 +26,12 @@ export const addProject = gql`
     }
   }
 `;
-
+export const GET_USERS=gql`query Users {
+  users {
+    id
+    name
+  }
+}`
 export const addMilestone = gql`
   mutation CreateMilestone($data: MilestoneCreateInput!) {
     createMilestone(data: $data) {
@@ -141,9 +146,9 @@ export const getProjectList = gql`
         name
         id
       }
-      projectDiscription
+    
       name
-      memberCount
+     
       member {
         id
         name
