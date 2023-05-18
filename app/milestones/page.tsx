@@ -1,12 +1,13 @@
 "use client";
 import client from "@/apolloClient";
-import ModalMs from "@/components/milestone/ModalMs";
+import dynamic from "next/dynamic";
+ 
 import { MILESTONE_QUERY, getMilestone } from "@/services";
 import { useQuery } from "@apollo/client";
 import { Pagination } from "@mantine/core";
-import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
+const ModalMs = dynamic(() => import("@/components/milestone/ModalMs"));
  
 const EditModalMs = dynamic(
   () => import("../../components/milestone/EditModalMs")
@@ -101,7 +102,7 @@ const MildStone = () => {
           setViewMode={setViewMode}
           status={status}
           viewMode={viewMode}
-          title="Project"
+          title="Milestone"
         />
         {/* View Parts */}
         <ContentPart
@@ -115,7 +116,9 @@ const MildStone = () => {
 
 <Pagination total={totalPages}   onChange={handlePageChange} value={currentPage} />
 </div>
-<ModalMs refetch={refetch} showModal={showModal} handleCloseModal={handleCloseModal} />
+ {
+  showModal &&<ModalMs refetch={refetch} showModal={showModal} handleCloseModal={handleCloseModal} />
+ }
       </div>
 
       {selectedFeild && (

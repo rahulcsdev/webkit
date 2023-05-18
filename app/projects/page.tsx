@@ -127,7 +127,7 @@ const Projects = () => {
           value={currentPage}
         />
       </div>
-      <ModalProject refetch={refetch}   showModal={showModal} handleCloseModal={handleCloseModal}  />
+     {showModal && <ModalProject refetch={refetch}   showModal={showModal} handleCloseModal={handleCloseModal}  />} 
       </div>
 
       {selectedFeild && (
