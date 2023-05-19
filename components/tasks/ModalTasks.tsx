@@ -99,8 +99,11 @@ const ModalTasks = (props: typeModal) => {
         },
       },
       refetchQueries: [{ query: getTask }],
+    }).then(() => {
+      formData.reset();
+      setErrMessage("");
+      handleCloseModal();
     });
-    handleCloseModal();
   };
 
   return (
