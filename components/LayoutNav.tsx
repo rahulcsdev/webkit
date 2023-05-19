@@ -3,15 +3,9 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
-
-
-const LayoutNav  = ({ children }:{
-  children: React.ReactNode;
-}) => {
+const LayoutNav = ({ children }: { children: React.ReactNode }) => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
-
- 
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,13 +25,15 @@ const LayoutNav  = ({ children }:{
     };
   }, [myDivRef]);
 
- 
- 
   return (
-    <div className="h-full overflow-y-scroll myGrid " id="my-div"   ref={myDivRef}>
+    <div
+      className="h-full overflow-y-scroll myGrid "
+      id="my-div"
+      ref={myDivRef}
+    >
       <Navbar isScrolling={isScrolling} />
       {children}
-      <Footer/>
+      <Footer />
     </div>
   );
 };
