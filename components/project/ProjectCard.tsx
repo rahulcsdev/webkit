@@ -3,7 +3,8 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { AiFillStar } from "react-icons/ai";
 import { Manrope, Roboto } from "next/font/google";
 
-import { FiEdit, FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEdit } from "react-icons/fi";
+import {SlEye} from "react-icons/sl";
 import { FaCalendarMinus, FaCalendarPlus } from "react-icons/fa";
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
@@ -38,10 +39,10 @@ interface projectTypes   {
 interface Props {
   data: projectTypes;
   openDetais:any;
-  openView:any
+  
 }
 
-const ProjectCard:React.FC<Props> = ({data,openDetais,openView}) => {
+const ProjectCard:React.FC<Props> = ({data,openDetais}) => {
  
   const {name,status,member,memberCount,projectManager,projectType,startDate,endDate,id} =data;
  let percentage=0;
@@ -143,7 +144,7 @@ const ProjectCard:React.FC<Props> = ({data,openDetais,openView}) => {
               {item.name}
             </div>
           ))}
-        
+         
           {
             member.length>3&&<div className="px-2 text-xl rounded-full bg-gray-200" >{memberCount-3}+</div>
           }
@@ -152,16 +153,16 @@ const ProjectCard:React.FC<Props> = ({data,openDetais,openView}) => {
         </div>
         <div className="flex items-center gap-2 justify-center">
         <button
-          onClick={()=>openDetais(id)}
+          onClick={()=>openDetais(id,'edit')}
           className={`px-2 py-1 rounded-md bg-transparent text-[#cf9700] hover:bg-[#fff2cf] transition-all delay-75 ease-in duration-100`}
         >
       <FiEdit size={20} />
         </button>
         <button
-          onClick={()=>openView(id)}
+          onClick={()=>openDetais(id,"view")}
           className={`px-2 py-1 rounded-md  text-[#007ece] hover:bg-[#ceecff] transition-all delay-75 ease-in duration-100`}
         >
-         <FiEyeOff size={20} />
+         <SlEye size={25} />
         </button>
         </div>
       </div>
