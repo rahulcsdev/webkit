@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Roboto, Manrope } from "next/font/google";
 import { IoMailOpenOutline } from "react-icons/io5";
 import { BiMessageRounded } from "react-icons/bi";
@@ -19,7 +18,7 @@ interface UserData {
   designation: string;
   code: string;
   role: string;
-  dateofjoining: Date;
+  dateOfJoining: Date;
   reportingManager: string;
 }
 
@@ -118,7 +117,7 @@ const EmployeesCardData = (props: Props) => {
             </div>
           </div>
           <div className="flex flex-grow">
-            <div className="overflow-y-scroll max-h-[50px] mt-1">
+            <div className="overflow-y-scroll max-h-[50px] mt-1 w-[100%]">
               {Array.isArray(roleLabels) ? (
                roleLabels.map((item) => (
                   <p key={item} className={`text-lg ${manrope.className}`}>
