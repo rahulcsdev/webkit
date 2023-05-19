@@ -78,36 +78,42 @@ export default list({
     createdDate: timestamp({ defaultValue: new Date().toISOString() }),
   },
   hooks: {
-    resolveInput: async ({ resolvedData, context }) => {
-       // Get the count and list of existing users from the database
-       const count = await context.db.User.count({});
-       const Users = await context.db.User.findMany({});
- 
-       // Generate a unique code for the new user
-       if (Users.length == 0) {
-         // If no users exist, set the code as "USR001"
-         return {
-           ...resolvedData,
-           code: "USR001",
-         };
+    resolveInput: async ({ resolvedData, context,operation }) => {
+     if(operation==="create"){
+        // Get the count and list of existing users from the database
+        const count = await context.db.User.count({});
+        const Users = await context.db.User.findMany({});
+  
+        // Generate a unique code for the new user
+        if (Users.length == 0) {
+          // If no users exist, set the code as "USR001"
+          return {
+            ...resolvedData,
+            code: "USR001",
+          };
+        }
+       const lastUser = Users[Users.length - 1];
+       let lastCode: any = lastUser?.code;
+       let matches = lastCode.match(/^([a-zA-Z]+)(\d+)$/);
+       let newCode = "";
+       if (matches) {
+         let prefix = matches[1];
+         let numberStr = matches[2];
+         let number = parseInt(numberStr);
+         number++;
+         let newNumberStr = number.toString().padStart(numberStr.length, "0");
+         newCode = prefix + newNumberStr;
        }
-      const lastUser = Users[Users.length - 1];
-      let lastCode: any = lastUser?.code;
-      let matches = lastCode.match(/^([a-zA-Z]+)(\d+)$/);
-      let newCode = "";
-      if (matches) {
-        let prefix = matches[1];
-        let numberStr = matches[2];
-        let number = parseInt(numberStr);
-        number++;
-        let newNumberStr = number.toString().padStart(numberStr.length, "0");
-        newCode = prefix + newNumberStr;
-      }
-       // Set the generated code for the new user
+        // Set the generated code for the new user
+       return {
+         ...resolvedData,
+         code: newCode,
+       };
+     }else{
       return {
-        ...resolvedData,
-        code: newCode,
-      };
+        ...resolvedData
+      }
+     }
     },
   },
 });

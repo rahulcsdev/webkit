@@ -78,7 +78,8 @@ ui: {hideCreate: true,},}),
  labelField: 'name', },
  // Define a hook to generate project codes
 hooks:{
-    resolveInput: async({ resolvedData,context }) => {
+    resolveInput: async({ resolvedData,context,operation }) => {
+    if(operation==="create"){
       const Projects=await context.db.Project.findMany({})
       if(Projects.length===0){
         return {
@@ -102,6 +103,11 @@ if (matches) {
         ...resolvedData,
         code: newCode
       }
+    }else{
+      return{
+        ...resolvedData
+      }
+    }
     }
   },
 })
