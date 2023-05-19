@@ -6,8 +6,7 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(()=>{
-    console.log('kk')
-    router.push('/loginm');
+    router.push('/login');
   },[])
 
   return 
