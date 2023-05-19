@@ -6,13 +6,14 @@ import { MILESTONE_QUERY, getMilestone } from "@/services";
 import { useQuery } from "@apollo/client";
 import { Pagination } from "@mantine/core";
 import React, { useEffect, useState } from "react";
+import SecondNav from "@/components/SecondNav";
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 const ModalMs = dynamic(() => import("@/components/milestone/ModalMs"));
  
 const EditModalMs = dynamic(
   () => import("../../components/milestone/EditModalMs")
 );
-const SecondNav = dynamic(() => import("@/components/SecondNav"));
+ 
 const ContentPart = dynamic(() => import("@/components/milestone/ContentPart"));
 
 const MildStone = () => {
