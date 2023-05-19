@@ -115,7 +115,7 @@ const DeskCardCarousal = (props: Props) => {
         <h5
         className={`text-[#8B8B8B] font-semibold whitespace-nowrap ml-2 mt-1`}
       >
-      {data.projectManager.name}
+      {data?.projectManager?.name}
       </h5>
       </div>
       <div className="flex mt-2">

@@ -82,7 +82,8 @@ export default list({
   },
 
   hooks: {
-    resolveInput: async ({ resolvedData, context }) => {
+    resolveInput: async ({ resolvedData, context,operation }) => {
+    if(operation==="create"){
       const taskId = resolvedData.task.connect.id;
       const task = await context.db.Task.findOne({
         where: { id: taskId },
@@ -117,6 +118,11 @@ export default list({
         ...resolvedData,
         code: `${taskCode}-${newCode}`,
       };
+    }else{
+      return {
+        ...resolvedData,
+      }
+    }
     },
   },
 });

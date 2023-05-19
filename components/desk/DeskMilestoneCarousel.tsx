@@ -106,7 +106,7 @@ const bg =
       <h1
         className={`text-[1.2em]   text-[#140F49] font-semibold whitespace-nowrap ml-2`}
       >
-      {data.project.name}
+      {data?.project?.name}
       </h1>
       </div>
       <div className="flex mt-2">

@@ -1,5 +1,5 @@
 import {IoHomeOutline,IoPrint} from 'react-icons/io5'
-import {BsClipboardCheck,BsPersonPlus,BsCalendarEvent,BsFolder2Open, BsInbox, BsMic ,BsHourglass } from 'react-icons/bs'
+import {BsClipboardCheck,BsPersonPlus,BsCalendarEvent,BsFolder2Open, BsInbox, BsMic ,BsHourglass,  BsFolder, } from 'react-icons/bs'
 import {RxCube} from 'react-icons/rx'
 import { FiMessageSquare,FiLogOut ,FiEdit } from 'react-icons/fi'
 import { RiLinksLine } from 'react-icons/ri'
@@ -11,7 +11,7 @@ export const navLinks=[
    {
     icon:<IoHomeOutline className='text-2xl' />,
     name:"dashboard",
-    link:''
+    link:'home'
    },
    {
     icon:<IoPrint className='text-2xl'/>,
@@ -38,29 +38,35 @@ export const navLinks=[
     name:"desk",
     link:'desk'
    },
-   {
-    icon:<BsHourglass className='text-2xl'/>,
-    name:"approval as reporting Manager",
-    link:'reportingManagerTimeLines'
-   },
-   {
-    icon:<BsHourglass className='text-2xl'/>,
-    name:"approval as project Manager",
-    link:'projectManagerTimeLines'
-   },
-   {
-    icon:<BsHourglass className='text-2xl'/>,
-    name:"Time Entry",
-    link:'timeline'
-   },
-   {
-    icon:<BsFolder2Open className='text-2xl'/>,
-    name:"test",
-    link:'test'
-   },
-
     
 ]
+
+
+export const timelineFolder = 
+   {
+     icon: <BsFolder className="text-2xl" />,
+     name: "time entry",
+   }
+
+ 
+ export const timelineLinks = [
+   {
+     icon: <BsHourglass className="text-2xl" />,
+     name: "Time Entry",
+     link: "timeline",
+   },
+   {
+     icon: <BsHourglass className="text-2xl" />,
+     name: "approval as reporting Manager",
+     link: "reportingManagerTimeLines",
+   },
+   {
+     icon: <BsHourglass className="text-2xl" />,
+     name: "approval as project Manager",
+     link: "projectManagerTimeLines",
+   },
+ ];
+ 
 
 
 
