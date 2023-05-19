@@ -100,6 +100,7 @@ const ModalTasks = (props: typeModal) => {
       },
       refetchQueries: [{ query: getTask }],
     });
+    handleCloseModal();
   };
 
   return (
