@@ -58,8 +58,9 @@ export default list({
     endDate: timestamp({ defaultValue: new Date().toISOString() }),
   },
   hooks: {
-    resolveInput: async ({ resolvedData, context }) => {
-      const { id } = resolvedData.project.connect;
+    resolveInput: async ({ resolvedData, context,operation }) => {
+      if(operation==="create"){
+        const { id } = resolvedData.project.connect;
 
       const project = await context.db.Project.findOne({
         where: { id: id },
@@ -94,6 +95,11 @@ export default list({
         ...resolvedData,
         code: `${projectCode}-${newCode}`,
       };
+      }else{
+        return {
+          ...resolvedData,
+        }
+      }
     },
   },
   ui: {

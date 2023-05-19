@@ -89,7 +89,8 @@ export default list({
     }),
   },
   hooks: {
-    resolveInput: async ({ resolvedData, context }) => {
+    resolveInput: async ({ resolvedData, context,operation }) => {
+     if(operation==="create"){
       const milestoneId = resolvedData.milestone?.connect.id;
       const milestone = await context.db.Milestone.findOne({
         where: { id: milestoneId },
@@ -124,6 +125,11 @@ export default list({
         ...resolvedData,
         code: `${milestoneCode}-${newCode}`,
       };
+     }else{
+      return{
+        ...resolvedData
+      }
+     }
     },
   },
   ui: {

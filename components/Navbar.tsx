@@ -15,8 +15,8 @@ import { Popover } from "@mantine/core";
 import { profileLinks } from "../utils/data";
 import client from "@/apolloClient/index";
 import { getspecficUser } from "@/services";
-
-
+import { useContext } from "react";
+import { User_data } from "@/app/context/context";
 
 
 const manrope = Manrope({ subsets: ["latin"] });
@@ -27,22 +27,11 @@ const Navbar = (props: Props) => {
   const [isExpand, setIsExpand] = useState(false);
   const router = useRouter();
   const [reload,setReload] = useState(false);
-  const [user, setUser] = useState<{ [key: string]: any }>({});
 
   const { isScrolling } = props;
 
-  const getUserData = async (id: string) => {
-    const data = await client.query({
-      query: getspecficUser,
-      variables: {
-        where:{
-          id: id,
-        }
-      },
-    });
 
-    return data;
-  };
+  const {user}:any = useContext(User_data)
 
   const navigateToPage = (item: any) => {
     if (item.link === "/login") {
@@ -55,24 +44,6 @@ const Navbar = (props: Props) => {
     }
   };
 
-  useEffect(() => {
-    // console.log("in nav");
-    const id = localStorage.getItem("userId");
-    if (id) {
-      const data = getUserData(id);
-
-      data
-        .then((res: any) => {
-          if (res) {
-            setUser(res.data.user);
-            // console.log(res);
-          }
-        })
-        .catch((err) => {
-          // console.log("error",err);
-        });
-    } 
-  }, []);
 
   return (
     <div

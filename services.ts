@@ -491,19 +491,19 @@ mutation UpdateUser($where: UserWhereUniqueInput!, $data: UserUpdateInput!) {
 `;
 
 export const getTasks = gql`
-  query Query {
-    tasks {
+query Query ($orderBy: [TaskOrderByInput!]!) {
+  tasks (orderBy: $orderBy) {
+    name
+    id
+    project {
       name
-      id
-      project {
-        name
-        status
-      }
       status
-      startDate
-      endDate
     }
+    status
+    startDate
+    endDate
   }
+}
 `;
 
 export const getTasksOfSelectedProject = gql`
