@@ -5,6 +5,7 @@ import client from "@/apolloClient";
 import { gql, useQuery } from "@apollo/client";
 import { getProjectList, getProjects } from "@/services";
 import { Pagination } from "@mantine/core";
+import SecondNav from "@/components/SecondNav";
  
 
 const EditModalProject = dynamic(
@@ -12,7 +13,7 @@ const EditModalProject = dynamic(
 );
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 const ModalProject = dynamic(() => import("@/components/project/ModalProject"))
-const SecondNav = dynamic(() => import("@/components/SecondNav"));
+ 
 const ContentPart = dynamic(() => import("@/components/project/ContentPart"));
 
 const Projects = () => {
@@ -127,7 +128,7 @@ const Projects = () => {
           value={currentPage}
         />
       </div>
-      <ModalProject refetch={refetch}   showModal={showModal} handleCloseModal={handleCloseModal}  />
+     {showModal && <ModalProject refetch={refetch}   showModal={showModal} handleCloseModal={handleCloseModal}  />} 
       </div>
 
       {selectedFeild && (

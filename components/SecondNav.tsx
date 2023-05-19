@@ -19,7 +19,7 @@ const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
 const SecondNav:React.FC<typesProps> = ({setStatus,status,viewMode,setViewMode,setShowModal,title,setCurrentPage}) => {
   return (
-    <div className="px-5 py-3 bg-white drop-shadow-md rounded-xl">
+    <div  className="px-5 py-3 bg-white drop-shadow-md rounded-xl">
     <div className="flex items-center justify-between">
       <h1
         className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}

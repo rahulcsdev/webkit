@@ -11,7 +11,7 @@ export const navLinks=[
    {
     icon:<IoHomeOutline className='text-2xl' />,
     name:"dashboard",
-    link:''
+    link:'home'
    },
    {
     icon:<IoPrint className='text-2xl'/>,
