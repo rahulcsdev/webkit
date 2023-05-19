@@ -33,12 +33,10 @@ const Login = () => {
 
     if (data?.authenticateUserWithPassword.item) {
       // localStorage.setItem('userToken',data.authenticateUserWithPassword.sessionToken)
+
       localStorage.setItem("userId", data.authenticateUserWithPassword.item.id);
 
-      router.push("/");
-      return setTimeout(() => {
-        router.refresh();
-      }, 1000);
+      router.push("/home");
     }
     // console.log(data);
   };

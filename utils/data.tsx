@@ -7,6 +7,7 @@ import {
   BsInbox,
   BsMic,
   BsHourglass,
+  BsFolder,
 } from "react-icons/bs";
 import { RxCube } from "react-icons/rx";
 import { FiMessageSquare, FiLogOut, FiEdit } from "react-icons/fi";
@@ -46,25 +47,28 @@ export const navLinks = [
     name: "desk",
     link: "desk",
   },
+];
+
+export const timelineFolder = {
+  icon: <BsFolder className="text-2xl" />,
+  name: "time entry",
+};
+
+export const timelineLinks = [
   {
-    icon: <BsHourglass />,
-    name: "approval as reporting Manager",
-    link: "reportingManagerTimeLines",
-  },
-  {
-    icon: <BsHourglass />,
-    name: "approval as project Manager",
-    link: "projectManagerTimeLines",
-  },
-  {
-    icon: <BsHourglass />,
+    icon: <BsHourglass className="text-2xl" />,
     name: "Time Entry",
     link: "timeline",
   },
   {
-    icon: <BsFolder2Open />,
-    name: "test",
-    link: "test",
+    icon: <BsHourglass className="text-2xl" />,
+    name: "approval as reporting Manager",
+    link: "reportingManagerTimeLines",
+  },
+  {
+    icon: <BsHourglass className="text-2xl" />,
+    name: "approval as project Manager",
+    link: "projectManagerTimeLines",
   },
 ];
 

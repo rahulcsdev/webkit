@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Navbar from "../../components/Navbar";
 import { Manrope } from "next/font/google";
 import { dropDown } from "../../utils/data";
-import { deskDropDown, deskCarousalData } from "../../utils/data";
 import { Popover, Button } from "@mantine/core";
 import { gql, useQuery } from "@apollo/client";
 import { getProjectList ,getTasks,getMilestone} from "@/services";
-import client from '../../apolloClient/index'
+import client from '../../apolloClient/index';
+import dynamic from "next/dynamic"
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 
 import {
   FiChevronDown,
@@ -17,11 +17,9 @@ import {
 
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import ModalProject from "../../components/project/ModalProject";
-import DeskCarousal from "../../components/dashboard/DeskCarousel";
-import DeskCardCarousal from "../../components/desk/DeskCardCarousel";
-import DesktaskCarousel from "../../components/desk/DesktaskCarousel";
-import DeskMilestoneCarousel from "../../components/desk/DeskMilestoneCarousel"
+const  DeskCardCarousal = dynamic(() => import("../../components/desk/DeskCardCarousel"));
+const DesktaskCarousel= dynamic(() => import("../../components/desk/DesktaskCarousel"));
+const DeskMilestoneCarousel=dynamic(() => import("../../components/desk/DeskMilestoneCarousel"));
 
 const manrope = Manrope({ subsets: ["latin"] });
 const Desk = () => {
@@ -33,58 +31,49 @@ const Desk = () => {
 
   const projectData= useQuery(getProjectList, {
     client,
-  });
+    variables:{
+      "orderBy": [
+        {
+          "id": "desc"
+        }
+      ]
+    }
+});
+// console.log(projectData?.data?.projects)
+// const reverseprojectData= projectData?.data?.projects.reverse();
   const mileStoneData = useQuery(getMilestone, {
     client,
+    variables:{
+      "orderBy": [
+        {
+          "id": "desc"
+        }
+      ]
+    }
   });
   const taskData = useQuery(getTasks, {
     client,
+    variables:{
+      "orderBy": [
+        {
+          "id": "desc"
+        }
+      ]
+    }
   });
 
   //console.log(projectData?.data?.projects)
   // console.log(mileStoneData?.data?.milestones)
   //console.log(taskData?.data?.tasks)
    
-  
-  const handleDateChange = (date: Date) => {
-    setDate(date);
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const { current: myDiv } = myDivRef;
-      if (myDiv.scrollTop > 0) {
-        setIsScrolling(true);
-      } else {
-        setIsScrolling(false);
-      }
-    };
-    
-
-    const { current: myDiv } = myDivRef;
-    myDiv.addEventListener("scroll", handleScroll);
-
-    return () => {
-      myDiv.removeEventListener("scroll", handleScroll);
-    };
-  }, [myDivRef]);
-
   const [isExpand, setIsExpand] = useState(false);
   const [isDeskExpand, setisDeskExpand] = useState(false);
   const [isDeskExpand1, setisDeskExpand1] = useState(false);
   const [isDeskExpand2, setisDeskExpand2] = useState(false);
   const [value, setValue] = useState("progress");
-  const [deskValue, setdeskValue] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [opened, setOpened] = useState(false);
-
-  // function handleCloseModal() {
-  //   setShowModal(false);
-  // }
 
   return (
-    <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
-      <Navbar isScrolling={isScrolling} />
+    <LayoutNav>
       <div className="px-5 py-6">
         <div className="p-5 bg-white drop-shadow-md rounded-xl">
           <div className="flex items-center justify-between">
@@ -116,7 +105,7 @@ const Desk = () => {
                     {dropDown.map((item:any, index:any) => (
                       <div
                         key={index}
-                        onClick={() => setdeskValue(item.value)}
+                       
                         className="p-1 ... flex items-center justify-start gap-3 scale-1 delay-100 duration-150 transition-transform hover:scale-105 cursor-pointer"
                       >
                         {item.icon}
@@ -136,7 +125,6 @@ const Desk = () => {
               </div>
               <div className="relative">
                 <button
-                  onClick={() => setShowModal(true)}
                   className={`bg-[#5773FF] text-white px-3 py-2 rounded-lg capitalize`}
                 >
                   new project
@@ -155,35 +143,6 @@ const Desk = () => {
             >
                Projects 
             </h1>
-            <div className="flex items-center gap-4 justify-center">
-              <Popover
-                opened={isDeskExpand}
-                onChange={setisDeskExpand}
-                withinPortal
-              >
-                <Popover.Target>
-                  <div className="">
-                    <FiMoreHorizontal
-                      className="cursor-pointer"
-                      onClick={() => setisDeskExpand((prev) => !prev)}
-                    />
-                  </div>
-                </Popover.Target>
-
-                <Popover.Dropdown >
-                  {deskDropDown.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={() => setdeskValue(item.value)}
-                      className="p-1 ... flex items-center justify-start gap-3 scale-1 delay-100 duration-150 transition-transform hover:scale-105 cursor-pointer"
-                    >
-                      {item.icon}
-                      <h1 className="">{item.name}</h1>
-                    </div>
-                  ))}
-                </Popover.Dropdown>
-              </Popover>
-            </div>
           </div>
         </div>
         <div className="p-5 bg-white drop-shadow-md rounded-xl relative ...">
@@ -193,35 +152,6 @@ const Desk = () => {
             >
               Tasks
             </h1>
-            <div className="flex items-center gap-4 justify-center relative ...">
-              <Popover
-                opened={isDeskExpand1}
-                onChange={setisDeskExpand1}
-                withinPortal
-              >
-                <Popover.Target>
-                  <div className="">
-                    <FiMoreHorizontal
-                      className="cursor-pointer"
-                      onClick={() => setisDeskExpand1((prev) => !prev)}
-                    />
-                  </div>
-                </Popover.Target>
-
-                <Popover.Dropdown className="">
-                  {deskDropDown.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={() => setdeskValue(item.value)}
-                      className="p-1 ... flex items-center justify-start gap-3 scale-1 delay-100 duration-150 transition-transform hover:scale-105 cursor-pointer"
-                    >
-                      {item.icon}
-                      <h1 className="">{item.name}</h1>
-                    </div>
-                  ))}
-                </Popover.Dropdown>
-              </Popover>
-            </div>
           </div>
         </div>
         <div className="p-5 bg-white drop-shadow-md rounded-xl ">
@@ -231,35 +161,6 @@ const Desk = () => {
             >
               Milestone
             </h1>
-            <div className="flex items-center gap-4 justify-center">
-              <Popover
-                opened={isDeskExpand2}
-                onChange={setisDeskExpand2}
-                withinPortal
-              >
-                <Popover.Target>
-                  <div className="">
-                    <FiMoreHorizontal
-                      className="cursor-pointer"
-                      onClick={() => setisDeskExpand2((prev) => !prev)}
-                    />
-                  </div>
-                </Popover.Target>
-
-                <Popover.Dropdown className="">
-                  {deskDropDown.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={() => setdeskValue(item.value)}
-                      className="p-1 ... flex items-center justify-start gap-3 scale-1 delay-100 duration-150 transition-transform hover:scale-105 cursor-pointer"
-                    >
-                      {item.icon}
-                      <h1 className="">{item.name}</h1>
-                    </div>
-                  ))}
-                </Popover.Dropdown>
-              </Popover>
-            </div>
           </div>
         </div>
       </div>
@@ -286,7 +187,7 @@ const Desk = () => {
           handleCloseModal={handleCloseModal}
         /> */}
       </div>
-    </div>
+      </LayoutNav>
   );
 };
 

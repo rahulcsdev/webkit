@@ -2,7 +2,9 @@ import React from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 import { Manrope, Roboto } from "next/font/google";
-import { FiEdit, FiEyeOff } from "react-icons/fi";
+import { FiEdit, FiEye, FiEyeOff } from "react-icons/fi";
+import {SlEye } from "react-icons/sl";
+import { FaCalendarMinus, FaCalendarPlus } from "react-icons/fa";
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 interface projectTypes {
@@ -74,14 +76,14 @@ const ProjectCardCol: React.FC<Props> = ({ data, openDetais }) => {
   }
   const bg =
     percentage > 0 && percentage < 20
-      ? "#FFCF52"
-      : percentage >= 20 && percentage < 30
-      ? "#5773FF"
-      : percentage >= 30 && percentage < 40
       ? "#F35421"
+      : percentage >= 20 && percentage < 40
+      ? "#5773FF"
       : percentage >= 40 && percentage < 60
+      ? "#FFCF52"
+      : percentage >= 60 && percentage < 80
       ? "#50C6B4"
-      : "#5773FF";
+      : "#50C878";
 
   return (
     <div
@@ -119,18 +121,16 @@ const ProjectCardCol: React.FC<Props> = ({ data, openDetais }) => {
       {/* Middle */}
       <div className="mt-2">
       <div className="mt-4 pb-5 border-b-2 border-gray-200">
-            <div className="flex justify-between items-center">
-              <p
-                className={`text-green-400 text-base ${roboto.className} mt-1`}
-              >
-                <span className="font-medium">P.SD:</span>{" "}
-                {new Date(startDate).toLocaleDateString()}
-              </p>
-              <p className={`text-red-400 text-base ${roboto.className} mt-1`}>
-                <span className="font-medium">P.ED :</span>{" "}
-                {new Date(endDate).toLocaleDateString()}
-              </p>
-            </div>
+      <div className="flex justify-between items-center">
+
+<p className={`text-green-400 flex items-center gap-2 px-2 py-1 rounded-md bg-green-50 text-base ${roboto.className} mt-1`}>
+ <span className="font-medium" ><FaCalendarPlus /></span> {new Date(startDate).toLocaleDateString()}
+</p>
+  <p className={`text-red-400 flex items-center rounded-md gap-2 px-2 py-1 bg-red-50 text-base ${roboto.className} mt-1`}>
+ <span className="font-medium" ><FaCalendarMinus /></span> {new Date(endDate).toLocaleDateString()}
+</p>
+
+   </div>
             <p className={`text-[#605C8D] text-base ${roboto.className} mt-1`}>
               <span className="font-medium">Manager :</span>{" "}
               {projectManager ? projectManager.name : "Non"}
@@ -149,11 +149,11 @@ const ProjectCardCol: React.FC<Props> = ({ data, openDetais }) => {
                 <div
                   key={index}
                   className={`text-white text-sm px-2 py-1 rounded-md ${
-                    index % 2 == 0
-                      ? "bg-sky-400 "
-                      : index % 3 == 0
-                      ? "bg-orange-600"
-                      : "bg-yellow-500"
+                    index % 2 !== 0
+                      ? "bg-[#FFCF52]"
+                      : index % 3 !== 0
+                      ? "bg-[#50C6B4]"
+                      : "bg-[#51BBFE]"
                   }`}
                 >
                   {item.name}
@@ -168,16 +168,16 @@ const ProjectCardCol: React.FC<Props> = ({ data, openDetais }) => {
             </div>
             <div className="flex items-center gap-2 justify-center">
         <button
-          onClick={()=>openDetais(id)}
-          className={`px-2 py-1 rounded-md bg-transparent text-[#336B87] hover:bg-slate-100 transition-all delay-75 ease-in duration-100`}
+          onClick={()=>openDetais(id,'edit')}
+          className={`px-2 py-1 rounded-md bg-transparent text-[#cf9700] hover:bg-[#fff2cf] transition-all delay-75 ease-in duration-100`}
         >
       <FiEdit size={20} />
         </button>
         <button
-          // onClick={()=>openDetais(id)}
-          className={`px-2 py-1 rounded-md  text-slate-100 bg-[#336B87] transition-all delay-75 ease-in duration-100`}
+          onClick={()=>openDetais(id,"view")}
+          className={`px-2 py-1 rounded-md  text-[#007ece] hover:bg-[#ceecff] transition-all delay-75 ease-in duration-100`}
         >
-      <FiEyeOff size={20} />
+         <SlEye size={25} />
         </button>
         </div>
       </div>

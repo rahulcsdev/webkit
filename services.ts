@@ -18,7 +18,20 @@ export const addNewUser = gql`
     }
   }
 `;
-  
+export const getProjects = gql`
+query (
+  $where: ProjectWhereInput
+  $take: Int
+  $skip: Int
+  $orderBy: [ProjectOrderByInput!]
+) {
+  projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
+   
+    id
+   
+  }
+}
+`;
 export const addProject = gql`
   mutation ($data: ProjectCreateInput!) {
     createProject(data: $data) {
@@ -195,6 +208,19 @@ export const getMilestone = gql`
       startDate
       endDate
       name
+    }
+  }
+`;
+export const MILESTONE_QUERY = gql`
+  query (
+    $where: MilestoneWhereInput
+    $take: Int
+    $skip: Int
+    $orderBy: [MilestoneOrderByInput!]
+  ) {
+    milestones(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
+      id
+    
     }
   }
 `;
@@ -489,14 +515,7 @@ export const getTasksOfSelectedProject = gql`
   }
 `;
 
-export const getProjects = gql`
-  query Projects {
-    projects {
-      name
-      id
-    }
-  }
-`;
+
 
 export const addTimesheets = gql`
   mutation Mutation($data: [TimeEnteryCreateInput!]!) {
