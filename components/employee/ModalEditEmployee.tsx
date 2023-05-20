@@ -1,16 +1,11 @@
-import React, { FormEventHandler, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Manrope, Roboto } from "next/font/google";
 import {
   TextInput,
-  Checkbox,
   Button,
   Group,
-  Box,
-  Card,
-  Image,
   Select,
   Grid,
-  Flex,
   MultiSelect,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -19,10 +14,7 @@ import { gql, useQuery, useMutation } from "@apollo/client";
 import client from "../../apolloClient/index";
 import {
   getUser,
-  addNewUser,
-  getUserDetails,
   getspecficUser,
-  addUser,
   updateUser
 } from "../../services";
 
@@ -41,14 +33,13 @@ interface typeModal {
   showEditModal: Boolean;
   handleCloseModal: () => void;
   id: string;
-  fetchUser: () => void;
 }
 
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Manrope({ weight: "400", subsets: ["latin"] });
 
 const ModalEditEmployee = (props: typeModal) => {
-  const { fetchUser, showEditModal, handleCloseModal, id } = props;
+  const { showEditModal, handleCloseModal, id } = props;
 
   const [users, setUsers] = useState<any>([]);
   const [options, setOptions] = useState<any>([]);

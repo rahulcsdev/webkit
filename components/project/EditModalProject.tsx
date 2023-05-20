@@ -12,6 +12,7 @@ interface typeModal {
   showModal: Boolean;
   handleCloseModal: () => void;
   id: string;
+  type:string |null;
 
 }
 interface formTypes {
@@ -32,6 +33,7 @@ const EditModalProject: React.FC<typeModal> = ({
   handleCloseModal,
   id,
   showModal,
+  type
 }) => {
  
   const [users, setUsers] = useState<any>([]);
@@ -39,7 +41,7 @@ const EditModalProject: React.FC<typeModal> = ({
  
 
   const managerOptions = (users: any) => {
-    // console.log(users);
+ 
     const managerOp = [{ value: "", label: "Choose One", disabled: true }];
     for (let i = 0; i < users?.length; i++) {
       managerOp.push({
@@ -89,12 +91,12 @@ const EditModalProject: React.FC<typeModal> = ({
         "members",
         data.project.member.map((item: { id: any; }) => item.id)
       );
-      // console.log(data);
+     
       // setDetails(data?.project);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      // console.log(error);
+ 
     }
   };
   // Get all employee info for options
@@ -105,7 +107,7 @@ const EditModalProject: React.FC<typeModal> = ({
       const { data } = await client.query({
         query: GET_USERS,
       });
-      // console.log(data)
+ 
 
       managerOptions(data.users);
       for (let i = 0; i < data?.users?.length; i++) {
@@ -137,7 +139,7 @@ const EditModalProject: React.FC<typeModal> = ({
   const [updateProject, { data, error, loading }] = useMutation(UPDATE_PROJECT);
 
   const updatedProject =  (formData: formTypes) => {
-    console.log(formData);
+ 
     let membersObj = [{ id: formData.members[0] }];
 
     for (let i = 1; i < formData.members.length; i++) {
@@ -207,7 +209,7 @@ const EditModalProject: React.FC<typeModal> = ({
                   <h2
                     className={`font-semibold mb-2 text-center text-[#140F49] text-2xl ${manrope.className}`}
                   >
-                    Edit Project
+                 {type=='view'?'VIEW ONLY':"EDIT PROJECT"}
                   </h2>
                 </div>
                 <div className="p-4">
@@ -233,6 +235,8 @@ const EditModalProject: React.FC<typeModal> = ({
                       <Input
                         required
                         placeholder="Enter yout Project name"
+                        readOnly={type==='view'}
+                         
                         {...form.getInputProps("projectName")}
                         styles={(theme) => ({
                           input: {
@@ -254,6 +258,8 @@ const EditModalProject: React.FC<typeModal> = ({
                         label="Start Date"
                         placeholder="Start date"
                         {...form.getInputProps("startDate")}
+                        readOnly={type==='view'}
+                         
                         styles={(theme) => ({
                           label: {
                             color: "#01041b",
@@ -276,6 +282,8 @@ const EditModalProject: React.FC<typeModal> = ({
                         mx="auto"
                         label="End Date"
                         placeholder="End date"
+                        readOnly={type==='view'}
+                         
                         styles={(theme) => ({
                           label: {
                             color: "#01041b",
@@ -315,6 +323,8 @@ const EditModalProject: React.FC<typeModal> = ({
                           { label: "Completed", value: "Completed" },
                         ]}
                         {...form.getInputProps("status")}
+                        readOnly={type==='view'}
+                         
                         styles={(theme) => ({
                           label: {
                             color: "#01041b",
@@ -335,6 +345,8 @@ const EditModalProject: React.FC<typeModal> = ({
                       <Select
                         label="Project Type"
                         placeholder="Pick one"
+                        readOnly={type==='view'}
+                         
                         data={[
                           {
                             label: "Internal project",
@@ -376,6 +388,8 @@ const EditModalProject: React.FC<typeModal> = ({
                         placeholder="Pick one"
                         data={users}
                         {...form.getInputProps("projectManager")}
+                        readOnly={type==='view'}
+                         
                         styles={(theme) => ({
                           label: {
                             color: "#01041b",
@@ -401,6 +415,8 @@ const EditModalProject: React.FC<typeModal> = ({
                       autosize
                       minRows={2}
                       {...form.getInputProps("desc")}
+                      readOnly={type==='view'}
+                       
                       styles={(theme) => ({
                         label: {
                           color: "#01041b",
@@ -427,6 +443,8 @@ const EditModalProject: React.FC<typeModal> = ({
                       classNames={{
                         searchInput: "bg-transparent outline-none w-full ",
                       }}
+                      readOnly={type==='view'}
+                       
                       styles={(theme) => ({
                         label: {
                           color: "#01041b",
@@ -454,21 +472,23 @@ const EditModalProject: React.FC<typeModal> = ({
                     />
                   </div>
 
- 
-                  <div className="flex items-center justify-center mt-4 gap-4 ">
-                    <button
-                      type="submit"
-                      className={`text-md font-normal ${roboto.className} text-white px-4 bg-[#5773FF] rounded-md py-2 border-none`}
-                    >
-                      {loading ? "Updating..." : "Save"}
-                    </button>
-                    <button
-                      onClick={() => form.reset()}
-                      className={`text-md font-normal ${roboto.className} text-white px-4 bg-[#5773FF] rounded-md py-2 border-none`}
-                    >
-                      Reset
-                    </button>
-                  </div>
+ {
+  type!=='view' && ( <div className="flex items-center justify-center mt-4 gap-4 ">
+  <button
+    type="submit"
+    className={`text-md font-normal ${roboto.className} text-white px-4 bg-[#5773FF] rounded-md py-2 border-none`}
+  >
+    {loading ? "Updating..." : "Save"}
+  </button>
+  <button
+    onClick={() => form.reset()}
+    className={`text-md font-normal ${roboto.className} text-white px-4 bg-[#5773FF] rounded-md py-2 border-none`}
+  >
+    Reset
+  </button>
+</div>)
+ }
+                 
                 </form>
                 </div>
               </div>

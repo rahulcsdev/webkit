@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Skeleton } from '@mantine/core';
-import { useQuery, gql } from "@apollo/client";
+
 import { Manrope } from "next/font/google";
 import { HiOutlineSearch } from "react-icons/hi";
 import { MdOutlineEmail } from "react-icons/md";
@@ -11,12 +11,12 @@ import { useRouter } from "next/navigation";
 import { FiChevronDown } from "react-icons/fi";
 import Image from "next/image";
 import girl from "../public/assets/girl.jpg";
-import { Popover, Button } from "@mantine/core";
+import { Popover } from "@mantine/core";
 import { profileLinks } from "../utils/data";
 import client from "@/apolloClient/index";
 import { getspecficUser } from "@/services";
-
-
+import { useContext } from "react";
+import { User_data } from "@/app/context/context";
 
 
 const manrope = Manrope({ subsets: ["latin"] });
@@ -27,53 +27,23 @@ const Navbar = (props: Props) => {
   const [isExpand, setIsExpand] = useState(false);
   const router = useRouter();
   const [reload,setReload] = useState(false);
-  const [user, setUser] = useState<{ [key: string]: any }>({});
 
   const { isScrolling } = props;
 
-  const getUserData = async (id: string) => {
-    const data = await client.query({
-      query: getspecficUser,
-      variables: {
-        where:{
-          id: id,
-        }
-      },
-    });
 
-    return data;
-  };
+  const {user}:any = useContext(User_data)
 
   const navigateToPage = (item: any) => {
     if (item.link === "/login") {
       // console.log('jjj')
         localStorage.removeItem("userId")
-        setReload(!reload)
+        router.push(item.link);
+        // setReload(!reload)
     } else {
       router.push(item.link);
     }
   };
 
-  useEffect(() => {
-    // console.log("in nav");
-    const id = localStorage.getItem("userId");
-    if (id) {
-      const data = getUserData(id);
-
-      data
-        .then((res: any) => {
-          if (res) {
-            setUser(res.data.user);
-            // console.log(res);
-          }
-        })
-        .catch((err) => {
-          // console.log("error",err);
-        });
-    } else {
-      router.push("/login");
-    }
-  }, [reload]);
 
   return (
     <div

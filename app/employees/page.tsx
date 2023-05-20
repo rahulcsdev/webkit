@@ -1,7 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import React, { useEffect, useRef, useState , useCallback } from "react";
-import Navbar from "../../components/Navbar";
+import React, { useEffect, useState } from "react";
 import { Manrope } from "next/font/google";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
@@ -12,48 +11,21 @@ const ModalEditEmployee = dynamic(() => import("../../components/employee/ModalE
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
 import { gql , useQuery } from "@apollo/client";
 import client from "../../apolloClient/index";
-import { getUser, getUserDetails } from "@/services";
- 
+import { getUser } from "@/services";
 import { Pagination } from "@mantine/core";
-import Footer from "@/components/Footer";
+
 
 const manrope = Manrope({ subsets: ["latin"] });
 
 
 const Employees = () => {
-  const myDivRef = useRef<any>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [date, setDate] = useState<Date>(new Date());
   const [viewMode, setViewMode] = useState(true);
-  const [isExpand, setIsExpand] = useState(false);
-  const [value, setValue] = useState("progress");
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [selectedFeild, setSelectedFeild] = useState<string | null>();
   const [total, setTotal] = useState(0);
+  const [datas, setData] = useState([]);
 
-
-  const handleDateChange = (date: Date) => {
-    setDate(date);
-  };
-
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const { current: myDiv } = myDivRef;
-  //     if (myDiv.scrollTop > 0) {
-  //       setIsScrolling(true);
-  //     } else {
-  //       setIsScrolling(false);
-  //     }
-  //   };
-
-  //   const { current: myDiv } = myDivRef;
-  //   myDiv.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-  //     myDiv.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, [myDivRef]);
 
   const openDetails = (id: string) => {
     setSelectedFeild(id);
@@ -71,8 +43,6 @@ const Employees = () => {
 
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
-
-  const [datas, setData] = useState([]);
 
 const ITEMS_PER_PAGE = 9;
 const INITIAL_PAGE = 1;
@@ -116,8 +86,6 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
 
   return (
     <>
-      {/* <div className="h-full overflow-y-scroll" id="my-div" ref={myDivRef}>
-        <Navbar isScrolling={isScrolling} /> */}
         <LayoutNav>
         <div className="px-5 py-6">
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
@@ -184,7 +152,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
          <Pagination total={totalPages}   onChange={handlePageChange} value={currentPage} />
        </div>
       </div>
-      {/* </div> */}
+   
       <ModalEmployee
         refetch={refetch}
         showModal={showModal}
@@ -193,7 +161,6 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
 
       {selectedFeild && (
         <ModalEditEmployee
-          fetchUser={fetchUser}
           id={selectedFeild}
           showEditModal={showModalEdit}
           handleCloseModal={handleCloseModalEdit}
