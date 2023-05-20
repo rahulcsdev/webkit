@@ -27,9 +27,9 @@ const MildStone = () => {
   const [total, setTotal] = useState(0);
   const [mileData, setMileData] = useState([])
   const [selectedFeild, setSelectedFeild] = useState<string | null>();
-
-  const openDetails = (id: string) => {
- 
+  const [type, setType] = useState<string>()
+  const openDetails = (id: string,type:string) => {
+    setType(type)
     setSelectedFeild(id);
     setShowModalEdit(true);
   };
@@ -124,6 +124,7 @@ const MildStone = () => {
 
       {selectedFeild && (
         <EditModalMs
+          type={type}
           selectedFeild={selectedFeild}
           showModal={showModalEdit}
           handleCloseModal={handleCloseModalEdit}
