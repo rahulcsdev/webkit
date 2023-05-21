@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
- 
+
 import { Manrope } from "next/font/google";
 import { dropDown, projectsData } from "../../utils/data";
 import { FiChevronDown, FiChevronRight, FiEdit } from "react-icons/fi";
@@ -14,12 +14,14 @@ import Footer from "../../components/Footer";
 import { useForm, isNotEmpty } from "@mantine/form";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { TableSkeleton } from "@/utils/skeleton";
+import { ColorSchemeProvider, Pagination,Badge } from "@mantine/core";
+import client from "@/apolloClient";
 
-const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 const manrope = Manrope({ subsets: ["latin"] });
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 import { useRouter } from "next/navigation";
-const Projects = () => {
+const TimeEntries = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
@@ -27,6 +29,11 @@ const Projects = () => {
   const [value, setValue] = useState("progress");
   const [showModal, setShowModal] = useState(false);
   const [viewMode, setViewMode] = useState(true);
+  const INITIAL_PAGE = 1;
+  const ITEMS_PER_PAGE = 15;
+  const [page, setPage] = useState(INITIAL_PAGE);
+  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
+  const [total, setTotal] = useState(0);
 
   const form = useForm({
     initialValues: {
@@ -45,29 +52,28 @@ const Projects = () => {
   const getStatus = (status: string) => {
     if (status === "Pending") {
       return (
-        <p className="bg-orange-500 text-white rounded px-2 py-[1px]">
+        <Badge  color="yellow"  variant="filled"  >
           {status}
-        </p>
+        </Badge>
       );
     }
 
     if (status === "Approved") {
       return (
-        <p className="bg-green-500 text-white rounded px-2 py-[1px]">
+        <Badge  color="green" variant="filled"   >
           {status}
-        </p>
+        </Badge>
       );
     }
 
     if (status === "Rejected") {
       return (
-        <p className="bg-red-600 text-white rounded px-2 py-[1px]">{status}</p>
+        <Badge  color="red" variant="filled"  >{status}</Badge>
       );
     }
   };
 
-
-  const { data,loading } = useQuery(getSpecificManagerTimeEntries, {
+  const { data, loading, refetch } = useQuery(getSpecificManagerTimeEntries, {
     variables: {
       where: {
         userName: {
@@ -81,8 +87,12 @@ const Projects = () => {
           date: "asc",
         },
       ],
+      take: ITEMS_PER_PAGE,
+      skip: (page - 1) * ITEMS_PER_PAGE,
     },
   });
+
+  console.log("data", data);
 
   const router = useRouter();
 
@@ -90,20 +100,77 @@ const Projects = () => {
     setDate(date);
   };
 
+  const handlePageChange = (page: any) => {
+    console.log("page", page);
+
+    setCurrentPage(page);
+    refetch({
+      where: {
+        userName: {
+          id: {
+            equals: form.values.userId,
+          },
+        },
+      },
+      orderBy: [
+        {
+          date: "asc",
+        },
+      ],
+      take: ITEMS_PER_PAGE,
+      skip: (page - 1) * ITEMS_PER_PAGE,
+    });
+  };
+
+  const getTotalLength = async (id: string) => {
+    await client
+      .query({
+        query: getSpecificManagerTimeEntries,
+        variables: {
+          where: {
+            userName: {
+              id: {
+                equals: id,
+              },
+            },
+          },
+          orderBy: [
+            {
+              date: "asc",
+            },
+          ],
+        },
+      })
+      .then(({ data }) => {
+        console.log("all enteries");
+        setTotal(data?.timeEnteries.length);
+        console.log(data);
+      });
+  };
+
   useEffect(() => {
-    // console.log("l");
     const userId = localStorage.getItem("userId");
     if (userId) {
       form.setFieldValue("userId", userId);
+
+      getTotalLength(userId);
     }
   }, []);
 
   function handleCloseModal() {
     setShowModal(false);
   }
+
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+
+  // console.log(total);
+
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
-  return ( loading ? <TableSkeleton/> :  <LayoutNav>
+  return loading ? (
+    <TableSkeleton />
+  ) : (
+    <LayoutNav>
       <form
         onSubmit={form.onSubmit(
           (values, _event) => {
@@ -161,6 +228,9 @@ const Projects = () => {
                     Activities
                   </th>
                   <th scope="col" className="px-6 py-3">
+                    Remark
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     status
                   </th>
                   <th scope="col" className="px-6 py-3">
@@ -188,7 +258,11 @@ const Projects = () => {
                           <td className="px-6 py-4"> {item.userName.name}</td>
                           <td className="px-6 py-4">{item.duration}</td>
                           <td className="px-6 py-4">{item.activities}</td>
-                          <td className="px-6 py-4">  {getStatus(item.reviewStatus)}</td>
+                          <td className="px-6 py-4">{item.remarks}</td>
+                          <td className="px-6 py-4">
+                            {" "}
+                            {getStatus(item.reviewStatus)}
+                          </td>
                           <td>
                             {item.reviewStatus === "Rejected" && (
                               <button
@@ -207,6 +281,15 @@ const Projects = () => {
                       );
                     }
                   })}
+                <div className="my-5 flex items-center justify-center">
+                  {
+                    <Pagination
+                      total={totalPages}
+                      onChange={handlePageChange}
+                      value={currentPage}
+                    />
+                  }
+                </div>
               </tbody>
             </table>
           </div>
@@ -221,4 +304,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default TimeEntries;

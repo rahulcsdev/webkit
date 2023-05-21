@@ -28,6 +28,7 @@ query (
   projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
    
     id
+    name
    
   }
 }
@@ -425,8 +426,10 @@ export const getSpecificManagerTimeEntries = gql`
   query Query(
     $orderBy: [TimeEnteryOrderByInput!]!
     $where: TimeEnteryWhereInput!
+    $take: Int
+    $skip: Int
   ) {
-    timeEnteries(orderBy: $orderBy, where: $where) {
+    timeEnteries(orderBy: $orderBy, where: $where,take:$take,skip:$skip) {
       id
       project {
         name

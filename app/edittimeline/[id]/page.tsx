@@ -30,7 +30,7 @@ import {
 import { useRouter } from "next/navigation";
 import { get } from "http";
 
-const Projects = ({ params }: any) => {
+const EditTimeEntry = ({ params }: any) => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
@@ -326,7 +326,11 @@ const Projects = ({ params }: any) => {
           refetch1();
           refetch2();
           refetch3();
-          router.push('/timeline')
+    
+          setTimeout(()=>{
+            router.push('/timeline')
+           },1000)
+
           // alert("timeline added");
         })
         .catch((err) => {
@@ -466,4 +470,4 @@ const Projects = ({ params }: any) => {
   );
 };
 
-export default Projects;
+export default EditTimeEntry;

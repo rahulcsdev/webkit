@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm, isNotEmpty } from "@mantine/form";
 import DatePicker from "react-datepicker";
+
 import {
   Textarea,
   NumberInput,
@@ -9,6 +10,8 @@ import {
   Button,
   Modal,
   Group,
+  Pagination,
+  Badge
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { useDisclosure } from "@mantine/hooks";
@@ -17,6 +20,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Manrope } from "next/font/google";
 
 import { FiEdit } from "react-icons/fi";
+import client from "@/apolloClient";
 
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 import { useRouter } from "next/navigation";
@@ -26,12 +30,18 @@ const manrope = Manrope({ subsets: ["latin"] });
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 import { TableSkeleton } from "@/utils/skeleton";
 
-const TimeEntries = () => {
+const ProjectManagerTimeEntries = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isExpand, setIsExpand] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
+
+  const INITIAL_PAGE = 1;
+  const ITEMS_PER_PAGE = 15;
+  const [page, setPage] = useState(INITIAL_PAGE);
+  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
+  const [total, setTotal] = useState(0);
 
   const router = useRouter();
 
@@ -49,11 +59,37 @@ const TimeEntries = () => {
     },
   });
 
+
+  const getTotalLength = async (id: string) => {
+    await client
+      .query({
+        query: getSpecificManagerTimeEntries,
+        variables: {
+          where: {
+            projectManager: {
+              equals: id,
+            },
+          },
+          orderBy: [
+            {
+              date: "asc",
+            },
+          ],
+        },
+      })
+      .then(({ data }) => {
+        // console.log("all enteries",data);
+        setTotal(data?.timeEnteries.length);
+        // console.log(data);
+      });
+  };
+
   useEffect(() => {
     // console.log('l')
     const userId = localStorage.getItem("userId");
     if (userId) {
       form.setFieldValue("userId", userId);
+      getTotalLength(userId)
     }
   }, []);
 
@@ -69,10 +105,12 @@ const TimeEntries = () => {
           date: "asc",
         },
       ],
+      take: ITEMS_PER_PAGE,
+      skip: (page - 1) * ITEMS_PER_PAGE,
     },
   });
 
-  // console.log(data);
+
 
   const [createProject, {}] = useMutation(updateTimeEntry);
 
@@ -108,35 +146,63 @@ const TimeEntries = () => {
       })
       .catch((error) => console.log(error));
   };
+
+
+  const handlePageChange = (page: any) => {
+    console.log("page", page);
+
+    setCurrentPage(page);
+    refetch({
+      where: {
+        projectManager: {
+          equals: form.values.userId,
+        },
+      },
+      orderBy: [
+        {
+          date: "asc",
+        },
+      ],
+      take: ITEMS_PER_PAGE,
+      skip: (page - 1) * ITEMS_PER_PAGE,
+    });
+  };
+
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
+
+
+  console.log('p',data);
 
   const getStatus = (status: string) => {
     if (status === "Pending") {
       return (
-        <p className="bg-orange-500 text-white rounded px-2 py-[1px]">
+        <Badge  color="yellow"  variant="filled"  >
           {status}
-        </p>
+        </Badge>
       );
     }
 
     if (status === "Approved") {
       return (
-        <p className="bg-green-500 text-white rounded px-2 py-[1px]">
+        <Badge  color="green" variant="filled"   >
           {status}
-        </p>
+        </Badge>
       );
     }
 
     if (status === "Rejected") {
       return (
-        <p className="bg-red-600 text-white rounded px-2 py-[1px]">{status}</p>
+        <Badge  color="red" variant="filled"  >{status}</Badge>
       );
     }
   };
 
+
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+
   return loading ? (
-    TableSkeleton
+    <TableSkeleton/>
   ) : (
     <LayoutNav>
       <form
@@ -299,6 +365,15 @@ const TimeEntries = () => {
                           );
                         }
                       })}
+                                                  <div className="my-5 flex items-center justify-center">
+                  {
+                    <Pagination
+                      total={totalPages}
+                      onChange={handlePageChange}
+                      value={currentPage}
+                    />
+                  }
+                </div>
                   </tbody>
                 </table>
               </div>
@@ -315,4 +390,4 @@ const TimeEntries = () => {
   );
 };
 
-export default TimeEntries;
+export default ProjectManagerTimeEntries;

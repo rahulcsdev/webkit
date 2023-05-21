@@ -4,9 +4,11 @@ import { useForm, isNotEmpty } from "@mantine/form";
 import DatePicker from "react-datepicker";
 import dynamic from "next/dynamic";
 import { TableSkeleton } from "@/utils/skeleton";
-import { Textarea, Select, Modal, Group } from "@mantine/core";
+import { Textarea, Select, Modal, Group ,Badge} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import "react-datepicker/dist/react-datepicker.css";
+import client from "@/apolloClient";
+import { Pagination } from "@mantine/core";
 
 import { Manrope } from "next/font/google";
 
@@ -20,9 +22,17 @@ const manrope = Manrope({ subsets: ["latin"] });
 
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 
-const TimeEntries = () => {
+const ReportingManagerTimeEntries = () => {
   const [showModal, setShowModal] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
+  const INITIAL_PAGE = 1;
+  const ITEMS_PER_PAGE = 15;
+  const [page, setPage] = useState(INITIAL_PAGE);
+  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
+  const [total, setTotal] = useState(0);
+
+  
+
 
   const router = useRouter();
 
@@ -40,14 +50,7 @@ const TimeEntries = () => {
     },
   });
 
-  useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    if (userId) {
-      form.setFieldValue("userId", userId);
-    }
-  }, []);
-
-  const { data, loading } = useQuery(getSpecificManagerTimeEntries, {
+  const { data, loading,refetch } = useQuery(getSpecificManagerTimeEntries, {
     variables: {
       where: {
         reviewedBy: {
@@ -61,12 +64,54 @@ const TimeEntries = () => {
           date: "asc",
         },
       ],
+      take: ITEMS_PER_PAGE,
+      skip: (page - 1) * ITEMS_PER_PAGE,
     },
   });
 
   // console.log(data);
 
   const [createProject, {}] = useMutation(updateTimeEntry);
+
+
+  const getTotalLength = async (id: string) => {
+    await client
+      .query({
+        query: getSpecificManagerTimeEntries,
+        variables: {
+          where: {
+            reviewedBy: {
+              id: {
+                equals: id,
+              },
+            },
+          },
+          orderBy: [
+            {
+              date: "asc",
+            },
+          ],
+        },
+      })
+      .then(({ data }) => {
+        // console.log("all enteries");
+        setTotal(data?.timeEnteries.length);
+        // console.log(data);
+      });
+  };
+
+
+
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      form.setFieldValue("userId", userId);
+      getTotalLength(userId)
+    }
+  }, []);
+
+
 
   function handleCloseModal() {
     setShowModal(false);
@@ -102,32 +147,59 @@ const TimeEntries = () => {
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
 
+  const handlePageChange = (page: any) => {
+    console.log("page", page);
+
+    setCurrentPage(page);
+    refetch({
+      where: {
+        reviewedBy: {
+          id: {
+            equals: form.values.userId,
+          },
+        },
+      },
+      orderBy: [
+        {
+          date: "asc",
+        },
+      ],
+      take: ITEMS_PER_PAGE,
+      skip: (page - 1) * ITEMS_PER_PAGE,
+    });
+  };
+
   const getStatus = (status: string) => {
     if (status === "Pending") {
       return (
-        <p className="bg-orange-500 text-white rounded px-2 py-[1px]">
+        <Badge  color="yellow"  variant="filled"  >
           {status}
-        </p>
+        </Badge>
       );
     }
 
     if (status === "Approved") {
       return (
-        <p className="bg-green-500 text-white rounded px-2 py-[1px]">
+        <Badge  color="green" variant="filled"   >
           {status}
-        </p>
+        </Badge>
       );
     }
 
     if (status === "Rejected") {
       return (
-        <p className="bg-red-600 text-white rounded px-2 py-[1px]">{status}</p>
+        <Badge  color="red" variant="filled"  >{status}</Badge>
       );
     }
   };
 
+
+  console.log('r',data)
+  
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+
   return loading ? (
-    TableSkeleton
+        <TableSkeleton/>
   ) : (
     <LayoutNav>
       <form
@@ -290,6 +362,15 @@ const TimeEntries = () => {
                           );
                         }
                       })}
+                              <div className="my-5 flex items-center justify-center">
+                  {
+                    <Pagination
+                      total={totalPages}
+                      onChange={handlePageChange}
+                      value={currentPage}
+                    />
+                  }
+                </div>
                   </tbody>
                 </table>
               </div>
@@ -307,4 +388,4 @@ const TimeEntries = () => {
   );
 };
 
-export default TimeEntries;
+export default ReportingManagerTimeEntries;
