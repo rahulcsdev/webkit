@@ -1,16 +1,11 @@
 import React from "react";
-import {
-   
-  Text,
-  Card,
-  RingProgress,
-  Badge,
- 
-} from "@mantine/core";
+import { Text, Card, RingProgress, Badge } from "@mantine/core";
 import { Roboto, Manrope } from "next/font/google";
 import { FiEdit } from "react-icons/fi";
 import { SlEye } from "react-icons/sl";
 import { FaCloudDownloadAlt } from "react-icons/fa";
+import { BsCalendar2Check } from "react-icons/bs";
+import { IoPrint } from "react-icons/io5";
 interface dataType {
   id: string;
   name: string;
@@ -38,7 +33,7 @@ const MsCardGrid: React.FC<props> = ({ data, openDetails }) => {
     let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
     return TotalDays;
   };
-  const day=days(new Date(endDate),new Date())
+  const day = days(new Date(endDate), new Date());
   switch (status) {
     case "New":
       percentage = 5;
@@ -74,42 +69,42 @@ const MsCardGrid: React.FC<props> = ({ data, openDetails }) => {
       <Card withBorder p="xl" radius="md">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-
-          <div className="bg-sky-600 text-white rounded-full p-1">
-            <FaCloudDownloadAlt size={18} />
+            <div className="bg-sky-600 text-white rounded-full p-1">
+              <FaCloudDownloadAlt size={18} />
+            </div>
+            <Text
+              className={`font-bold text-xl  capitalize ${roboto.className}`}
+            >
+              {name}
+            </Text>
           </div>
-          <Text className={`font-bold text-xl  capitalize ${roboto.className}`}>
-            {name}
-          </Text>
-          </div>
-
-          <Badge color={day>=0?'cyan':'red'} >{day>=0?`${day} days left`:`Time limit exceed`}</Badge>
+          {status === "Completed" ? (
+            <Badge color="green">{status}</Badge>
+          ) : (
+            <Badge color={day >= 0 ? "cyan" : "red"}>
+              {day >= 0 ? `${day} days left` : `Time limit exceed`}
+            </Badge>
+          )}
         </div>
         <div className="flex mt-2 justify-between items-center">
           <div>
-            <div>
-              <Text>{status}</Text>
-              <Text fz="xs" color="dimmed">
-                Status
-              </Text>
-            </div>
+         
             <div className="flex items-center justify-start gap-4">
-
-            <div>
-              <Text>{new Date(startDate).toLocaleDateString()}</Text>
-              <Text fz="xs" color="dimmed">
-                Start date
-              </Text>
+              <div>
+                <Text className="flex items-center gap-1"  > <BsCalendar2Check size={12}/> {new Date(startDate).toLocaleDateString()}</Text>
+                <Text fz="xs" color="dimmed">
+                  Start date
+                </Text>
+              </div>
+              <div>
+                <Text className="flex items-center gap-1" ><BsCalendar2Check size={12} />{new Date(endDate).toLocaleDateString()}</Text>
+                <Text fz="xs" color="dimmed">
+                  End date
+                </Text>
+              </div>
             </div>
             <div>
-              <Text>{new Date(endDate).toLocaleDateString()}</Text>
-              <Text fz="xs" color="dimmed">
-                End date
-              </Text>
-            </div>
-            </div>
-            <div>
-              <Text>{project.name}</Text>
+              <Text className="flex items-center capitalize gap-1" ><IoPrint/> {project.name}</Text>
               <Text fz="xs" color="dimmed">
                 Project Name
               </Text>
@@ -136,18 +131,18 @@ const MsCardGrid: React.FC<props> = ({ data, openDetails }) => {
           </div>
         </div>
         <div className="flex items-center mt-1 gap-2 justify-end">
-        <button
-          onClick={()=>openDetails(id,'edit')}
-          className={`px-2 py-1 rounded-md bg-transparent text-[#cf9700] hover:bg-[#fff2cf] transition-all delay-75 ease-in duration-100`}
-        >
-      <FiEdit size={16} />
-        </button>
-        <button
-          onClick={()=>openDetails(id,"view")}
-          className={`px-2 py-1 rounded-md  text-[#007ece] hover:bg-[#ceecff] transition-all delay-75 ease-in duration-100`}
-        >
-         <SlEye size={20} />
-        </button>
+          <button
+            onClick={() => openDetails(id, "edit")}
+            className={`px-2 py-1 rounded-md bg-transparent text-[#cf9700] hover:bg-[#fff2cf] transition-all delay-75 ease-in duration-100`}
+          >
+            <FiEdit size={16} />
+          </button>
+          <button
+            onClick={() => openDetails(id, "view")}
+            className={`px-2 py-1 rounded-md  text-[#007ece] hover:bg-[#ceecff] transition-all delay-75 ease-in duration-100`}
+          >
+            <SlEye size={20} />
+          </button>
         </div>
       </Card>
     </div>

@@ -7,7 +7,8 @@ import { navLinks, timelineLinks, timelineFolder } from "../utils/data";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { FiArrowDown, FiArrowRight } from "react-icons/fi";
-
+import logo from '../public/images/logo1.png'
+import Logo from "./Logo";
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "500", subsets: ["latin"] });
 const Sidebar = () => {
@@ -22,12 +23,12 @@ const Sidebar = () => {
     <div className="bg-white drop-shadow-sm  h-full py-3">
       {/* Logo */}
       <div className="flex items-center py-3 justify-center gap-3 sticky top-0 z-10 bg-white ">
-        <Image src="/assets/logo.svg" height={30} width={30} alt="logo" />
-        <h3
+       <Logo />
+        {/* <h3
           className={`text-3xl font-extrabold  text-[#140F49] ${manrope.className} `}
         >
           WEBKIT
-        </h3>
+        </h3> */}
       </div>
       <div className="h-full pb-12 overflow-y-scroll ">
         <ul className=" flex flex-col items-start justify-center gap-2  w-full ">
@@ -112,7 +113,7 @@ const Sidebar = () => {
               </Link>
             ))}
         </ul>
-        <div className="mt-6 flex items-center justify-center flex-col">
+        {/* <div className="mt-6 flex items-center justify-center flex-col">
           <h1
             className={`text-xl font-medium text-center text-gray-700 ${roboto.className} `}
           >
@@ -135,7 +136,7 @@ const Sidebar = () => {
               <h1>Incomplete task</h1>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
