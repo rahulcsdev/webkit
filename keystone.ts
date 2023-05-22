@@ -26,12 +26,12 @@ export default config(
     },
 
     lists: {
-      User,// Register the User list
-      Project,// Register the Project list
-      Milestone,// Register the Milestone list
-      Task,// Register the Task list
-      TimeEntery,// Register the TimeEntry list
-      File,// Register the File list
+      User, // Register the User list
+      Project, // Register the Project list
+      Milestone, // Register the Milestone list
+      Task, // Register the Task list
+      TimeEntery, // Register the TimeEntry list
+      File, // Register the File list
     },
     storage: {
       my_local_images: {
@@ -53,7 +53,7 @@ export default config(
         storagePath: "public/file",
       },
     },
-    session,// Use the session configuration from the "auth" module
+    session, // Use the session configuration from the "auth" module
     ui: {
       isAccessAllowed: (context: any) => !!context.session?.data,
     },

@@ -10,7 +10,7 @@
     "next:build": "next build",
     "build": "keystone build --no-ui && next build",
     "postinstall": "keystone postinstall",
-    "start": "next start"
+    "start": "next start && keystone start"
   },
   "dependencies": {
     "@apollo/client": "^3.7.14",

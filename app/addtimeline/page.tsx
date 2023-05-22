@@ -49,9 +49,9 @@ const Projects = () => {
       .query({
         query: getspecficUser,
         variables: {
-            where:{
-              id: localStorage.getItem("userId"),
-            }
+          where: {
+            id: localStorage.getItem("userId"),
+          },
         },
       })
       .then((res: any) => {
@@ -175,8 +175,9 @@ const Projects = () => {
       },
       orderBy: [
         {
-          date: "asc"
-        }]
+          date: "asc",
+        },
+      ],
     },
   });
 
@@ -191,8 +192,9 @@ const Projects = () => {
       },
       orderBy: [
         {
-          date: "asc"
-        }]
+          date: "asc",
+        },
+      ],
     },
   });
 
@@ -205,8 +207,9 @@ const Projects = () => {
       },
       orderBy: [
         {
-          date: "asc"
-        }]
+          date: "asc",
+        },
+      ],
     },
   });
 
@@ -277,17 +280,21 @@ const Projects = () => {
             },
           },
           projectType: item.projectType,
-          ...((item.projectType === "Internal project" || localStorage.getItem("userId") === await getProjectManagerId(item)) && {
+          ...((item.projectType === "Internal project" ||
+            localStorage.getItem("userId") ===
+              (await getProjectManagerId(item))) && {
             reviewedBy: {
               connect: {
                 id: await getReportingManagerId(item),
               },
             },
           }),
-          ...(((item.projectType === "Hourly cost project" ||
-            item.projectType === "Fixed cost project") && localStorage.getItem("userId") !== await getProjectManagerId(item)  )&& {
-            projectManager: await getProjectManagerId(item),
-          }),
+          ...((item.projectType === "Hourly cost project" ||
+            item.projectType === "Fixed cost project") &&
+            localStorage.getItem("userId") !==
+              (await getProjectManagerId(item)) && {
+              projectManager: await getProjectManagerId(item),
+            }),
           userName: {
             connect: {
               id: localStorage.getItem("userId"),
@@ -310,9 +317,9 @@ const Projects = () => {
             refetch1();
             refetch2();
             refetch3();
-             setTimeout(()=>{
-              router.push('/timeline')
-             },1000)
+            setTimeout(() => {
+              router.push("/timeline");
+            }, 1000);
           })
           .catch((err) => {
             // console.log("err", err);
@@ -475,7 +482,10 @@ const Projects = () => {
                         if (item.key === 0) {
                         } else {
                           return (
-                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <tr
+                              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                              key={index}
+                            >
                               <th
                                 scope="row"
                                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -550,11 +560,10 @@ const Projects = () => {
           </div>
         </div>
 
-         {/* <ModalProject
+        {/* <ModalProject
           showModal={showModal}
           handleCloseModal={handleCloseModal}
         />  */}
-   
       </form>
     </LayoutNav>
   );
