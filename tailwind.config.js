@@ -17,6 +17,10 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
+    colors:{
+      'primary':'#FF5C00',
+      'secondary':'#006180'
+    }
   },
   plugins: [
     require('flowbite/plugin'),

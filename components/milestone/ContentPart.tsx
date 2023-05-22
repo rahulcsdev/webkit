@@ -1,9 +1,5 @@
-import client from '@/apolloClient';
-import { getMilestone } from '@/services';
-import { useQuery } from '@apollo/client';
-import { Pagination } from '@mantine/core';
-import React, { useEffect, useState } from 'react'
-import ModalMs from './ModalMs';
+ 
+ 
 import dynamic from 'next/dynamic';
 const MsCardGrid = dynamic(() => import("./MsCardGrid"));
 const MsCardCol = dynamic(() => import('./MsCardCol'));

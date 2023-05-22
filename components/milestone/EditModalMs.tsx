@@ -12,12 +12,13 @@ interface typeModal {
   showModal: Boolean;
   handleCloseModal: any;
   selectedFeild: any;
+  type:any
 }
 
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 const EditModalMs = (props: typeModal) => {
-  const { showModal, handleCloseModal, selectedFeild } = props;
+  const { showModal, handleCloseModal, selectedFeild,type } = props;
   const [projects, setProjects] = useState<any>([]);
   const [loading, setLoading] = useState(false);
 
@@ -158,7 +159,7 @@ const handleEdit=async(formData:formTypes)=>{
                   <h2
                     className={`font-semibold mb-2 text-center text-[#140F49] text-2xl ${manrope.className}`}
                   >
-                    New Milestone
+                   {type=='view'?'VIEW ONLY':"EDIT MILESTONE"}
                   </h2>
                 </div>
                 <div className="p-4">
@@ -193,6 +194,7 @@ const handleEdit=async(formData:formTypes)=>{
                               lineHeight: 50,
                             },
                           })}
+                          readOnly={type==='view'}
                         />
                       </Input.Wrapper>
                     </div>
@@ -217,6 +219,7 @@ const handleEdit=async(formData:formTypes)=>{
                             lineHeight: 50,
                           },
                         })}
+                        readOnly={type==='view'}
                       />
                     </div>
                     <div className="flex flex-row gap-2 mt-4">
@@ -227,6 +230,7 @@ const handleEdit=async(formData:formTypes)=>{
                           label="Start Date"
                           placeholder="Start date"
                           {...form.getInputProps("startDate")}
+                          readOnly={type==='view'}
                           styles={(theme) => ({
                             label: {
                               color: "#01041b",
@@ -249,6 +253,7 @@ const handleEdit=async(formData:formTypes)=>{
                           mx="auto"
                           label="End Date"
                           placeholder="End date"
+                          readOnly={type==='view'}
                           styles={(theme) => ({
                             label: {
                               color: "#01041b",
@@ -272,6 +277,7 @@ const handleEdit=async(formData:formTypes)=>{
                       <Select
                         label="Status"
                         placeholder="Pick one"
+                        readOnly={type==='view'}
                         data={[
                           { label: "New", value: "New" },
 
@@ -304,21 +310,22 @@ const handleEdit=async(formData:formTypes)=>{
                         })}
                       />
                     </div>
-
-                    <div className="flex items-center justify-center mt-4 gap-4 ">
-                      <button
-                        type="submit"
-                        className={`text-base font-normal ${roboto.className} text-white px-4 bg-[#5773FF] rounded-md py-2 border-none`}
-                      >
-                        {loading ? "Loading..." : "Save"}
-                      </button>
-                      <button
-                        onClick={() => form.reset()}
-                        className={`text-base font-normal ${roboto.className} text-white px-4 bg-[#5773FF] rounded-md py-2 border-none`}
-                      >
-                        Reset
-                      </button>
-                    </div>
+                    {
+  type!=='view' && ( <div className="flex items-center justify-center mt-4 gap-4 ">
+  <button
+    type="submit"
+    className={`text-md font-normal ${roboto.className} text-white px-4 bg-secondary rounded-md py-2 border-none`}
+  >
+    {loading ? "Updating..." : "Save"}
+  </button>
+  <button
+    onClick={() => form.reset()}
+    className={`text-md font-normal ${roboto.className} text-white px-4 bg-primary rounded-md py-2 border-none`}
+  >
+    Reset
+  </button>
+</div>)
+ }
                   </form>
                 </div>
               </div>

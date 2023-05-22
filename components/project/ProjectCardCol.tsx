@@ -135,11 +135,9 @@ const ProjectCardCol: React.FC<Props> = ({ data, openDetais }) => {
               <span className="font-medium">Manager :</span>{" "}
               {projectManager ? projectManager.name : "Non"}
             </p>
-            {/* <p
-              className={`text-[#605C8D] text-base ${roboto.className} max-h-[70px] overflow-y-scroll mt-1`}
-            >
-              {projectDiscription}
-            </p> */}
+            <p className={`text-[#605C8D] text-base ${roboto.className} mt-1`}>
+         <span className="font-medium" >Project Type :</span> {projectType}
+        </p>
           </div>
       </div>
       {/* Footer/Bottom */}
