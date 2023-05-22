@@ -2,22 +2,17 @@ import React  , { useState , useEffect} from "react";
 import { Manrope, Roboto } from "next/font/google";
 import {
   TextInput,
-  Checkbox,
   Button,
   Group,
-  Box,
-  Card,
-  Image,
   Select,
   Grid,
-  Flex,
   MultiSelect
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DateInput } from '@mantine/dates';
-import { gql, useQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import client from '../../apolloClient/index';
-import { addNewUser , getUser, getUserDetails, getspecficUser } from '../../services';
+import { addNewUser , getUser } from '../../services';
 
 
 interface typeModal {

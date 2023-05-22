@@ -1,18 +1,16 @@
 import React from "react";
 import {
-  createStyles,
+   
   Text,
   Card,
   RingProgress,
-  Group,
-  rem,
   Badge,
-  Button,
+ 
 } from "@mantine/core";
 import { Roboto, Manrope } from "next/font/google";
-import { FaCalendarMinus, FaCalendarPlus } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { SlEye } from "react-icons/sl";
+import { FaCloudDownloadAlt } from "react-icons/fa";
 interface dataType {
   id: string;
   name: string;
@@ -35,14 +33,12 @@ const manrope = Manrope({ weight: "500", subsets: ["latin"] });
 const MsCardGrid: React.FC<props> = ({ data, openDetails }) => {
   const { id, code, endDate, name, project, startDate, status } = data;
   let percentage = 0;
-
-  let date_2 = new Date();
-
   const days = (date_1: Date, date_2: Date) => {
     let difference = date_1.getTime() - date_2.getTime();
     let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
     return TotalDays;
   };
+  const day=days(new Date(endDate),new Date())
   switch (status) {
     case "New":
       percentage = 5;
@@ -77,13 +73,19 @@ const MsCardGrid: React.FC<props> = ({ data, openDetails }) => {
     <div className=" drop-shadow-md rounded-lg">
       <Card withBorder p="xl" radius="md">
         <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+
+          <div className="bg-sky-600 text-white rounded-full p-1">
+            <FaCloudDownloadAlt size={18} />
+          </div>
           <Text className={`font-bold text-xl  capitalize ${roboto.className}`}>
             {name}
           </Text>
+          </div>
 
-          <Badge>{days(new Date(), new Date(endDate))} days left</Badge>
+          <Badge color={day>=0?'cyan':'red'} >{day>=0?`${day} days left`:`Time limit exceed`}</Badge>
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex mt-2 justify-between items-center">
           <div>
             <div>
               <Text>{status}</Text>
@@ -91,11 +93,20 @@ const MsCardGrid: React.FC<props> = ({ data, openDetails }) => {
                 Status
               </Text>
             </div>
+            <div className="flex items-center justify-start gap-4">
+
             <div>
               <Text>{new Date(startDate).toLocaleDateString()}</Text>
               <Text fz="xs" color="dimmed">
                 Start date
               </Text>
+            </div>
+            <div>
+              <Text>{new Date(endDate).toLocaleDateString()}</Text>
+              <Text fz="xs" color="dimmed">
+                End date
+              </Text>
+            </div>
             </div>
             <div>
               <Text>{project.name}</Text>
@@ -117,14 +128,14 @@ const MsCardGrid: React.FC<props> = ({ data, openDetails }) => {
                     {percentage.toFixed(0)}%
                   </Text>
                   <Text ta="center" fz="xs" c="dimmed">
-                    progress
+                    status
                   </Text>
                 </div>
               }
             />
           </div>
         </div>
-        <div className="flex items-center mt-1 gap-2 justify-start">
+        <div className="flex items-center mt-1 gap-2 justify-end">
         <button
           onClick={()=>openDetails(id,'edit')}
           className={`px-2 py-1 rounded-md bg-transparent text-[#cf9700] hover:bg-[#fff2cf] transition-all delay-75 ease-in duration-100`}
