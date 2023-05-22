@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Manrope, Roboto } from "next/font/google";
 import { useForm } from "@mantine/form";
 import {
@@ -19,6 +19,7 @@ interface typeModal {
   project?: Array<{}>;
   milestones?: Array<{}>;
 }
+
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Manrope({ weight: "400", subsets: ["latin"] });
 
@@ -26,18 +27,34 @@ const ModalTasks = (props: typeModal) => {
   const { showModal, handleCloseModal, milestones, project } = props;
   const [createTask, { data, error, loading }] = useMutation(addTask);
   const [errMessage, setErrMessage] = useState("");
-  const mileStoneArr = milestones?.map((item: any) => {
-    return {
-      value: item?.id,
-      label: item?.name,
-    };
-  });
-  const ProjectArr = project?.map((item: any) => {
-    return {
-      value: item?.id,
-      label: item?.name,
-    };
-  });
+  const [mileStoneArray, setMileStoneArray] = useState<any>([]);
+  const [projectArray, setPorjectArray] = useState<any>([]);
+  const mileStoneArr = [{ value: "", label: "Choose One", disabled: true }];
+  const ProjectArr = [{ value: "", label: "Choose One", disabled: true }];
+
+  const ArrOptions = (milestones: any, project: any) => {
+    for (let i = 0; i < milestones?.length; i++) {
+      mileStoneArr.push({
+        value: milestones[i]?.id,
+        label: milestones[i].name,
+        disabled: false,
+      });
+    }
+
+    for (let i = 0; i < project?.length; i++) {
+      ProjectArr.push({
+        value: project[i]?.id,
+        label: project[i].name,
+        disabled: false,
+      });
+    }
+    setMileStoneArray(mileStoneArr);
+    setPorjectArray(ProjectArr);
+  };
+
+  useEffect(() => {
+    ArrOptions(milestones, project);
+  }, []);
 
   const formData = useForm({
     initialValues: {
@@ -170,7 +187,7 @@ const ModalTasks = (props: typeModal) => {
                         })}
                         radius="md"
                         size="lg"
-                        data={ProjectArr}
+                        data={projectArray}
                         {...formData.getInputProps("project")}
                       />
                     </Grid.Col>
@@ -333,7 +350,7 @@ const ModalTasks = (props: typeModal) => {
                             borderRadius: "12px !important",
                           },
                         })}
-                        data={mileStoneArr}
+                        data={mileStoneArray}
                         {...formData.getInputProps("mileStone")}
                       />
                     </Grid.Col>
