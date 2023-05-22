@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Manrope, Roboto } from "next/font/google";
-import { navLinks, timelineLinks, timelineFolder } from "../utils/data";
+import { timelineLinks, timelineFolder } from "../utils/data";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { FiArrowDown, FiArrowRight } from "react-icons/fi";
@@ -11,6 +11,43 @@ import logo from '../public/images/logo1.png'
 import Logo from "./Logo";
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "500", subsets: ["latin"] });
+import { BsClipboardCheck, BsPersonPlus } from "react-icons/bs";
+import { RxCube } from "react-icons/rx";
+import { IoHomeOutline, IoPrint } from "react-icons/io5";
+
+import { GiStairsGoal } from "react-icons/gi";
+const navLinks = [
+  {
+    icon: <IoHomeOutline />,
+    name: "dashboard",
+    link: "",
+  },
+  {
+    icon: <IoPrint />,
+    name: "projects",
+    link: "projects",
+  },
+  {
+    icon: <BsClipboardCheck />,
+    name: "tasks",
+    link: "tasks",
+  },
+  {
+    icon: <BsPersonPlus />,
+    name: "employees",
+    link: "employees",
+  },
+  {
+    icon: <GiStairsGoal />,
+    name: "milestones",
+    link: "milestones",
+  },
+  {
+    icon: <RxCube />,
+    name: "desk",
+    link: "desk",
+  },
+];
 const Sidebar = () => {
   const [active, setActive] = useState("dashboard");
   const [timelineToggle, setTimelineToggel] = useState(false);
@@ -37,20 +74,18 @@ const Sidebar = () => {
               <Link
                 href={`/${item.link}`}
                 className="w-full"
-                key={index}
                 onClick={() => changeState(item.name)}
               >
                 <div
-                  key={index}
                   className={`${
                     active === item.name
                       ? "border-l-4  border-[#5773FF]  bg-sky-50  text-[#5773FF]"
                       : "border-none  text-gray-600 "
-                  } hover:text-[#5773FF] hover:bg-sky-50  flex justify-start cursor-pointer  items-center gap-3 px-3 py-4 w-full `}
+                  } hover:text-[#5773FF] hover:bg-sky-50  flex justify-start cursor-pointer  items-center gap-3 px-3 py-4 w-full  text-2xl`}
                 >
                   {item.icon}
                   <h1
-                    className={`text-md font-medium capitalize ${roboto.className} `}
+                    className={`text-md font-medium capitalize text-[1rem] ${roboto.className} `}
                   >
                     {item.name}
                   </h1>
