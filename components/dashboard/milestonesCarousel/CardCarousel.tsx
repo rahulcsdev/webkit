@@ -1,7 +1,7 @@
 import React from "react";
 import { Manrope, Roboto } from "next/font/google";
 import { BiTask } from "react-icons/bi";
-import ProgressBar from "../ProgressBar";
+import ProgressBar from "../../ProgressBar";
 import Image from "next/image";
 import { FaCalendarMinus, FaCalendarPlus } from "react-icons/fa";
 import { Card } from "@mantine/core";
@@ -38,22 +38,27 @@ interface projectCardTypes {
   endDate: string;
 }
 
+interface dataType    {
+    id: string,
+    name:string,
+    project: {
+      name: string,
+      id: string
+    },
+    endDate: string,
+    code:string,
+    startDate: string,
+    status: string
+  }
+
+
 interface Props {
-  data: projectCardTypes;
+  data: dataType;
 }
 
 const CardCarousal = ({ data }: Props) => {
-  const {
-    name,
-    status,
-    member,
-    memberCount,
-    projectManager,
-    projectType,
-    startDate,
-    endDate,
-    id,
-  } = data;
+
+    const {id,code,endDate,name,project,startDate,status}=data;
 
   let percentage = 0;
 
@@ -130,79 +135,11 @@ const CardCarousal = ({ data }: Props) => {
 
         <div className="flex justify-between items-center mt-6">
           <div className="flex">
-            <p className={`text-[#605C8D] text-base ${roboto.className} mt-1`}>
-              <span className="font-medium">Manager :</span>{" "}
-              {projectManager ? projectManager.name : "Non"}
-            </p>
-
-            {/* {arr.map((item, index) => (
-              <Image
-                key={index}
-                src={index % 2 == 0 ? "/assets/picTwo.jpg" : "/assets/picTwo.jpg"}
-                height={30}
-                width={30}
-                alt="image"
-                className={`rounded-full -mr-3`}
-              />
-            ))} */}
+          <h6 className={`text-md font-normal px-2 py-1 bg-[#50C6B4] rounded-md`}>{project.name}</h6>
           </div>
-          <div className="grid grid-cols-2 gap-2 items-start justify-start ">
-            {member.slice(0, 3).map((item, index) => (
-              <div
-                key={index}
-                className={`text-white text-sm px-2 py-1 rounded-md ${
-                  index % 2 !== 0
-                    ? "bg-[#FFCF52]"
-                    : index % 3 !== 0
-                    ? "bg-[#50C6B4]"
-                    : "bg-[#51BBFE]"
-                }`}
-              >
-                {item.name}
-              </div>
-            ))}
 
-            {member.length > 3 && (
-              <div className="px-2 text-xl rounded-full bg-gray-200">
-                {memberCount - 3}+
-              </div>
-            )}
-          </div>
-          {/* <button className={`px-2 ${roboto.className} text-base py-1 rounded-md ${data.sbg} text-[${data.color}] border-none outline-none`} >
-          {data.btn}
-        </button> */}
+          <h6 className={`text-md font-normal px-2 py-1 bg-[#51BBFE] rounded-md`}>{code}</h6> 
         </div>
-
-        {/* <div className={` bg-white drop-shadow-md rounded-xl p-5 my-2 mx-3 min-w-[400px]`} >
-  
-    <h1 className={`text-[1.2em] mb-3 ${manrope.className} text-[#140F49] font-semibold whitespace-nowrap`}> {name}</h1>
-    <div className="flex items-center justify-start gap-3 mb-[1.2rem]">
-        <BiTask className='text-[#605C8D]' />
-   <p className={`text-base text-[#605C8D] font-normal ${manrope.className}`}>{data.date}</p>
-    </div>
-     <h2
-          className={`text-yellow-500 bg-yellow-100 ${manrope.className} font-semibold text-sm px-2 py-[1px] rounded-md lowercase `}
-        >
-          {status}
-        </h2>
-
-
-    
-     <div className="flex items-center justify-start gap-3 mb-[1.2rem]">
-      <div className="flex items-center justify-center w-1/2">
-        <BiTask className="text-[#605C8D]" />
-        <p className="text-base text-[#605C8D] font-normal">{new Date(startDate).toLocaleDateString()}</p>
-      </div>
-      <div className="flex items-center justify-center w-1/2">
-        <BiTask className="text-[#605C8D]" />
-        <p className="text-base text-[#605C8D] font-normal">{new Date(endDate).toLocaleDateString()}</p>
-      </div>
-    </div>
-   
-    
-   
-   
-    </div> */}
       </Card>
     </>
   );

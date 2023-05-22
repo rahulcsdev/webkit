@@ -13,6 +13,12 @@ const DataCard = dynamic(() => import("../../components/dashboard/DataCard"));
 const MyCarousal = dynamic(
   () => import("../../components/dashboard/MyCarousal")
 );
+const MilestonesCarousel = dynamic(
+  () => import("../../components/dashboard/milestonesCarousel/MilestonesCarousel")
+);
+const TaskCarousel = dynamic(
+  () => import("../../components/dashboard/taskCarousel/TaskCarousel")
+);
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 import { getspecficUser } from "@/services";
 import { useContext } from "react";
@@ -107,19 +113,49 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* Third part carousal  */}
+        {/* First carousal  */}
 
         <div className="my-2 px-5">
           <h1
-            className={`text-2xl font-semibold text-[#140F49] ${manrope.className}`}
+            className={`text-2xl text-center font-semibold text-[#140F49] ${manrope.className} mt-5`}
           >
             Current Projects
           </h1>
-          {/* Carousal part */}
+         
           <div className="w-full mt-5 flex items-center justify-center flex-col pb-5">
             <MyCarousal />
           </div>
         </div>
+
+          {/* Second carousal  */}
+
+          <div className="my-2 px-5">
+          <h1
+            className={`text-2xl text-center font-semibold text-[#140F49] ${manrope.className} mt-5`}
+          >
+            Current Milestones
+          </h1>
+         
+          <div className="w-full mt-5 flex items-center justify-center flex-col pb-5">
+           <MilestonesCarousel/>
+          </div>
+        </div>
+
+        {/* Third carousal  */}
+
+        <div className="my-2 px-5">
+          <h1
+            className={`text-2xl text-center font-semibold text-[#140F49] ${manrope.className} mt-5`}
+          >
+            Current Tasks
+          </h1>
+         
+          <div className="w-full mt-5 flex items-center justify-center flex-col pb-5">
+            <TaskCarousel/>
+          </div>
+        </div>
+
+
       </div>
     </LayoutNav>
   );

@@ -220,7 +220,7 @@ export const carousalData=[
    {
      title:"Product list view changes",
      date:"02/02/2021",
-     percentage:60,
+     percentage:10,
      bg:'bg-[#50C6B4]',
      sbg:'bg-[#ceefea]',
      btn:'SEO',
@@ -230,7 +230,7 @@ export const carousalData=[
    {
      title:"Add multiple theme options",
      date:"02/02/2021",
-     percentage:60,
+     percentage:10,
      bg:'bg-[#FFCF52]',
      sbg:'bg-[#fff2cf]',
      btn:'Development',
@@ -257,6 +257,26 @@ export const carousalData=[
      image:4,
      color:'#b53209'
    },
+   {
+      title:"Hotel Management App UI Kit",
+      date:"02/02/2021",
+      percentage:60,
+      bg:'bg-[#b53209]',
+      sbg:'bg-[#fccfc1]',
+      btn:'Design',
+      image:4,
+      color:'#b53209'
+    },
+    {
+      title:"Hotel Management App UI Kit",
+      date:"02/02/2021",
+      percentage:60,
+      bg:'bg-[#b53209]',
+      sbg:'bg-[#fccfc1]',
+      btn:'Design',
+      image:4,
+      color:'#b53209'
+    },
    {
      title:"General Improvment in progress",
      date:"02/02/2021",
