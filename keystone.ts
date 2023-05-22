@@ -13,12 +13,12 @@ import type { Context } from ".keystone/types";
 
 export default config(
   withAuth({
-    server: {
-      cors: {
-        origin: ["http://localhost:4000", "http://localhost:3000"],
-        credentials: true,
-      },
-    },
+    // server: {
+    //   cors: {
+    //     origin: ["http://localhost:4000", "http://localhost:3000"],
+    //     credentials: true,
+    //   },
+    // },
     //connect to the postgress database
     db: {
       provider: "postgresql",
