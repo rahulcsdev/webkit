@@ -14,7 +14,7 @@ import Footer from "../../components/Footer";
 import { useForm, isNotEmpty } from "@mantine/form";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { TableSkeleton } from "@/utils/skeleton";
-import { ColorSchemeProvider, Pagination,Badge } from "@mantine/core";
+import { ColorSchemeProvider, Pagination, Badge, Tooltip,Text } from "@mantine/core";
 import client from "@/apolloClient";
 
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
@@ -52,7 +52,7 @@ const TimeEntries = () => {
   const getStatus = (status: string) => {
     if (status === "Pending") {
       return (
-        <Badge  color="yellow"  variant="filled"  >
+        <Badge color="yellow" variant="filled">
           {status}
         </Badge>
       );
@@ -60,7 +60,7 @@ const TimeEntries = () => {
 
     if (status === "Approved") {
       return (
-        <Badge  color="green" variant="filled"   >
+        <Badge color="green" variant="filled">
           {status}
         </Badge>
       );
@@ -68,7 +68,9 @@ const TimeEntries = () => {
 
     if (status === "Rejected") {
       return (
-        <Badge  color="red" variant="filled"  >{status}</Badge>
+        <Badge color="red" variant="filled">
+          {status}
+        </Badge>
       );
     }
   };
@@ -257,7 +259,22 @@ const TimeEntries = () => {
                           </td>
                           <td className="px-6 py-4"> {item.userName.name}</td>
                           <td className="px-6 py-4">{item.duration}</td>
-                          <td className="px-6 py-4">{item.activities}</td>
+                          <td className="px-6 py-4">
+                            {" "}
+                            <Tooltip 
+                                  multiline
+                                  color="blue"
+                                  width={200}
+                                  offset={10}
+                                  withArrow
+                                  transitionProps={{ duration: 200 }}
+                            
+                            label={item.activities}>
+                               <Text truncate  w={60} >
+                               {item.activities}
+                               </Text>
+                            </Tooltip>{" "}
+                          </td>
                           <td className="px-6 py-4">{item.remarks}</td>
                           <td className="px-6 py-4">
                             {" "}
@@ -281,17 +298,17 @@ const TimeEntries = () => {
                       );
                     }
                   })}
-                <div className="my-5 flex items-center justify-center">
-                  {
-                    <Pagination
-                      total={totalPages}
-                      onChange={handlePageChange}
-                      value={currentPage}
-                    />
-                  }
-                </div>
               </tbody>
             </table>
+            <div className="my-5 flex items-center justify-center">
+              {
+                <Pagination
+                  total={totalPages}
+                  onChange={handlePageChange}
+                  value={currentPage}
+                />
+              }
+            </div>
           </div>
         </div>
         {/* <ModalProject

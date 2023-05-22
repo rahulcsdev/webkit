@@ -11,7 +11,7 @@ import {
   Modal,
   Group,
   Pagination,
-  Badge
+  Badge,
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { useDisclosure } from "@mantine/hooks";
@@ -59,7 +59,6 @@ const ProjectManagerTimeEntries = () => {
     },
   });
 
-
   const getTotalLength = async (id: string) => {
     await client
       .query({
@@ -89,7 +88,7 @@ const ProjectManagerTimeEntries = () => {
     const userId = localStorage.getItem("userId");
     if (userId) {
       form.setFieldValue("userId", userId);
-      getTotalLength(userId)
+      getTotalLength(userId);
     }
   }, []);
 
@@ -109,8 +108,6 @@ const ProjectManagerTimeEntries = () => {
       skip: (page - 1) * ITEMS_PER_PAGE,
     },
   });
-
-
 
   const [createProject, {}] = useMutation(updateTimeEntry);
 
@@ -147,9 +144,8 @@ const ProjectManagerTimeEntries = () => {
       .catch((error) => console.log(error));
   };
 
-
   const handlePageChange = (page: any) => {
-    console.log("page", page);
+    // console.log("page", page);
 
     setCurrentPage(page);
     refetch({
@@ -171,13 +167,12 @@ const ProjectManagerTimeEntries = () => {
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
 
-
-  console.log('p',data);
+  // console.log('p',data);
 
   const getStatus = (status: string) => {
     if (status === "Pending") {
       return (
-        <Badge  color="yellow"  variant="filled"  >
+        <Badge color="yellow" variant="filled">
           {status}
         </Badge>
       );
@@ -185,7 +180,7 @@ const ProjectManagerTimeEntries = () => {
 
     if (status === "Approved") {
       return (
-        <Badge  color="green" variant="filled"   >
+        <Badge color="green" variant="filled">
           {status}
         </Badge>
       );
@@ -193,16 +188,17 @@ const ProjectManagerTimeEntries = () => {
 
     if (status === "Rejected") {
       return (
-        <Badge  color="red" variant="filled"  >{status}</Badge>
+        <Badge color="red" variant="filled">
+          {status}
+        </Badge>
       );
     }
   };
 
-
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
 
   return loading ? (
-    <TableSkeleton/>
+    <TableSkeleton />
   ) : (
     <LayoutNav>
       <form
@@ -217,9 +213,10 @@ const ProjectManagerTimeEntries = () => {
       >
         <>
           <Modal opened={opened} onClose={close} centered>
-            change status
             <Select
               placeholder="change status"
+              label="status"
+              withAsterisk
               withinPortal
               {...form.getInputProps(`status`)}
               data={[
@@ -231,6 +228,7 @@ const ProjectManagerTimeEntries = () => {
             <Textarea
               className="mt-4"
               placeholder="write remark"
+              label="remark"
               withAsterisk
               {...form.getInputProps(`remark`)}
             />
@@ -240,7 +238,7 @@ const ProjectManagerTimeEntries = () => {
                 onClick={() => changeStatus()}
                 className="text-white mt-2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
               >
-                save
+                submit
               </button>
             </Group>
           </Modal>
@@ -252,7 +250,7 @@ const ProjectManagerTimeEntries = () => {
               <h1
                 className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
               >
-                Project Manager Time Entries
+                Approval as Project Manager
               </h1>
               <div className="flex items-center gap-4 justify-center">
                 <div className="relative"></div>
@@ -310,7 +308,7 @@ const ProjectManagerTimeEntries = () => {
                         status
                       </th>
                       <th scope="col" className="px-6 py-3">
-                        change status
+                        Approval
                       </th>
                     </tr>
                   </thead>
@@ -365,7 +363,9 @@ const ProjectManagerTimeEntries = () => {
                           );
                         }
                       })}
-                                                  <div className="my-5 flex items-center justify-center">
+                  </tbody>
+                </table>
+                <div className="my-5 flex items-center justify-center">
                   {
                     <Pagination
                       total={totalPages}
@@ -374,8 +374,6 @@ const ProjectManagerTimeEntries = () => {
                     />
                   }
                 </div>
-                  </tbody>
-                </table>
               </div>
             </div>
           </div>

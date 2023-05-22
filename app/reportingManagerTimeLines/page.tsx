@@ -214,9 +214,11 @@ const ReportingManagerTimeEntries = () => {
       >
         <>
           <Modal opened={opened} onClose={close} centered>
-            change status
+       
             <Select
               placeholder="change status"
+              label="status"
+              withAsterisk
               withinPortal
               {...form.getInputProps(`status`)}
               data={[
@@ -227,6 +229,7 @@ const ReportingManagerTimeEntries = () => {
             />
             <Textarea
               className="mt-4"
+              label="remark"
               placeholder="write remark"
               withAsterisk
               {...form.getInputProps(`remark`)}
@@ -237,7 +240,7 @@ const ReportingManagerTimeEntries = () => {
                 onClick={() => changeStatus()}
                 className="text-white mt-2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
               >
-                save
+                submit
               </button>
             </Group>
           </Modal>
@@ -249,7 +252,7 @@ const ReportingManagerTimeEntries = () => {
               <h1
                 className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
               >
-                Reporting Manager Time Entries
+                Approval as Reporting Manager
               </h1>
               <div className="flex items-center gap-4 justify-center">
                 <div className="relative"></div>
@@ -307,7 +310,7 @@ const ReportingManagerTimeEntries = () => {
                         status
                       </th>
                       <th scope="col" className="px-6 py-3">
-                        change status
+                        Approval
                       </th>
                     </tr>
                   </thead>
@@ -362,7 +365,12 @@ const ReportingManagerTimeEntries = () => {
                           );
                         }
                       })}
-                              <div className="my-5 flex items-center justify-center">
+        
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="my-5 flex items-center justify-center">
                   {
                     <Pagination
                       total={totalPages}
@@ -371,10 +379,6 @@ const ReportingManagerTimeEntries = () => {
                     />
                   }
                 </div>
-                  </tbody>
-                </table>
-              </div>
-            </div>
           </div>
         </div>
         {/* 
