@@ -446,6 +446,11 @@ export const getSpecificManagerTimeEntries = gql`
       userName {
         name
       }
+      projectManager {
+        name
+        id
+      }
+      project
       activities
       reviewStatus
       date

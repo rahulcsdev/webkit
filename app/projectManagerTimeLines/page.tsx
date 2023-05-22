@@ -66,8 +66,10 @@ const ProjectManagerTimeEntries = () => {
         variables: {
           where: {
             projectManager: {
-              equals: id,
-            },
+              id: {
+                equals:form.values.userId 
+              }
+            }
           },
           orderBy: [
             {
@@ -96,7 +98,9 @@ const ProjectManagerTimeEntries = () => {
     variables: {
       where: {
         projectManager: {
-          equals: form.values.userId,
+          id: {
+            equals:form.values.userId 
+          }
         },
       },
       orderBy: [
@@ -151,7 +155,9 @@ const ProjectManagerTimeEntries = () => {
     refetch({
       where: {
         projectManager: {
-          equals: form.values.userId,
+          id: {
+            equals:form.values.userId 
+          }
         },
       },
       orderBy: [

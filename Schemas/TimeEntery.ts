@@ -57,7 +57,7 @@ export default list({
       ],
     }),
 
-    projectManager: text(),
+    projectManager: relationship({ ref: "User" }),
 
     userName: relationship({ ref: "User" }),
     reviewStatus: select({

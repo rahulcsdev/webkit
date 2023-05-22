@@ -263,7 +263,7 @@ const TimeEntries = () => {
                             {" "}
                             <Tooltip 
                                   multiline
-                                  color="blue"
+                            color="blue"
                                   width={200}
                                   offset={10}
                                   withArrow

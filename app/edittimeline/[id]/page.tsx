@@ -216,7 +216,9 @@ const EditTimeEntry = ({ params }: any) => {
     variables: {
       where: {
         projectManager: {
-          equals: form.values.userId,
+          id: {
+            equals: form.values.userId,
+          },
         },
       },
       orderBy: [

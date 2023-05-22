@@ -200,7 +200,9 @@ const Projects = () => {
     variables: {
       where: {
         projectManager: {
-          equals: form.values.userId,
+             id: {
+            equals: form.values.userId,
+          },
         },
       },
       orderBy: [
@@ -286,7 +288,11 @@ const Projects = () => {
           }),
           ...(((item.projectType === "Hourly cost project" ||
             item.projectType === "Fixed cost project") && localStorage.getItem("userId") !== await getProjectManagerId(item)  )&& {
-            projectManager: await getProjectManagerId(item),
+            projectManager: {
+              connect: {
+                id: await getProjectManagerId(item),
+              },
+            },
           }),
           userName: {
             connect: {
