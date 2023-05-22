@@ -140,13 +140,13 @@ const MsCardCol: React.FC<props> = ({ data, openDetails }) => {
           <div className="flex items-center mt-1 gap-2 justify-end">
           <button
             onClick={() => openDetails(id, "edit")}
-            className={`px-2 py-1 rounded-md bg-transparent text-[#cf9700] hover:bg-[#fff2cf] transition-all delay-75 ease-in duration-100`}
+            className={`px-2 py-1 rounded-md bg-transparent text-primary hover:bg-orange-50 transition-all delay-75 ease-in duration-100`}
           >
             <FiEdit size={16} />
           </button>
           <button
             onClick={() => openDetails(id, "view")}
-            className={`px-2 py-1 rounded-md  text-[#007ece] hover:bg-[#ceecff] transition-all delay-75 ease-in duration-100`}
+            className={`px-2 py-1 rounded-md  text-secondary hover:bg-blue-50 transition-all delay-75 ease-in duration-100`}
           >
             <SlEye size={20} />
           </button>
