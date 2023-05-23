@@ -74,7 +74,7 @@ ui: {hideCreate: true,},}),
  startDate: timestamp({ defaultValue: new Date().toISOString() }),
 
  endDate: timestamp({ defaultValue: new Date().toISOString() }), 
- totalTimeUtilized:float({ui: { itemView: { fieldMode: 'read' } }}),
+ totalTimeUtilized:float({defaultValue: 0,ui: { itemView: { fieldMode: 'read' } }}),
 },
  ui: {labelField: 'name', },
 
