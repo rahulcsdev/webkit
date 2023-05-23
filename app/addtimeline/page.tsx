@@ -205,7 +205,7 @@ const AddTimeLine = () => {
         projectManager: {
           id: {
             equals: form.values.userId,
-          },
+          }
         },
       },
       orderBy: [
