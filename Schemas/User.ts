@@ -2,7 +2,7 @@ import { list } from "@keystone-6/core";
 import { text, password, select, file } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { multiselect, relationship, timestamp } from "@keystone-6/core/fields";
-import type { Context } from ".keystone/types";
+
 // Define the Session type for user role information
 type Session = {
   data: {
