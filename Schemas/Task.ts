@@ -1,7 +1,7 @@
 import { list } from "@keystone-6/core";
 import { text, password, select } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
-import { multiselect, relationship, timestamp } from "@keystone-6/core/fields";
+import { multiselect, relationship, timestamp ,float} from "@keystone-6/core/fields";
 
 
 type Session = {
@@ -78,6 +78,7 @@ export default list({
     startDate: text(),
 
     endDate: text(),
+    totalTimeUtilized:float({ui: { itemView: { fieldMode: 'read' } }}),
     estimateTime: text(),
     taskType: select({
       defaultValue: "No priority",

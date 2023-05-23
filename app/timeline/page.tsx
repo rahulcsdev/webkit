@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
- 
+
 import { Manrope } from "next/font/google";
 import { dropDown, projectsData } from "../../utils/data";
 import { FiChevronDown, FiChevronRight, FiEdit } from "react-icons/fi";
@@ -15,7 +15,7 @@ import { useForm, isNotEmpty } from "@mantine/form";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { TableSkeleton } from "@/utils/skeleton";
 
-const LayoutNav = dynamic(() => import("@/components/LayoutNav"))
+const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 const manrope = Manrope({ subsets: ["latin"] });
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 import { useRouter } from "next/navigation";
@@ -66,8 +66,7 @@ const Projects = () => {
     }
   };
 
-
-  const { data,loading } = useQuery(getSpecificManagerTimeEntries, {
+  const { data, loading } = useQuery(getSpecificManagerTimeEntries, {
     variables: {
       where: {
         userName: {
@@ -103,7 +102,10 @@ const Projects = () => {
   }
   const clickS = "bg-[#5773FF] text-white";
   const notClickS = "bg-gray-100 text-black";
-  return ( loading ? <TableSkeleton/> :  <LayoutNav>
+  return loading ? (
+    <TableSkeleton />
+  ) : (
+    <LayoutNav>
       <form
         onSubmit={form.onSubmit(
           (values, _event) => {
@@ -174,7 +176,10 @@ const Projects = () => {
                     if (item.key === 0) {
                     } else {
                       return (
-                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <tr
+                          className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                          key={index}
+                        >
                           <th
                             scope="row"
                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -188,7 +193,10 @@ const Projects = () => {
                           <td className="px-6 py-4"> {item.userName.name}</td>
                           <td className="px-6 py-4">{item.duration}</td>
                           <td className="px-6 py-4">{item.activities}</td>
-                          <td className="px-6 py-4">  {getStatus(item.reviewStatus)}</td>
+                          <td className="px-6 py-4">
+                            {" "}
+                            {getStatus(item.reviewStatus)}
+                          </td>
                           <td>
                             {item.reviewStatus === "Rejected" && (
                               <button
