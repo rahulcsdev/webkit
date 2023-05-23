@@ -292,7 +292,7 @@ const ProjectManagerTimeEntries = () => {
 
               <div className="relative overflow-x-auto">
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <thead className="capitalize bg-[#F8F7F7] font-semibold text-[1em] text-[#140F49]">
                     <tr>
                       <th scope="col" className="px-6 py-3 text-center">
                         Project
