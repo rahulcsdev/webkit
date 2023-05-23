@@ -168,41 +168,7 @@ const CardCarousal = ({ data }: Props) => {
               </div>
             )}
           </div>
-          {/* <button className={`px-2 ${roboto.className} text-base py-1 rounded-md ${data.sbg} text-[${data.color}] border-none outline-none`} >
-          {data.btn}
-        </button> */}
         </div>
-
-        {/* <div className={` bg-white drop-shadow-md rounded-xl p-5 my-2 mx-3 min-w-[400px]`} >
-  
-    <h1 className={`text-[1.2em] mb-3 ${manrope.className} text-[#140F49] font-semibold whitespace-nowrap`}> {name}</h1>
-    <div className="flex items-center justify-start gap-3 mb-[1.2rem]">
-        <BiTask className='text-[#605C8D]' />
-   <p className={`text-base text-[#605C8D] font-normal ${manrope.className}`}>{data.date}</p>
-    </div>
-     <h2
-          className={`text-yellow-500 bg-yellow-100 ${manrope.className} font-semibold text-sm px-2 py-[1px] rounded-md lowercase `}
-        >
-          {status}
-        </h2>
-
-
-    
-     <div className="flex items-center justify-start gap-3 mb-[1.2rem]">
-      <div className="flex items-center justify-center w-1/2">
-        <BiTask className="text-[#605C8D]" />
-        <p className="text-base text-[#605C8D] font-normal">{new Date(startDate).toLocaleDateString()}</p>
-      </div>
-      <div className="flex items-center justify-center w-1/2">
-        <BiTask className="text-[#605C8D]" />
-        <p className="text-base text-[#605C8D] font-normal">{new Date(endDate).toLocaleDateString()}</p>
-      </div>
-    </div>
-   
-    
-   
-   
-    </div> */}
       </Card>
     </>
   );

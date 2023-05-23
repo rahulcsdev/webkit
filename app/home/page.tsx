@@ -119,7 +119,7 @@ export default function Home() {
           <h1
             className={`text-2xl text-center font-semibold text-[#140F49] ${manrope.className} mt-5`}
           >
-            Current Projects
+          Projects
           </h1>
          
           <div className="w-full mt-5 flex items-center justify-center flex-col pb-5">
@@ -133,7 +133,7 @@ export default function Home() {
           <h1
             className={`text-2xl text-center font-semibold text-[#140F49] ${manrope.className} mt-5`}
           >
-            Current Milestones
+          Milestones
           </h1>
          
           <div className="w-full mt-5 flex items-center justify-center flex-col pb-5">
@@ -147,7 +147,7 @@ export default function Home() {
           <h1
             className={`text-2xl text-center font-semibold text-[#140F49] ${manrope.className} mt-5`}
           >
-            Current Tasks
+          Tasks
           </h1>
          
           <div className="w-full mt-5 flex items-center justify-center flex-col pb-5">

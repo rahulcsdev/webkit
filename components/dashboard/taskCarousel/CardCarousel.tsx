@@ -92,15 +92,6 @@ const CardCarousal = ({ data }: Props) => {
           <ProgressBar percentage={percentage} />
         </div>
 
-        <div className="flex justify-between items-center mt-6 mb-6">
-          <div className="flex">
-          <h6 className={`text-md font-normal px-2 py-1 bg-[#50C6B4] rounded-md`}>{project.name}</h6>
-          </div>
-
-          <h6 className={`text-md font-normal px-2 py-1 bg-[#51BBFE] rounded-md`}>{milestone.name}</h6>
-        
-        </div>
-
         <div className="flex justify-between items-center">
           <p
             className={`text-green-400 flex items-center gap-2 px-2 py-1 rounded-md bg-green-50 text-base ${roboto.className} mt-1`}
@@ -122,12 +113,23 @@ const CardCarousal = ({ data }: Props) => {
           </p>
         </div>
 
-        <div className="flex justify-between items-center mt-6">
+        {/* <div className="flex justify-between items-center mt-6">
           <div className="flex">
           <h6 className={`text-md font-normal px-2 py-1 bg-[#FFCF52] rounded-md`}>{priority}</h6>
           </div>
 
           <h6 className={`text-md font-normal px-2 py-1 bg-[#F35421] rounded-md`}>{estimateTime}</h6>
+        
+        </div> */}
+
+        <div className="flex justify-between items-center mt-6">
+          <div className="flex">
+          <h6 className={`text-[#605C8D] text-base ${roboto.className} mt-1`}><span className={`font-medium`}>Project :</span> {project?.name}</h6>
+          {/* <h6 className={`text-md font-normal px-2 py-1 bg-[#50C6B4] rounded-md`}>{project.name}</h6> */}
+          </div>
+
+          <h6 className={`text-white text-sm px-2 py-1 rounded-md bg-[#51BBFE]`}>{priority}</h6>
+          {/* <h6 className={`text-md font-normal px-2 py-1 bg-[#51BBFE] rounded-md`}>{milestone.name}</h6> */}
         
         </div>
 

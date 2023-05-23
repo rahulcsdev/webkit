@@ -27,17 +27,17 @@ const [mileData, setMileData] = useState([])
     setMileData(data?.milestones);
   },[data,loading]);
 
-//   console.log(data);
+  console.log(data);
   
   return (
     <div className='max-w-[1195px]' >
    <Carousel
-      withIndicators
       slideSize="33.33%"
       slideGap="xs"
       loop
       align="start"
       controlsOffset="xs"
+      withControls={mileData && mileData.length > 3}
       breakpoints={[{ maxWidth: 'sm', slideSize: '100%' }]}
       // breakpoints={[
       //   { maxWidth: 'md', slideSize: '50%' },

@@ -9,35 +9,6 @@ import { Card } from "@mantine/core";
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 
-interface projectCardTypes {
-  status: string;
-  startDate: string;
-  projectType: string;
-  projectManager: {
-    name: string;
-    id: string;
-  };
-
-  name: string;
-  memberCount: number;
-  member: [
-    {
-      id: string;
-      name: string;
-    },
-    {
-      id: string;
-      name: string;
-    },
-    {
-      id: string;
-      name: string;
-    }
-  ];
-  id: string;
-  endDate: string;
-}
-
 interface dataType    {
     id: string,
     name:string,
@@ -46,7 +17,6 @@ interface dataType    {
       id: string
     },
     endDate: string,
-    code:string,
     startDate: string,
     status: string
   }
@@ -58,7 +28,7 @@ interface Props {
 
 const CardCarousal = ({ data }: Props) => {
 
-    const {id,code,endDate,name,project,startDate,status}=data;
+    const {id,endDate,name,project,startDate,status}=data;
 
   let percentage = 0;
 
@@ -135,10 +105,11 @@ const CardCarousal = ({ data }: Props) => {
 
         <div className="flex justify-between items-center mt-6">
           <div className="flex">
-          <h6 className={`text-md font-normal px-2 py-1 bg-[#50C6B4] rounded-md`}>{project.name}</h6>
+          <h6 className={`text-[#605C8D] text-base ${roboto.className} mt-1`}><span className={`font-medium`}>Project :</span> {project?.name}</h6>
+          {/* <h6 className={`text-md font-normal px-2 py-1 bg-[#50C6B4] rounded-md`}>{project.name}</h6> */}
           </div>
 
-          <h6 className={`text-md font-normal px-2 py-1 bg-[#51BBFE] rounded-md`}>{code}</h6> 
+          {/* <h6 className={`text-md font-normal px-2 py-1 bg-[#51BBFE] rounded-md`}>{code}</h6>  */}
         </div>
       </Card>
     </>
