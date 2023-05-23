@@ -328,14 +328,7 @@ const ProjectManagerTimeEntries = () => {
                         if (item.key === 0) {
                         } else {
                           return (
-<<<<<<< HEAD
                             <tr   key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-=======
-                            <tr
-                              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                              key={index}
-                            >
->>>>>>> 585b879de9b00541454a8d69f5ddaa984b456023
                               <th
                                 scope="row"
                                 className="text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
