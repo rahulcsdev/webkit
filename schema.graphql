@@ -416,8 +416,8 @@ type Task {
   priority: String
   status: String
   milestone: Milestone
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
   totalTimeUtilized: Float
   estimateTime: String
   taskType: String
@@ -440,8 +440,8 @@ input TaskWhereInput {
   priority: StringNullableFilter
   status: StringNullableFilter
   milestone: MilestoneWhereInput
-  startDate: StringFilter
-  endDate: StringFilter
+  startDate: DateTimeNullableFilter
+  endDate: DateTimeNullableFilter
   totalTimeUtilized: FloatNullableFilter
   estimateTime: StringFilter
   taskType: StringNullableFilter
@@ -470,8 +470,8 @@ input TaskUpdateInput {
   priority: String
   status: String
   milestone: MilestoneRelateToOneForUpdateInput
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
   totalTimeUtilized: Float
   estimateTime: String
   taskType: String
@@ -497,8 +497,8 @@ input TaskCreateInput {
   priority: String
   status: String
   milestone: MilestoneRelateToOneForCreateInput
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
   totalTimeUtilized: Float
   estimateTime: String
   taskType: String
