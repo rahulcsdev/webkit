@@ -69,88 +69,86 @@ const MsCardCol: React.FC<props> = ({ data, openDetails }) => {
       <Card withBorder p="xl" radius="md">
         <div className="flex gap-2 items-center justify-between">
           <div className="flex items-center gap-2">
+            <RingProgress
+              roundCaps
+              thickness={6}
+              size={120}
+              sections={[{ value: percentage, color: bg }]}
+              label={
+                <div>
+                  <Text ta="center" fz="lg">
+                    {percentage.toFixed(0)}%
+                  </Text>
+                  <Text ta="center" fz="xs" c="dimmed">
+                    status
+                  </Text>
+                </div>
+              }
+            />
 
-          <RingProgress
-            roundCaps
-            thickness={6}
-            size={120}
-            sections={[{ value: percentage, color: bg }]}
-            label={
-              <div>
-                <Text ta="center" fz="lg">
-                  {percentage.toFixed(0)}%
-                </Text>
-                <Text ta="center" fz="xs" c="dimmed">
-                  status
-                </Text>
-              </div>
-            }
-          />
-
-          <div>
-          <div className="flex items-center gap-2">
-        
-            <Text
-              className={`font-bold text-xl  capitalize ${roboto.className}`}
-            >
-              {name}
-            </Text>
-          </div>
-            <div className="flex items-center justify-start gap-4">
-              <div>
-                <Text className="flex items-center gap-1">
-                  {" "}
-                  <BsCalendar2Check size={12} />{" "}
-                  {new Date(startDate).toLocaleDateString()}
-                </Text>
-                <Text fz="xs" color="dimmed">
-                  Start date
-                </Text>
-              </div>
-              <div>
-                <Text className="flex items-center gap-1">
-                  <BsCalendar2Check size={12} />
-                  {new Date(endDate).toLocaleDateString()}
-                </Text>
-                <Text fz="xs" color="dimmed">
-                  End date
-                </Text>
-              </div>
-            </div>
             <div>
-              <Text className="flex items-center capitalize gap-1">
-                <IoPrint /> {project.name}
-              </Text>
-              <Text fz="xs" color="dimmed">
-                Project Name
-              </Text>
+              <div className="flex items-center gap-2">
+                <Text
+                  className={`font-bold text-xl  capitalize ${roboto.className}`}
+                >
+                  {name}
+                </Text>
+              </div>
+              <div className="flex items-center justify-start gap-4">
+                <div>
+                  <Text className="flex items-center gap-1">
+                    {" "}
+                    <BsCalendar2Check size={12} />{" "}
+                    {new Date(startDate).toLocaleDateString()}
+                  </Text>
+                  <Text fz="xs" color="dimmed">
+                    Start date
+                  </Text>
+                </div>
+                <div>
+                  <Text className="flex items-center gap-1">
+                    <BsCalendar2Check size={12} />
+                    {new Date(endDate).toLocaleDateString()}
+                  </Text>
+                  <Text fz="xs" color="dimmed">
+                    End date
+                  </Text>
+                </div>
+              </div>
+              <div>
+                <Text className="flex items-center capitalize gap-1">
+                  <IoPrint /> {project.name}
+                </Text>
+                <Text fz="xs" color="dimmed">
+                  Project Name
+                </Text>
+              </div>
             </div>
-          </div>
           </div>
           <div className="flex flex-col gap-5">
             <div className="">
-            {status === "Completed" ? (
-            <Badge color="green">{status}</Badge>
-          ) : (
-            <Badge color={day >= 0 ? "cyan" : "red"}>
-              {day >= 0 ? `${day} days left` : `Time limit exceed`}
-            </Badge>
-          )}
+              {status === "Completed" ? (
+                <Badge color="green">{status}</Badge>
+              ) : (
+                <Badge color={day >= 0 ? "cyan" : "red"}>
+                  {day >= 0 ? `${day} days left` : `Time limit exceed`}
+                </Badge>
+              )}
             </div>
-          <div className="flex items-center mt-1 gap-2 justify-end">
-          <button
-            onClick={() => openDetails(id, "edit")}
-            className={`px-2 py-1 rounded-md bg-transparent text-primary hover:bg-orange-50 transition-all delay-75 ease-in duration-100`}
-          >
-            <FiEdit size={16} />
-          </button>
-          <button
-            onClick={() => openDetails(id, "view")}
-            className={`px-2 py-1 rounded-md  text-secondary hover:bg-blue-50 transition-all delay-75 ease-in duration-100`}
-          >
-            <SlEye size={20} />
-          </button>
-        </div>
+            <div className="flex items-center mt-1 gap-2 justify-end">
+              <button
+                onClick={() => openDetails(id, "edit")}
+                className={`px-2 py-1 rounded-md bg-transparent text-primary hover:bg-orange-50 transition-all delay-75 ease-in duration-100`}
+              >
+                <FiEdit size={16} />
+              </button>
+              <button
+                onClick={() => openDetails(id, "view")}
+                className={`px-2 py-1 rounded-md  text-secondary hover:bg-blue-50 transition-all delay-75 ease-in duration-100`}
+              >
+                <SlEye size={20} />
+              </button>
+            </div>
           </div>
         </div>
       </Card>
