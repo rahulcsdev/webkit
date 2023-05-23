@@ -73,6 +73,12 @@ export const updateTimesheet = gql`
 mutation Mutation($data: TimeEnteryUpdateInput!, $where: TimeEnteryWhereUniqueInput!) {
   updateTimeEntery(data: $data, where: $where) {
     id
+    reviewedBy{
+      name
+    }
+    projectManager{
+      name
+    }
   }
 }
 `;
@@ -124,6 +130,8 @@ export const updateTimeEntry = gql`
   ) {
     updateTimeEntery(where: $where, data: $data) {
       reviewStatus
+ 
+      
     }
   }
 `;
@@ -450,7 +458,6 @@ export const getSpecificManagerTimeEntries = gql`
         name
         id
       }
-      project
       activities
       reviewStatus
       date
@@ -539,7 +546,10 @@ export const addTimesheets = gql`
       code
       duration
       projectType
-      projectManager
+      projectManager{
+        name
+        id
+      }
       userName {
         name
         id

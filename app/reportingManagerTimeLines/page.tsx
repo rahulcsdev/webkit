@@ -148,7 +148,7 @@ const ReportingManagerTimeEntries = () => {
   const notClickS = "bg-gray-100 text-black";
 
   const handlePageChange = (page: any) => {
-    console.log("page", page);
+    // console.log("page", page);
 
     setCurrentPage(page);
     refetch({
@@ -322,7 +322,7 @@ const ReportingManagerTimeEntries = () => {
                         if (item.key === 0) {
                         } else {
                           return (
-                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <tr  key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                               <th
                                 scope="row"
                                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"

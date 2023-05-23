@@ -263,7 +263,7 @@ const EditTimeEntry = ({ params }: any) => {
     }
 
     if (data) {
-      // console.log("data", data);
+      console.log("data", data);
       getProjectsAndTasksSelectedData(data);
 
       form.setFieldValue("project", data?.timeEntery.project.id);
@@ -280,7 +280,7 @@ const EditTimeEntry = ({ params }: any) => {
     if (form.validate().hasErrors) {
       return;
     } else {
-      const formatteddata = {
+      const formatteddata: any = {
         activities: form.values.activity,
         duration: form.values.duration.toString(),
         task: {
@@ -288,7 +288,7 @@ const EditTimeEntry = ({ params }: any) => {
             id: form.values.task,
           },
         },
-  
+
         project: {
           connect: {
             id: form.values.project,
@@ -308,13 +308,32 @@ const EditTimeEntry = ({ params }: any) => {
           form.values.projectType === "Fixed cost project") &&
           localStorage.getItem("userId") !==
             (await getProjectManagerId(form.values.project)) && {
-            projectManager: await getProjectManagerId(form.values.project),
+            projectManager: {
+              connect: {
+                id: await getProjectManagerId(form.values.project),
+              },
+            },
           }),
         reviewStatus: "Pending",
       };
-  
+
       // console.log("formattedData", formatteddata);
-  
+
+      //removing default manger
+
+      if (formatteddata.reviewedBy?.connect) {
+        formatteddata.projectManager = {
+          disconnect: true,
+        };
+      }
+      if (formatteddata.projectManager?.connect) {
+        formatteddata.reviewedBy = {
+          disconnect: true,
+        };
+      }
+
+      // console.log("format1", formatteddata);
+
       updateTimeEntry({
         variables: {
           data: formatteddata,
@@ -324,23 +343,19 @@ const EditTimeEntry = ({ params }: any) => {
         },
       })
         .then((res: any) => {
-          // console.log("timeline updated", res);
+          console.log("timeline updated", res);
           refetch1();
           refetch2();
           refetch3();
-    
-          setTimeout(()=>{
-            router.push('/timeline')
-           },1000)
 
-          // alert("timeline added");
+          setTimeout(() => {
+            router.push("/timeline");
+          }, 1000);
         })
         .catch((err) => {
           // console.log("err", err);
         });
     }
-
-
   };
 
   function handleCloseModal() {
@@ -353,10 +368,10 @@ const EditTimeEntry = ({ params }: any) => {
       <form
         onSubmit={form.onSubmit(
           (values, _event) => {
-            console.log("h", values, _event);
+            // console.log("h", values, _event);
           },
           (validationErrors, _values, _event) => {
-            console.log(validationErrors);
+            // console.log(validationErrors);
           }
         )}
       >
@@ -409,6 +424,12 @@ const EditTimeEntry = ({ params }: any) => {
                         searchable
                         withAsterisk
                         // label="select project"
+                        styles={(theme) => ({
+                          input: {
+                            padding: "20px !important",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         nothingFound="No options"
                         data={form.values.projects}
                         {...form.getInputProps(`project`)}
@@ -422,6 +443,12 @@ const EditTimeEntry = ({ params }: any) => {
                         searchable
                         dropdownPosition="bottom"
                         // label="select task"
+                        styles={(theme) => ({
+                          input: {
+                            padding: "20px !important",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         withinPortal
                         withAsterisk
                         nothingFound="No options"
@@ -434,8 +461,14 @@ const EditTimeEntry = ({ params }: any) => {
                       <NumberInput
                         placeholder="choose duration"
                         // label="select duration"
+                        styles={(theme) => ({
+                          input: {
+                            padding: "20px !important",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         type="number"
-                        withAsterisk
+                        // withAsterisk
                         {...form.getInputProps(`duration`)}
                       />
                     </td>
@@ -444,7 +477,13 @@ const EditTimeEntry = ({ params }: any) => {
                       <Textarea
                         placeholder="write here"
                         // label="create activity"
-                        withAsterisk
+                        // withAsterisk
+                        styles={(theme) => ({
+                          input: {
+                            padding: "20px !important",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         {...form.getInputProps(`activity`)}
                       />
                     </td>

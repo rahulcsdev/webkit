@@ -8,7 +8,7 @@ import Navbar from "../../components/Navbar";
 import { randomId } from "@mantine/hooks";
 import { Manrope } from "next/font/google";
 import { dropDown, projectsData } from "../../utils/data";
-import { FiChevronDown, FiChevronRight, FiTrash } from "react-icons/fi";
+import { FiChevronDown, FiChevronRight, FiTrash, FiCalendar } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
 import ModalProject from "../../components/project/ModalProject";
@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { gql, useQuery, useMutation } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
 import client from "../../apolloClient/index";
+import { DateInput } from "@mantine/dates";
 import {
   getProjects,
   addTimesheets,
@@ -29,7 +30,7 @@ import {
   getSpecificManagerTimeEntries,
 } from "@/services";
 
-const Projects = () => {
+const AddTimeLine = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isExpand, setIsExpand] = useState(false);
@@ -49,9 +50,9 @@ const Projects = () => {
       .query({
         query: getspecficUser,
         variables: {
-            where:{
-              id: localStorage.getItem("userId"),
-            }
+          where: {
+            id: localStorage.getItem("userId"),
+          },
         },
       })
       .then((res: any) => {
@@ -175,8 +176,9 @@ const Projects = () => {
       },
       orderBy: [
         {
-          date: "asc"
-        }]
+          date: "asc",
+        },
+      ],
     },
   });
 
@@ -191,8 +193,9 @@ const Projects = () => {
       },
       orderBy: [
         {
-          date: "asc"
-        }]
+          date: "asc",
+        },
+      ],
     },
   });
 
@@ -200,15 +203,16 @@ const Projects = () => {
     variables: {
       where: {
         projectManager: {
-             id: {
+          id: {
             equals: form.values.userId,
           },
         },
       },
       orderBy: [
         {
-          date: "asc"
-        }]
+          date: "asc",
+        },
+      ],
     },
   });
 
@@ -279,21 +283,25 @@ const Projects = () => {
             },
           },
           projectType: item.projectType,
-          ...((item.projectType === "Internal project" || localStorage.getItem("userId") === await getProjectManagerId(item)) && {
+          ...((item.projectType === "Internal project" ||
+            localStorage.getItem("userId") ===
+              (await getProjectManagerId(item))) && {
             reviewedBy: {
               connect: {
                 id: await getReportingManagerId(item),
               },
             },
           }),
-          ...(((item.projectType === "Hourly cost project" ||
-            item.projectType === "Fixed cost project") && localStorage.getItem("userId") !== await getProjectManagerId(item)  )&& {
-            projectManager: {
-              connect: {
-                id: await getProjectManagerId(item),
+          ...((item.projectType === "Hourly cost project" ||
+            item.projectType === "Fixed cost project") &&
+            localStorage.getItem("userId") !==
+              (await getProjectManagerId(item)) && {
+              projectManager: {
+                connect: {
+                  id: await getProjectManagerId(item),
+                },
               },
-            },
-          }),
+            }),
           userName: {
             connect: {
               id: localStorage.getItem("userId"),
@@ -316,9 +324,9 @@ const Projects = () => {
             refetch1();
             refetch2();
             refetch3();
-             setTimeout(()=>{
-              router.push('/timeline')
-             },1000)
+            setTimeout(() => {
+              router.push("/timeline");
+            }, 1000);
           })
           .catch((err) => {
             // console.log("err", err);
@@ -400,16 +408,22 @@ const Projects = () => {
         <div className="px-5 py-6">
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 ml-6">
-                Date
-              </label>
+   
 
-              <DatePicker
-                selected={form.values.date}
-                // onChange={(date: any) => setStartDate(date)}
-                {...form.getInputProps("date")}
-                className="block w-1/2 ... ml-6 mb-6 p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark"
-              />
+              <div className="flex mx-5 my-4">
+                <DateInput
+                  {...form.getInputProps("date")}
+                  styles={(theme) => ({
+                    input: {
+                      padding: "20px !important",
+                      borderRadius: "12px !important",
+                      width:"270px"
+                    },
+                  })}
+                  placeholder="Date input"
+                  label={<div className="flex" >  <FiCalendar  className="text-2xl"  />  <h4 className="mx-2" > select date </h4></div>}
+                />
+              </div>
 
               <div className="relative overflow-x-auto">
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -445,6 +459,12 @@ const Projects = () => {
                           dropdownPosition="top"
                           withinPortal
                           {...form.getInputProps(`entries.${0}.project`)}
+                          styles={(theme) => ({
+                            input: {
+                              padding: "20px !important",
+                              borderRadius: "12px !important",
+                            },
+                          })}
                           onChange={(e) => selectProject(e, 0)}
                         />
                       </th>
@@ -455,6 +475,12 @@ const Projects = () => {
                           dropdownPosition="top"
                           withinPortal
                           nothingFound="No options"
+                          styles={(theme) => ({
+                            input: {
+                              padding: "20px !important",
+                              borderRadius: "12px !important",
+                            },
+                          })}
                           data={form.values.entries[0].tasks}
                           {...form.getInputProps(`entries.${0}.task`)}
                         />
@@ -464,6 +490,12 @@ const Projects = () => {
                           placeholder="choose duration"
                           type="number"
                           withAsterisk
+                          styles={(theme) => ({
+                            input: {
+                              padding: "20px !important",
+                              borderRadius: "12px !important",
+                            },
+                          })}
                           {...form.getInputProps(`entries.${0}.duration`)}
                         />
                       </td>
@@ -471,6 +503,12 @@ const Projects = () => {
                         <Textarea
                           placeholder="write here"
                           withAsterisk
+                          styles={(theme) => ({
+                            input: {
+                              padding: "20px !important",
+                              borderRadius: "12px !important",
+                            },
+                          })}
                           {...form.getInputProps(`entries.${0}.activity`)}
                         />
                       </td>
@@ -481,7 +519,10 @@ const Projects = () => {
                         if (item.key === 0) {
                         } else {
                           return (
-                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <tr
+                              key={item.key}
+                              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                            >
                               <th
                                 scope="row"
                                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -490,6 +531,12 @@ const Projects = () => {
                                   placeholder="choose project"
                                   searchable
                                   nothingFound="No options"
+                                  styles={(theme) => ({
+                                    input: {
+                                      padding: "20px !important",
+                                      borderRadius: "12px !important",
+                                    },
+                                  })}
                                   data={projects}
                                   {...form.getInputProps(
                                     `entries.${index}.project`
@@ -502,6 +549,12 @@ const Projects = () => {
                                   placeholder="choose Task"
                                   searchable
                                   nothingFound="No options"
+                                  styles={(theme) => ({
+                                    input: {
+                                      padding: "20px !important",
+                                      borderRadius: "12px !important",
+                                    },
+                                  })}
                                   data={item.tasks}
                                   {...form.getInputProps(
                                     `entries.${index}.task`
@@ -511,6 +564,12 @@ const Projects = () => {
                               <td className="px-6 py-4">
                                 <NumberInput
                                   placeholder="choose duration"
+                                  styles={(theme) => ({
+                                    input: {
+                                      padding: "20px !important",
+                                      borderRadius: "12px !important",
+                                    },
+                                  })}
                                   type="number"
                                   withAsterisk
                                   {...form.getInputProps(
@@ -521,6 +580,12 @@ const Projects = () => {
                               <td className="px-6 py-4">
                                 <Textarea
                                   placeholder="write here"
+                                  styles={(theme) => ({
+                                    input: {
+                                      padding: "20px !important",
+                                      borderRadius: "12px !important",
+                                    },
+                                  })}
                                   withAsterisk
                                   {...form.getInputProps(
                                     `entries.${index}.activity`
@@ -556,14 +621,13 @@ const Projects = () => {
           </div>
         </div>
 
-         {/* <ModalProject
+        {/* <ModalProject
           showModal={showModal}
           handleCloseModal={handleCloseModal}
         />  */}
-   
       </form>
     </LayoutNav>
   );
 };
 
-export default Projects;
+export default AddTimeLine;
