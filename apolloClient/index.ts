@@ -11,7 +11,7 @@ const enchancedFetch = (url: string, init: RequestInit): Promise<Response> => {
 };
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:3000/api/graphql",
+  uri: `${process.env.PORT}/api/graphql`,
   credentials: "include",
   fetchOptions: {
     mode: "cors",
