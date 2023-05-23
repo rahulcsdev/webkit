@@ -361,7 +361,7 @@ const EditTimeEntry = ({ params }: any) => {
   function handleCloseModal() {
     setShowModal(false);
   }
-  const clickS = "bg-[#5773FF] text-white";
+  const clickS = "bg-secondary text-white";
   const notClickS = "bg-gray-100 text-black";
   return (
     <LayoutNav>
@@ -380,7 +380,7 @@ const EditTimeEntry = ({ params }: any) => {
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="flex items-center justify-between">
               <h1
-                className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
+                   className={`text-secondary text-[1.2em] font-semibold ${manrope.style} `}
               >
                 Edit Time Entry
               </h1>

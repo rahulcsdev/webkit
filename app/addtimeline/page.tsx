@@ -367,7 +367,7 @@ const AddTimeLine = () => {
     form.setFieldValue(`entries.${index}.projectType`, projectType);
   };
 
-  const clickS = "bg-[#5773FF] text-white";
+  const clickS = "bg-secondary text-white";
   const notClickS = "bg-gray-100 text-black";
   return (
     <LayoutNav>
@@ -387,7 +387,7 @@ const AddTimeLine = () => {
                 <div className="relative">
                   <button
                     type="button"
-                    className={`${clickS} px-3 py-2 rounded-lg capitalize mr-6`}
+                    className={`${clickS} px-3 py-2 rounded-lg capitalize mr-2`}
                     onClick={() => router.push("/timeline")}
                   >
                     Go Back

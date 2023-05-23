@@ -172,7 +172,7 @@ const ProjectManagerTimeEntries = () => {
     });
   };
 
-  const clickS = "bg-[#5773FF] text-white";
+  const clickS = "bg-secondary text-white";
   const notClickS = "bg-gray-100 text-black";
 
   // console.log('p',data);
@@ -256,7 +256,7 @@ const ProjectManagerTimeEntries = () => {
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="flex items-center justify-between">
               <h1
-                className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
+                className={`text-secondary text-[1.2em] font-semibold ${manrope.style} `}
               >
                 Approval as Project Manager
               </h1>
@@ -337,7 +337,7 @@ const ProjectManagerTimeEntries = () => {
                               </th>
                               <td className="text-center px-6 py-4">{item.task?.name}</td>
                               <td className="text-center px-6 py-4">
-                                {item.date.slice(0, 10)}
+                                {item.date?.slice(0, 10)}
                               </td>
                               <td className="text-center px-6 py-4">
                                 {" "}
@@ -394,6 +394,13 @@ const ProjectManagerTimeEntries = () => {
                       total={totalPages}
                       onChange={handlePageChange}
                       value={currentPage}
+                      styles={(theme) => ({
+                        control: {
+                          "&[data-active]": {
+                            backgroundColor: "#006180",
+                          },
+                        },
+                      })}
                     />
                   }
                 </div>

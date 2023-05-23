@@ -193,6 +193,7 @@ type Project {
   projectDiscription: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input ProjectWhereUniqueInput {
@@ -215,6 +216,7 @@ input ProjectWhereInput {
   projectDiscription: StringFilter
   startDate: DateTimeNullableFilter
   endDate: DateTimeNullableFilter
+  totalTimeUtilized: FloatNullableFilter
 }
 
 input UserManyRelationFilter {
@@ -252,6 +254,17 @@ input NestedStringNullableFilter {
   not: NestedStringNullableFilter
 }
 
+input FloatNullableFilter {
+  equals: Float
+  in: [Float!]
+  notIn: [Float!]
+  lt: Float
+  lte: Float
+  gt: Float
+  gte: Float
+  not: FloatNullableFilter
+}
+
 input ProjectOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -262,6 +275,7 @@ input ProjectOrderByInput {
   projectDiscription: OrderDirection
   startDate: OrderDirection
   endDate: OrderDirection
+  totalTimeUtilized: OrderDirection
 }
 
 input ProjectUpdateInput {
@@ -276,6 +290,7 @@ input ProjectUpdateInput {
   projectDiscription: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input UserRelateToManyForUpdateInput {
@@ -302,6 +317,7 @@ input ProjectCreateInput {
   projectDiscription: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input UserRelateToManyForCreateInput {
@@ -319,6 +335,7 @@ type Milestone {
   status: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input MilestoneWhereUniqueInput {
@@ -337,6 +354,7 @@ input MilestoneWhereInput {
   status: StringNullableFilter
   startDate: DateTimeNullableFilter
   endDate: DateTimeNullableFilter
+  totalTimeUtilized: FloatNullableFilter
 }
 
 input MilestoneOrderByInput {
@@ -346,6 +364,7 @@ input MilestoneOrderByInput {
   status: OrderDirection
   startDate: OrderDirection
   endDate: OrderDirection
+  totalTimeUtilized: OrderDirection
 }
 
 input MilestoneUpdateInput {
@@ -356,6 +375,7 @@ input MilestoneUpdateInput {
   status: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input ProjectRelateToOneForUpdateInput {
@@ -377,6 +397,7 @@ input MilestoneCreateInput {
   status: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input ProjectRelateToOneForCreateInput {
@@ -397,6 +418,7 @@ type Task {
   milestone: Milestone
   startDate: String
   endDate: String
+  totalTimeUtilized: Float
   estimateTime: String
   taskType: String
 }
@@ -420,6 +442,7 @@ input TaskWhereInput {
   milestone: MilestoneWhereInput
   startDate: StringFilter
   endDate: StringFilter
+  totalTimeUtilized: FloatNullableFilter
   estimateTime: StringFilter
   taskType: StringNullableFilter
 }
@@ -433,6 +456,7 @@ input TaskOrderByInput {
   status: OrderDirection
   startDate: OrderDirection
   endDate: OrderDirection
+  totalTimeUtilized: OrderDirection
   estimateTime: OrderDirection
   taskType: OrderDirection
 }
@@ -448,6 +472,7 @@ input TaskUpdateInput {
   milestone: MilestoneRelateToOneForUpdateInput
   startDate: String
   endDate: String
+  totalTimeUtilized: Float
   estimateTime: String
   taskType: String
 }
@@ -474,6 +499,7 @@ input TaskCreateInput {
   milestone: MilestoneRelateToOneForCreateInput
   startDate: String
   endDate: String
+  totalTimeUtilized: Float
   estimateTime: String
   taskType: String
 }
@@ -499,7 +525,7 @@ type TimeEntery {
   remarks: String
   reviewedBy: User
   reviewedAt: String
-  date: String
+  date: DateTime
 }
 
 input TimeEnteryWhereUniqueInput {
@@ -524,7 +550,7 @@ input TimeEnteryWhereInput {
   remarks: StringFilter
   reviewedBy: UserWhereInput
   reviewedAt: StringFilter
-  date: StringFilter
+  date: DateTimeNullableFilter
 }
 
 input TimeEnteryOrderByInput {
@@ -553,7 +579,7 @@ input TimeEnteryUpdateInput {
   remarks: String
   reviewedBy: UserRelateToOneForUpdateInput
   reviewedAt: String
-  date: String
+  date: DateTime
 }
 
 input TaskRelateToOneForUpdateInput {
@@ -581,7 +607,7 @@ input TimeEnteryCreateInput {
   remarks: String
   reviewedBy: UserRelateToOneForCreateInput
   reviewedAt: String
-  date: String
+  date: DateTime
 }
 
 input TaskRelateToOneForCreateInput {

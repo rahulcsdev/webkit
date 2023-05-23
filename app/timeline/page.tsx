@@ -191,7 +191,7 @@ const TimeEntries = () => {
 
   // console.log(total);
 
-  const clickS = "bg-[#5773FF] text-white";
+  const clickS = "bg-secondary text-white";
   const notClickS = "bg-gray-100 text-black";
   return loading ? (
     <TableSkeleton />
@@ -212,7 +212,7 @@ const TimeEntries = () => {
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="flex items-center justify-between">
               <h1
-                className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
+                className={`text-secondary text-[1.2em] font-semibold ${manrope.style} `}
               >
                 Time Entries
               </h1>
@@ -231,7 +231,7 @@ const TimeEntries = () => {
 
           <div className="p-5 bg-white drop-shadow-md rounded-xl rounded mt-8">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 rounded">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <thead className="capitalize bg-[#F8F7F7] font-semibold text-[1em] text-[#140F49]">
                 <tr>
                   <th scope="col" className="px-6 py-3 text-center">
                     Project
@@ -281,7 +281,7 @@ const TimeEntries = () => {
                           </th>
                           <td className="px-6 py-4 text-center">{item.task?.name}</td>
                           <td className="px-6 py-4 text-center">
-                            {item.date.slice(0, 10)}
+                            {item?.date?.slice(0, 10)}
                           </td>
                           <td className="px-6 py-4 text-center"> {item.userName.name}</td>
                           <td className="px-6 py-4 text-center">{item.duration}</td>
@@ -333,6 +333,13 @@ const TimeEntries = () => {
                   total={totalPages}
                   onChange={handlePageChange}
                   value={currentPage}
+                  styles={(theme) => ({
+                    control: {
+                      "&[data-active]": {
+                        backgroundColor: "#006180",
+                      },
+                    },
+                  })}
                 />
               }
             </div>
