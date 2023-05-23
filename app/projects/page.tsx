@@ -126,6 +126,13 @@ const Projects = () => {
           total={totalPages}
           onChange={handlePageChange}
           value={currentPage}
+          styles={(theme) => ({
+            control: {
+              "&[data-active]": {
+                backgroundColor: "#006180",
+              },
+            },
+          })}
         />
       </div>
      {showModal && <ModalProject refetch={refetch}   showModal={showModal} handleCloseModal={handleCloseModal}  />} 

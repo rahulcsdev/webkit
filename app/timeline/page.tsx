@@ -81,7 +81,11 @@ const TimeEntries = () => {
     }
   };
 
+<<<<<<< HEAD
   const { data, loading, refetch } = useQuery(getSpecificManagerTimeEntries, {
+=======
+  const { data, loading } = useQuery(getSpecificManagerTimeEntries, {
+>>>>>>> 585b879de9b00541454a8d69f5ddaa984b456023
     variables: {
       where: {
         userName: {
@@ -272,7 +276,14 @@ const TimeEntries = () => {
                     if (item.key === 0) {
                     } else {
                       return (
+<<<<<<< HEAD
                         <tr  key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+=======
+                        <tr
+                          className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                          key={index}
+                        >
+>>>>>>> 585b879de9b00541454a8d69f5ddaa984b456023
                           <th
                             scope="row"
                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
@@ -283,6 +294,7 @@ const TimeEntries = () => {
                           <td className="px-6 py-4 text-center">
                             {item.date.slice(0, 10)}
                           </td>
+<<<<<<< HEAD
                           <td className="px-6 py-4 text-center"> {item.userName.name}</td>
                           <td className="px-6 py-4 text-center">{item.duration}</td>
                           <td className="px-6 py-4 text-center">
@@ -304,6 +316,12 @@ const TimeEntries = () => {
                           <td className="px-6 py-4 text-center">{item?.projectManager?.name ? item?.projectManager?.name : item?.reviewedBy?.name }</td>
                           <td className="px-6 py-4 text-center">{item.remarks}</td>
                           <td className="px-6 py-4 text-center">
+=======
+                          <td className="px-6 py-4"> {item.userName.name}</td>
+                          <td className="px-6 py-4">{item.duration}</td>
+                          <td className="px-6 py-4">{item.activities}</td>
+                          <td className="px-6 py-4">
+>>>>>>> 585b879de9b00541454a8d69f5ddaa984b456023
                             {" "}
                             {getStatus(item.reviewStatus)}
                           </td>

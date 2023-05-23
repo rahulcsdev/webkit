@@ -271,13 +271,13 @@ const ModalMs = (props: typeModal) => {
                       <div className="flex items-center justify-center mt-4 gap-4 ">
                         <button
                           type="submit"
-                          className={`text-base font-normal ${roboto.className} text-white px-4 bg-[#5773FF] rounded-md py-2 border-none`}
+                          className={`text-base font-normal ${roboto.className} text-white px-4 bg-secondary rounded-md py-2 border-none`}
                         >
                           {loading ? "Creating..." : "Create"}
                         </button>
                         <button
                           onClick={() => form.reset()}
-                          className={`text-base font-normal ${roboto.className} text-white px-4 bg-[#5773FF] rounded-md py-2 border-none`}
+                          className={`text-base font-normal ${roboto.className} text-white px-4 bg-primary rounded-md py-2 border-none`}
                         >
                           Reset
                         </button>
