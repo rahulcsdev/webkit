@@ -12,6 +12,8 @@ import {
   Group,
   Pagination,
   Badge,
+  Tooltip,
+  Text
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { useDisclosure } from "@mantine/hooks";
@@ -292,28 +294,28 @@ const ProjectManagerTimeEntries = () => {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         Project
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         Task
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         date
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         createdBy
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         Duration
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         Activities
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         status
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         Approval
                       </th>
                     </tr>
@@ -329,21 +331,36 @@ const ProjectManagerTimeEntries = () => {
                             <tr   key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                               <th
                                 scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                className="text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                               >
                                 {item.project?.name}
                               </th>
-                              <td className="px-6 py-4">{item.task?.name}</td>
-                              <td className="px-6 py-4">
+                              <td className="text-center px-6 py-4">{item.task?.name}</td>
+                              <td className="text-center px-6 py-4">
                                 {item.date.slice(0, 10)}
                               </td>
-                              <td className="px-6 py-4">
+                              <td className="text-center px-6 py-4">
                                 {" "}
                                 {item.userName.name}
                               </td>
-                              <td className="px-6 py-4">{item.duration}</td>
-                              <td className="px-6 py-4">{item.activities}</td>
-                              <td className="px-6 py-4">
+                              <td className="text-center px-6 py-4">{item.duration}</td>
+                              <td className="px-6 py-4 text-center">
+                            {" "}
+                            <Tooltip
+                              multiline
+                              color="blue"
+                              width={200}
+                              offset={10}
+                              withArrow
+                              transitionProps={{ duration: 200 }}
+                              label={item.activities}
+                            >
+                              <Text truncate w={60}>
+                                {item.activities}
+                              </Text>
+                            </Tooltip>{" "}
+                          </td>
+                              <td className="text-center px-6 py-4">
                                 {" "}
                                 {getStatus(item.reviewStatus)}{" "}
                               </td>

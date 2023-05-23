@@ -100,7 +100,7 @@ const TimeEntries = () => {
     },
   });
 
-  console.log("data", data);
+  // console.log("data", data);
 
   const router = useRouter();
 
