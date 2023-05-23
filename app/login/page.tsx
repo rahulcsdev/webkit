@@ -10,14 +10,13 @@ import Image from "next/image";
 import boy from "../../public/assets/boy.jpg";
 import { useRouter } from "next/navigation";
 import client from "../../apolloClient/index";
-import { UserLogin} from "@/services";
+import { UserLogin } from "@/services";
 const manrope = Manrope({ subsets: ["latin"] });
-
 
 const Login = () => {
   const router = useRouter();
 
-
+  console.log(process.env.PORT);
   const LoginUser = async (values: any) => {
     const { data } = await client.mutate({
       mutation: UserLogin,
