@@ -99,7 +99,7 @@ const CardCarousal = ({ data }: Props) => {
             <span className="font-medium">
               <FaCalendarPlus />
             </span>{" "}
-            {startDate}
+            {new Date(startDate).toLocaleDateString()}
             {/* {new Date(startDate).toLocaleDateString()} */}
           </p>
           <p
@@ -108,7 +108,7 @@ const CardCarousal = ({ data }: Props) => {
             <span className="font-medium">
               <FaCalendarMinus />
             </span>{" "}
-            {endDate}
+            {new Date(endDate).toLocaleDateString()}
             {/* {new Date(endDate).toLocaleDateString()} */}
           </p>
         </div>
