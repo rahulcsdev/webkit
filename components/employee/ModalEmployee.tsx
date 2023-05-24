@@ -285,10 +285,10 @@ const ModalEmployee = (props: typeModal) => {
                       style={{ display: "flex", justifyContent: "center" }}
                     >
                       <Group position="right" mt="md">
-                        <Button type="submit" size="lg" className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none">
+                        <Button type="submit" size="lg" className="text-white px-6 bg-secondary rounded-md py-2 border-none">
                         {loading?'Creating...':'Create'}
                         </Button>
-                        <Button size="lg" className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none"  onClick={() => form.reset()} >
+                        <Button size="lg" className="text-white px-6  bg-primary rounded-md py-2 border-none"  onClick={() => form.reset()} >
                           Reset
                         </Button>
                       </Group>

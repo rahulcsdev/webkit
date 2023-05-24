@@ -321,13 +321,13 @@ const ModalEditEmployee = (props: typeModal) => {
                         <Button
                           type="submit"
                           size="lg"
-                          className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none"
+                          className="text-white px-6 bg-secondary rounded-md py-2 border-none"
                         >
                           Save
                         </Button>
                         <Button
                           size="lg"
-                          className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none"
+                          className="text-white px-6 bg-primary rounded-md py-2 border-none"
                           onClick={() => form.reset()}
                         >
                           Reset

@@ -41,7 +41,7 @@ const Employees = () => {
     setSelectedFeild(null);
   }
 
-  const clickS = "bg-[#5773FF] text-white";
+  const clickS = "bg-secondary text-white";
   const notClickS = "bg-gray-100 text-black";
 
 const ITEMS_PER_PAGE = 9;
@@ -91,7 +91,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="flex items-center justify-between">
               <h1
-                className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.className} `}
+                className={`text-secondary text-[1.2em] font-semibold ${manrope.className} `}
               >
                 Your Projects
               </h1>
@@ -117,7 +117,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
                 <div className="relative">
                   <button
                     onClick={() => setShowModal(true)}
-                    className={`bg-[#5773FF] text-white px-3 py-2 rounded-lg capitalize`}
+                    className={`bg-secondary text-white px-3 py-2 rounded-lg capitalize`}
                   >
                     New User
                   </button>
@@ -149,7 +149,14 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
           )}
         </div>
         <div className="my-5 flex items-center justify-center">
-         <Pagination total={totalPages}   onChange={handlePageChange} value={currentPage} />
+         <Pagination total={totalPages}  
+          styles={(theme) => ({
+              control: {
+                "&[data-active]": {
+                  backgroundColor: "#006180",
+                },
+              },
+            })}   onChange={handlePageChange} value={currentPage} />
        </div>
       </div>
    
