@@ -193,6 +193,7 @@ type Project {
   projectDiscription: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input ProjectWhereUniqueInput {
@@ -215,6 +216,7 @@ input ProjectWhereInput {
   projectDiscription: StringFilter
   startDate: DateTimeNullableFilter
   endDate: DateTimeNullableFilter
+  totalTimeUtilized: FloatNullableFilter
 }
 
 input UserManyRelationFilter {
@@ -252,6 +254,17 @@ input NestedStringNullableFilter {
   not: NestedStringNullableFilter
 }
 
+input FloatNullableFilter {
+  equals: Float
+  in: [Float!]
+  notIn: [Float!]
+  lt: Float
+  lte: Float
+  gt: Float
+  gte: Float
+  not: FloatNullableFilter
+}
+
 input ProjectOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -262,6 +275,7 @@ input ProjectOrderByInput {
   projectDiscription: OrderDirection
   startDate: OrderDirection
   endDate: OrderDirection
+  totalTimeUtilized: OrderDirection
 }
 
 input ProjectUpdateInput {
@@ -276,6 +290,7 @@ input ProjectUpdateInput {
   projectDiscription: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input UserRelateToManyForUpdateInput {
@@ -302,6 +317,7 @@ input ProjectCreateInput {
   projectDiscription: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input UserRelateToManyForCreateInput {
@@ -319,6 +335,7 @@ type Milestone {
   status: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input MilestoneWhereUniqueInput {
@@ -337,6 +354,7 @@ input MilestoneWhereInput {
   status: StringNullableFilter
   startDate: DateTimeNullableFilter
   endDate: DateTimeNullableFilter
+  totalTimeUtilized: FloatNullableFilter
 }
 
 input MilestoneOrderByInput {
@@ -346,6 +364,7 @@ input MilestoneOrderByInput {
   status: OrderDirection
   startDate: OrderDirection
   endDate: OrderDirection
+  totalTimeUtilized: OrderDirection
 }
 
 input MilestoneUpdateInput {
@@ -356,6 +375,7 @@ input MilestoneUpdateInput {
   status: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input ProjectRelateToOneForUpdateInput {
@@ -377,6 +397,7 @@ input MilestoneCreateInput {
   status: String
   startDate: DateTime
   endDate: DateTime
+  totalTimeUtilized: Float
 }
 
 input ProjectRelateToOneForCreateInput {
@@ -395,8 +416,9 @@ type Task {
   priority: String
   status: String
   milestone: Milestone
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
+  totalTimeUtilized: Float
   estimateTime: String
   taskType: String
 }
@@ -418,8 +440,9 @@ input TaskWhereInput {
   priority: StringNullableFilter
   status: StringNullableFilter
   milestone: MilestoneWhereInput
-  startDate: StringFilter
-  endDate: StringFilter
+  startDate: DateTimeNullableFilter
+  endDate: DateTimeNullableFilter
+  totalTimeUtilized: FloatNullableFilter
   estimateTime: StringFilter
   taskType: StringNullableFilter
 }
@@ -433,6 +456,7 @@ input TaskOrderByInput {
   status: OrderDirection
   startDate: OrderDirection
   endDate: OrderDirection
+  totalTimeUtilized: OrderDirection
   estimateTime: OrderDirection
   taskType: OrderDirection
 }
@@ -446,8 +470,9 @@ input TaskUpdateInput {
   priority: String
   status: String
   milestone: MilestoneRelateToOneForUpdateInput
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
+  totalTimeUtilized: Float
   estimateTime: String
   taskType: String
 }
@@ -472,8 +497,9 @@ input TaskCreateInput {
   priority: String
   status: String
   milestone: MilestoneRelateToOneForCreateInput
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
+  totalTimeUtilized: Float
   estimateTime: String
   taskType: String
 }
@@ -493,13 +519,13 @@ type TimeEntery {
   FileCount(where: FileWhereInput! = {}): Int
   duration: String
   projectType: String
-  projectManager: String
+  projectManager: User
   userName: User
   reviewStatus: String
   remarks: String
   reviewedBy: User
   reviewedAt: String
-  date: String
+  date: DateTime
 }
 
 input TimeEnteryWhereUniqueInput {
@@ -518,13 +544,13 @@ input TimeEnteryWhereInput {
   File: FileManyRelationFilter
   duration: StringFilter
   projectType: StringNullableFilter
-  projectManager: StringFilter
+  projectManager: UserWhereInput
   userName: UserWhereInput
   reviewStatus: StringNullableFilter
   remarks: StringFilter
   reviewedBy: UserWhereInput
   reviewedAt: StringFilter
-  date: StringFilter
+  date: DateTimeNullableFilter
 }
 
 input TimeEnteryOrderByInput {
@@ -533,7 +559,6 @@ input TimeEnteryOrderByInput {
   code: OrderDirection
   duration: OrderDirection
   projectType: OrderDirection
-  projectManager: OrderDirection
   reviewStatus: OrderDirection
   remarks: OrderDirection
   reviewedAt: OrderDirection
@@ -548,13 +573,13 @@ input TimeEnteryUpdateInput {
   File: FileRelateToManyForUpdateInput
   duration: String
   projectType: String
-  projectManager: String
+  projectManager: UserRelateToOneForUpdateInput
   userName: UserRelateToOneForUpdateInput
   reviewStatus: String
   remarks: String
   reviewedBy: UserRelateToOneForUpdateInput
   reviewedAt: String
-  date: String
+  date: DateTime
 }
 
 input TaskRelateToOneForUpdateInput {
@@ -576,13 +601,13 @@ input TimeEnteryCreateInput {
   File: FileRelateToManyForCreateInput
   duration: String
   projectType: String
-  projectManager: String
+  projectManager: UserRelateToOneForCreateInput
   userName: UserRelateToOneForCreateInput
   reviewStatus: String
   remarks: String
   reviewedBy: UserRelateToOneForCreateInput
   reviewedAt: String
-  date: String
+  date: DateTime
 }
 
 input TaskRelateToOneForCreateInput {

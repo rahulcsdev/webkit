@@ -28,6 +28,7 @@ query (
   projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
    
     id
+    name
    
   }
 }
@@ -72,6 +73,12 @@ export const updateTimesheet = gql`
 mutation Mutation($data: TimeEnteryUpdateInput!, $where: TimeEnteryWhereUniqueInput!) {
   updateTimeEntery(data: $data, where: $where) {
     id
+    reviewedBy{
+      name
+    }
+    projectManager{
+      name
+    }
   }
 }
 `;
@@ -123,6 +130,8 @@ export const updateTimeEntry = gql`
   ) {
     updateTimeEntery(where: $where, data: $data) {
       reviewStatus
+ 
+      
     }
   }
 `;
@@ -425,8 +434,10 @@ export const getSpecificManagerTimeEntries = gql`
   query Query(
     $orderBy: [TimeEnteryOrderByInput!]!
     $where: TimeEnteryWhereInput!
+    $take: Int
+    $skip: Int
   ) {
-    timeEnteries(orderBy: $orderBy, where: $where) {
+    timeEnteries(orderBy: $orderBy, where: $where,take:$take,skip:$skip) {
       id
       project {
         name
@@ -442,6 +453,10 @@ export const getSpecificManagerTimeEntries = gql`
       }
       userName {
         name
+      }
+      projectManager {
+        name
+        id
       }
       activities
       reviewStatus
@@ -531,7 +546,10 @@ export const addTimesheets = gql`
       code
       duration
       projectType
-      projectManager
+      projectManager{
+        name
+        id
+      }
       userName {
         name
         id

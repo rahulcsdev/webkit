@@ -30,7 +30,7 @@ import {
 import { useRouter } from "next/navigation";
 import { get } from "http";
 
-const Projects = ({ params }: any) => {
+const EditTimeEntry = ({ params }: any) => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
@@ -216,7 +216,9 @@ const Projects = ({ params }: any) => {
     variables: {
       where: {
         projectManager: {
-          equals: form.values.userId,
+          id: {
+            equals: form.values.userId,
+          },
         },
       },
       orderBy: [
@@ -261,7 +263,7 @@ const Projects = ({ params }: any) => {
     }
 
     if (data) {
-      // console.log("data", data);
+      console.log("data", data);
       getProjectsAndTasksSelectedData(data);
 
       form.setFieldValue("project", data?.timeEntery.project.id);
@@ -278,7 +280,7 @@ const Projects = ({ params }: any) => {
     if (form.validate().hasErrors) {
       return;
     } else {
-      const formatteddata = {
+      const formatteddata: any = {
         activities: form.values.activity,
         duration: form.values.duration.toString(),
         task: {
@@ -286,7 +288,7 @@ const Projects = ({ params }: any) => {
             id: form.values.task,
           },
         },
-  
+
         project: {
           connect: {
             id: form.values.project,
@@ -306,13 +308,32 @@ const Projects = ({ params }: any) => {
           form.values.projectType === "Fixed cost project") &&
           localStorage.getItem("userId") !==
             (await getProjectManagerId(form.values.project)) && {
-            projectManager: await getProjectManagerId(form.values.project),
+            projectManager: {
+              connect: {
+                id: await getProjectManagerId(form.values.project),
+              },
+            },
           }),
         reviewStatus: "Pending",
       };
-  
+
       // console.log("formattedData", formatteddata);
-  
+
+      //removing default manger
+
+      if (formatteddata.reviewedBy?.connect) {
+        formatteddata.projectManager = {
+          disconnect: true,
+        };
+      }
+      if (formatteddata.projectManager?.connect) {
+        formatteddata.reviewedBy = {
+          disconnect: true,
+        };
+      }
+
+      // console.log("format1", formatteddata);
+
       updateTimeEntry({
         variables: {
           data: formatteddata,
@@ -322,35 +343,35 @@ const Projects = ({ params }: any) => {
         },
       })
         .then((res: any) => {
-          // console.log("timeline updated", res);
+          console.log("timeline updated", res);
           refetch1();
           refetch2();
           refetch3();
-          router.push('/timeline')
-          // alert("timeline added");
+
+          setTimeout(() => {
+            router.push("/timeline");
+          }, 1000);
         })
         .catch((err) => {
           // console.log("err", err);
         });
     }
-
-
   };
 
   function handleCloseModal() {
     setShowModal(false);
   }
-  const clickS = "bg-[#5773FF] text-white";
+  const clickS = "bg-secondary text-white";
   const notClickS = "bg-gray-100 text-black";
   return (
     <LayoutNav>
       <form
         onSubmit={form.onSubmit(
           (values, _event) => {
-            console.log("h", values, _event);
+            // console.log("h", values, _event);
           },
           (validationErrors, _values, _event) => {
-            console.log(validationErrors);
+            // console.log(validationErrors);
           }
         )}
       >
@@ -359,7 +380,7 @@ const Projects = ({ params }: any) => {
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="flex items-center justify-between">
               <h1
-                className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
+                   className={`text-secondary text-[1.2em] font-semibold ${manrope.style} `}
               >
                 Edit Time Entry
               </h1>
@@ -403,6 +424,12 @@ const Projects = ({ params }: any) => {
                         searchable
                         withAsterisk
                         // label="select project"
+                        styles={(theme) => ({
+                          input: {
+                            padding: "20px !important",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         nothingFound="No options"
                         data={form.values.projects}
                         {...form.getInputProps(`project`)}
@@ -416,6 +443,12 @@ const Projects = ({ params }: any) => {
                         searchable
                         dropdownPosition="bottom"
                         // label="select task"
+                        styles={(theme) => ({
+                          input: {
+                            padding: "20px !important",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         withinPortal
                         withAsterisk
                         nothingFound="No options"
@@ -428,8 +461,14 @@ const Projects = ({ params }: any) => {
                       <NumberInput
                         placeholder="choose duration"
                         // label="select duration"
+                        styles={(theme) => ({
+                          input: {
+                            padding: "20px !important",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         type="number"
-                        withAsterisk
+                        // withAsterisk
                         {...form.getInputProps(`duration`)}
                       />
                     </td>
@@ -438,7 +477,13 @@ const Projects = ({ params }: any) => {
                       <Textarea
                         placeholder="write here"
                         // label="create activity"
-                        withAsterisk
+                        // withAsterisk
+                        styles={(theme) => ({
+                          input: {
+                            padding: "20px !important",
+                            borderRadius: "12px !important",
+                          },
+                        })}
                         {...form.getInputProps(`activity`)}
                       />
                     </td>
@@ -466,4 +511,4 @@ const Projects = ({ params }: any) => {
   );
 };
 
-export default Projects;
+export default EditTimeEntry;

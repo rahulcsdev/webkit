@@ -57,7 +57,7 @@ export default list({
       ],
     }),
 
-    projectManager: text(),
+    projectManager: relationship({ ref: "User" }),
 
     userName: relationship({ ref: "User" }),
     reviewStatus: select({
@@ -78,10 +78,171 @@ export default list({
 
     reviewedAt: text(),
 
-    date: text(),
+    date: timestamp(),
   },
 
   hooks: {
+    afterOperation: async ({
+      operation,
+      resolvedData,
+      context,
+      originalItem
+    }) => { 
+      // console.log(operation)
+      if(operation=="create"){
+
+      //  console.log(resolvedData)
+      //  console.log(originalItem)
+      const proejctId = resolvedData?.project.connect.id;
+      const taskId = resolvedData?.task.connect.id;
+     
+      const project:any = await context.db.Project.findOne({
+        where: { id:proejctId},
+      });
+      const task:any= await context.db.Task.findOne({
+        where: { id:taskId},
+      });
+    
+     const milestone:any= await context.db.Milestone.findOne({
+      where: { id:task?.milestoneId},
+    });
+     
+      let Projectduration:number ;
+      let taskDuration:number;
+      let milestoneDuration:number;
+      if(project?.totalTimeUtilized==0||task?.totalTimeUtilized==0){
+        Projectduration= +(resolvedData.duration)
+        taskDuration=+(resolvedData.duration)
+      }else{
+         Projectduration = project?.totalTimeUtilized+(+(resolvedData.duration))
+         taskDuration= task?.totalTimeUtilized+(+(resolvedData.duration));
+      }
+      if(milestone?.totalTimeUtilized=="null"){
+          milestoneDuration= taskDuration
+          // console.log(taskDuration)
+      }else{
+        milestoneDuration=milestone?.totalTimeUtilized+taskDuration
+        // console.log(milestoneDuration)
+      }
+       
+        const updateProject= await context.db.Project.updateOne({
+          where: { id: proejctId },
+          data: {
+            totalTimeUtilized: Projectduration,
+          },
+        });
+        const updateTask= await context.db.Task.updateOne({
+          where: { id: taskId },
+          data: {
+            totalTimeUtilized: taskDuration,
+          },
+        });
+        const updateMilestone=await context.db.Milestone.updateOne({
+          where: { id: task?.milestoneId },
+          data: {
+            totalTimeUtilized: milestoneDuration,
+          },
+        });
+      
+        return resolvedData
+    }
+    else if(operation==="update"){
+      
+      if(!isNaN(resolvedData.duration)){
+        const Projectid:any = originalItem.projectId
+        const taskId:any= originalItem.taskId
+       const project:any = await context.db.Project.findOne({
+         where: { id: Projectid},
+       });
+       const task:any= await context.db.Task.findOne({
+         where: { id: taskId},
+       });
+      const milestone:any= await context.db.Milestone.findOne({
+       where: { id: task?.milestoneId},
+     });
+       let Projectduration:number ;
+       let taskDuration:number;
+       let milestoneDuration:number;
+       if(project?.totalTimeUtilized==0||task?.totalTimeUtilized==0){
+         Projectduration= +(resolvedData.duration)
+         taskDuration=+(resolvedData.duration)
+ 
+       }else{
+          const deletePriviousProjectData= project?.totalTimeUtilized-(+(originalItem?.duration));
+          const deletePriviousTaskData=task?.totalTimeUtilized-(+(originalItem?.duration));
+          const deleteMilestoneData= milestone?.totalTimeUtilized-task.totalTimeUtilized;
+ 
+          Projectduration= deletePriviousProjectData+(+(resolvedData.duration));
+          taskDuration=deletePriviousTaskData+(+(resolvedData.duration));
+          milestoneDuration= deleteMilestoneData+(+(resolvedData.duration));
+          
+       }
+         
+         const updateProject= await context.db.Project.updateOne({
+           where: { id: Projectid },
+           data: {
+             totalTimeUtilized: Projectduration,
+           },
+         });
+         const updateTask= await context.db.Task.updateOne({
+           where: { id: taskId },
+           data: {
+             totalTimeUtilized: taskDuration,
+           },
+         });
+         const updateMilestone= await context.db.Milestone.updateOne({
+           where: { id: task?.milestoneId },
+           data: {
+             totalTimeUtilized: milestoneDuration,
+           },
+         });
+      }
+        // console.log(updateTask)
+        return resolvedData
+      
+    }
+    else if(operation==="delete"){
+      const Projectid:any = originalItem.projectId
+      const taskId:any= originalItem.taskId
+     const project:any = await context.db.Project.findOne({
+       where: { id: Projectid},
+     });
+     const task:any= await context.db.Task.findOne({
+       where: { id: taskId},
+     });
+    const milestone:any= await context.db.Milestone.findOne({
+     where: { id: task?.milestoneId},
+   });
+   const Projectduration = project?.totalTimeUtilized-(+(originalItem?.duration));
+   const taskDuration=task?.totalTimeUtilized-(+(originalItem?.duration));
+   const milestoneDuration = milestone?.totalTimeUtilized-task.totalTimeUtilized;
+   
+   const updateProject= await context.db.Project.updateOne({
+    where: { id: Projectid },
+    data: {
+      totalTimeUtilized: Projectduration,
+    },
+  });
+ 
+  const updateTask= await context.db.Task.updateOne({
+    where: { id: taskId },
+    data: {
+      totalTimeUtilized: taskDuration,
+    },
+  });
+  
+  const updateMilestone= await context.db.Milestone.updateOne({
+    where: { id: task?.milestoneId },
+    data: {
+      totalTimeUtilized: milestoneDuration,
+    },
+  });
+    }
+    else{
+      return resolvedData
+    }
+      
+    },
     resolveInput: async ({ resolvedData, context,operation }) => {
     if(operation==="create"){
       const taskId = resolvedData.task.connect.id;

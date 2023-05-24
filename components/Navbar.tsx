@@ -66,7 +66,7 @@ const Navbar = (props: Props) => {
               placeholder="search.."
             />
             <div
-              className={`bg-[#5773FF] text-white rounded-md flex items-center px-3 cursor-pointer`}
+              className={`bg-secondary text-white rounded-md flex items-center px-3 cursor-pointer`}
             >
               <HiOutlineSearch className="text-xl" />
             </div>

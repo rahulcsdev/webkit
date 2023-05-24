@@ -1,7 +1,7 @@
 import { list } from '@keystone-6/core';
 import { text, password, select } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
-import { multiselect ,relationship,timestamp } from '@keystone-6/core/fields';
+import { multiselect ,relationship,timestamp,float } from '@keystone-6/core/fields';
 
 // Define the session object type
 type Session = {
@@ -73,9 +73,13 @@ ui: {hideCreate: true,},}),
 
  startDate: timestamp({ defaultValue: new Date().toISOString() }),
 
- endDate: timestamp({ defaultValue: new Date().toISOString() }), }, ui: {
+ endDate: timestamp({ defaultValue: new Date().toISOString() }), 
+ totalTimeUtilized:float({defaultValue: 0,ui: { itemView: { fieldMode: 'read' } }}),
+},
+ ui: {labelField: 'name', },
 
- labelField: 'name', },
+ 
+
  // Define a hook to generate project codes
 hooks:{
     resolveInput: async({ resolvedData,context,operation }) => {

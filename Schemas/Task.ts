@@ -1,7 +1,8 @@
 import { list } from "@keystone-6/core";
 import { text, password, select } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
-import { multiselect, relationship, timestamp } from "@keystone-6/core/fields";
+import { multiselect, relationship, timestamp ,float} from "@keystone-6/core/fields";
+import { timeStamp } from "console";
 
 
 type Session = {
@@ -75,9 +76,10 @@ export default list({
       ref: "Milestone",
     }),
 
-    startDate: text(),
+    startDate: timestamp({ defaultValue: new Date().toISOString() }),
 
-    endDate: text(),
+    endDate: timestamp({ defaultValue: new Date().toISOString() }), 
+    totalTimeUtilized:float({defaultValue: 0,ui: { itemView: { fieldMode: 'read' } }}),
     estimateTime: text(),
     taskType: select({
       defaultValue: "No priority",
