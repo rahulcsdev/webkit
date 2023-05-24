@@ -22,7 +22,6 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <title>Cloud Active labs</title>
       <body className={inter.className}>
         <div className={`h-screen overflow-hidden ${flex}`}>
           {pathname !== "/login" && (
