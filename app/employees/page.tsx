@@ -13,6 +13,7 @@ import { gql , useQuery } from "@apollo/client";
 import client from "../../apolloClient/index";
 import { getUser } from "@/services";
 import { Pagination } from "@mantine/core";
+import { getAuthData } from "../helper";
 
 
 const manrope = Manrope({ subsets: ["latin"] });
@@ -25,6 +26,10 @@ const Employees = () => {
   const [selectedFeild, setSelectedFeild] = useState<string | null>();
   const [total, setTotal] = useState(0);
   const [datas, setData] = useState([]);
+
+  
+  const { refetch:refetchAuth} = getAuthData()
+
 
 
   const openDetails = (id: string) => {
@@ -73,6 +78,7 @@ const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
 
 
   useEffect(() => {
+    refetchAuth()
     fetchUser();
   }, [currentPage]);
 

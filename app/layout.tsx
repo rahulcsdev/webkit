@@ -1,7 +1,7 @@
 "use client";
 import Sidebar from "../components/Sidebar";
 import "./globals.css";
-import { gql, useQuery } from "@apollo/client";
+
 import { Inter } from "next/font/google";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });

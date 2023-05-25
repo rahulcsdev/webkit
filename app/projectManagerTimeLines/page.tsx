@@ -31,6 +31,7 @@ const manrope = Manrope({ subsets: ["latin"] });
 
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 import { TableSkeleton } from "@/utils/skeleton";
+import { getAuthData } from "../helper";
 
 const ProjectManagerTimeEntries = () => {
   const myDivRef = useRef<any>(null);
@@ -46,6 +47,10 @@ const ProjectManagerTimeEntries = () => {
   const [total, setTotal] = useState(0);
 
   const router = useRouter();
+
+  
+  const { refetch:refetchAuth} = getAuthData()
+
 
   const form = useForm({
     initialValues: {
@@ -89,6 +94,7 @@ const ProjectManagerTimeEntries = () => {
 
   useEffect(() => {
     // console.log('l')
+    refetchAuth()
     const userId = localStorage.getItem("userId");
     if (userId) {
       form.setFieldValue("userId", userId);

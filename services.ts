@@ -531,6 +531,25 @@ export const getTasksOfSelectedProject = gql`
 `;
 
 
+export const authItem= gql`
+query AuthenticatedItem {
+  authenticatedItem {
+    ... on User {
+      id
+      name
+    }
+  }
+}
+`
+
+export const endSession = gql`
+mutation Mutation {
+  endSession
+}
+`
+
+
+
 
 export const addTimesheets = gql`
   mutation Mutation($data: [TimeEnteryCreateInput!]!) {

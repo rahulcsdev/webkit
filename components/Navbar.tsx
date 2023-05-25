@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Skeleton } from '@mantine/core';
-
+import { Skeleton } from "@mantine/core";
 import { Manrope } from "next/font/google";
 import { HiOutlineSearch } from "react-icons/hi";
 import { MdOutlineEmail } from "react-icons/md";
@@ -16,8 +15,8 @@ import { profileLinks } from "../utils/data";
 import client from "@/apolloClient/index";
 import { getspecficUser } from "@/services";
 import { useContext } from "react";
-import { User_data } from "@/app/context/context";
-
+import { User_data } from "../app/context/context";
+import { authItem, endSession } from "@/services";
 
 const manrope = Manrope({ subsets: ["latin"] });
 interface Props {
@@ -26,24 +25,26 @@ interface Props {
 const Navbar = (props: Props) => {
   const [isExpand, setIsExpand] = useState(false);
   const router = useRouter();
-  const [reload,setReload] = useState(false);
+  const [reload, setReload] = useState(false);
 
   const { isScrolling } = props;
 
-
-  const {user}:any = useContext(User_data)
+  const { user, setUser }: any = useContext(User_data);
 
   const navigateToPage = (item: any) => {
     if (item.link === "/login") {
       // console.log('jjj')
-        localStorage.removeItem("userId")
-        router.push(item.link);
-        // setReload(!reload)
+      localStorage.removeItem("userId");
+
+      localStorage.removeItem("userToken");
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
     } else {
       router.push(item.link);
     }
   };
-
 
   return (
     <div
@@ -89,9 +90,7 @@ const Navbar = (props: Props) => {
               className={`rounded-full h-12 w-12`}
             />
             <h6 className={`text-base font-normal text-[#605C8D]`}>
-              {   
-                  user.name ? user.name : <Skeleton height={22} width={42}  />
-              }
+              {user.name ? user.name : <Skeleton height={22} width={42} />}
             </h6>
 
             <Popover opened={isExpand} onChange={setIsExpand} withinPortal>

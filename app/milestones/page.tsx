@@ -7,8 +7,10 @@ import { useQuery } from "@apollo/client";
 import { Pagination } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import SecondNav from "@/components/SecondNav";
+import { getAuthData } from "../helper";
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 const ModalMs = dynamic(() => import("@/components/milestone/ModalMs"));
+
 
 const EditModalMs = dynamic(
   () => import("../../components/milestone/EditModalMs")
@@ -42,6 +44,9 @@ const MildStone = () => {
     setSelectedFeild(null);
     setShowModalEdit(false);
   }
+
+  const { refetch:refetchAuth} = getAuthData()
+
 
   const { data, loading, error, refetch } = useQuery(getMilestone, {
     client,
@@ -86,6 +91,7 @@ const MildStone = () => {
       });
   };
   useEffect(() => {
+    refetchAuth()
     fetchData();
   }, [status, currentPage]);
 

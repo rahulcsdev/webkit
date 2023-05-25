@@ -27,6 +27,7 @@ const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 const manrope = Manrope({ subsets: ["latin"] });
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 import { useRouter } from "next/navigation";
+import { getAuthData } from "../helper";
 const TimeEntries = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -40,6 +41,8 @@ const TimeEntries = () => {
   const [page, setPage] = useState(INITIAL_PAGE);
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [total, setTotal] = useState(0);
+  
+  const { refetch:refetchAuth} = getAuthData()
 
   const form = useForm({
     initialValues: {
@@ -157,6 +160,8 @@ const TimeEntries = () => {
   };
 
   useEffect(() => {
+
+    refetchAuth()
     const userId = localStorage.getItem("userId");
 
     if (userId) {

@@ -21,6 +21,7 @@ import { gql, useQuery, useMutation } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
 import client from "../../apolloClient/index";
 import { DateInput } from "@mantine/dates";
+import { getAuthData } from "../helper";
 import {
   getProjects,
   addTimesheets,
@@ -44,6 +45,10 @@ const AddTimeLine = () => {
   const router = useRouter();
 
   const [createTimesheets, {}] = useMutation(addTimesheets);
+
+  
+  const { refetch:refetchAuth} = getAuthData()
+
 
   const getReportingManagerId = async (item: any) => {
     return await client
@@ -128,6 +133,7 @@ const AddTimeLine = () => {
   };
 
   useEffect(() => {
+     refetchAuth()
     const userId = localStorage.getItem("userId");
     if (userId) {
       form.setFieldValue("userId", userId);
