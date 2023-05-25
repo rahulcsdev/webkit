@@ -6,7 +6,8 @@ import {
   Group,
   Select,
   Grid,
-  MultiSelect
+  MultiSelect,
+  Input
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DateInput } from '@mantine/dates';
@@ -145,12 +146,38 @@ const ModalEmployee = (props: typeModal) => {
                 <form onSubmit={form.onSubmit((values) =>handleSubmit(values))}>
                   <Grid>
                     <Grid.Col span={12}>
-                      <TextInput
+                    <Input.Wrapper  label="Full Name"
+                     styles={() => ({
+                      label: {
+                        color: "#01041b",
+                        fontSize: "1.2em",
+                        fontWeight: 500,
+                        lineHeight: 1.2,
+                        marginBottom: 10,
+                      },
+                    })}
+                    >
+                    <Input 
+                     placeholder="Full Name"
+                     size="lg"
+                     required
+                     styles={(theme) => ({
+                      input: {
+                        height: 50,
+
+                        fontSize: 16,
+                        lineHeight: 50,
+                      },
+                    })}
+                     {...form.getInputProps("name")}
+                    />
+                  </Input.Wrapper>
+                      {/* <TextInput
                         variant="filled"
                         label="Full Name"
                         placeholder="Full Name"
-                        radius="md"
                         size="lg"
+                        className="rounded-md"
                         labelProps={{
                           style: {
                             marginBottom: "0.5rem", // add margin bottom to create space between label and input
@@ -158,11 +185,38 @@ const ModalEmployee = (props: typeModal) => {
                           },
                         }}
                         {...form.getInputProps("name")}
-                      />
+                      /> */}
                     </Grid.Col>
 
                     <Grid.Col span={6}>
-                      <TextInput
+                    <Input.Wrapper   label="Email"
+                     styles={() => ({
+                      label: {
+                        color: "#01041b",
+                        fontSize: "1.2em",
+                        fontWeight: 500,
+                        lineHeight: 1.2,
+                        marginBottom: 10,
+                      },
+                    })}
+                    >
+                    <Input 
+                     placeholder="your@email.com"
+                     radius="md"
+                     size="lg"
+                     required
+                     styles={(theme) => ({
+                      input: {
+                        height: 50,
+
+                        fontSize: 16,
+                        lineHeight: 50,
+                      },
+                    })}
+                    {...form.getInputProps("email")}
+                    />
+                  </Input.Wrapper>
+                      {/* <TextInput
                         variant="filled"
                         label="Email"
                         placeholder="your@email.com"
@@ -175,11 +229,38 @@ const ModalEmployee = (props: typeModal) => {
                           },
                         }}
                         {...form.getInputProps("email")}
-                      />
+                      /> */}
                     </Grid.Col>
 
                     <Grid.Col span={6}>
-                      <TextInput
+                    <Input.Wrapper   label="Password"
+                     styles={() => ({
+                      label: {
+                        color: "#01041b",
+                        fontSize: "1.2em",
+                        fontWeight: 500,
+                        lineHeight: 1.2,
+                        marginBottom: 10,
+                      },
+                    })}
+                    >
+                    <Input 
+                    placeholder="Password"
+                    radius="md"
+                    size="lg"
+                     required
+                     styles={(theme) => ({
+                      input: {
+                        height: 50,
+
+                        fontSize: 16,
+                        lineHeight: 50,
+                      },
+                    })}
+                    {...form.getInputProps("password")}
+                    />
+                  </Input.Wrapper>
+                      {/* <TextInput
                         variant="filled"
                         label="Password"
                         placeholder="Password"
@@ -192,7 +273,7 @@ const ModalEmployee = (props: typeModal) => {
                           },
                         }}
                         {...form.getInputProps("password")}
-                      />
+                      /> */}
                     </Grid.Col>
 
                     <Grid.Col span={6}>
