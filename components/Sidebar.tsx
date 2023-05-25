@@ -1,26 +1,27 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+
 import { Manrope, Roboto } from "next/font/google";
 import { timelineLinks, timelineFolder } from "../utils/data";
-import { CircularProgressbar } from "react-circular-progressbar";
+
 import "react-circular-progressbar/dist/styles.css";
 import { FiArrowDown, FiArrowRight } from "react-icons/fi";
-import logo from '../public/images/logo1.png'
-import Logo from "./Logo";
-const manrope = Manrope({ subsets: ["latin"] });
-const roboto = Roboto({ weight: "500", subsets: ["latin"] });
 import { BsClipboardCheck, BsPersonPlus } from "react-icons/bs";
 import { RxCube } from "react-icons/rx";
+import { TbReport, TbReportAnalytics, TbReportSearch } from "react-icons/tb";
 import { IoHomeOutline, IoPrint } from "react-icons/io5";
 
 import { GiStairsGoal } from "react-icons/gi";
+import Logo from "./Logo";
+const manrope = Manrope({ subsets: ["latin"] });
+const roboto = Roboto({ weight: "500", subsets: ["latin"] });
+
 const navLinks = [
   {
     icon: <IoHomeOutline />,
     name: "dashboard",
-    link: "",
+    link: "home",
   },
   {
     icon: <IoPrint />,
@@ -48,20 +49,31 @@ const navLinks = [
     link: "desk",
   },
 ];
+const report = [
+  {
+    icon: <TbReportSearch />,
+    name: "User Reports",
+    link: "userreports",
+  },
+  {
+    icon: <TbReport />,
+    name: "Task Reports",
+    link: "taskreports",
+  },
+];
 const Sidebar = () => {
   const [active, setActive] = useState("dashboard");
   const [timelineToggle, setTimelineToggel] = useState(false);
-
+  const [openReport, setOpenReport] = useState(false);
   const changeState = (value: string) => {
     setActive(value);
   };
-  const percentage = 66;
+
   return (
     <div className="bg-white drop-shadow-sm  h-full py-3">
       {/* Logo */}
       <div className="flex items-center py-6 justify-center w-full   sticky top-0 z-10 bg-white ">
-       <Logo />
-      
+        <Logo />
       </div>
       <div className="h-full pb-12 overflow-y-scroll ">
         <ul className=" flex flex-col items-start justify-center gap-2  w-full ">
@@ -81,7 +93,7 @@ const Sidebar = () => {
                 >
                   {item.icon}
                   <h1
-                    className={`text-md font-medium capitalize text-[1rem] ${roboto.className} `}
+                    className={`  font-medium capitalize text-[1rem] ${roboto.className} `}
                   >
                     {item.name}
                   </h1>
@@ -143,8 +155,48 @@ const Sidebar = () => {
                 </div>
               </Link>
             ))}
+          <li
+            className={`  font-medium capitalize text-[1rem] ${roboto.className} hover:text-primary
+             hover:bg-orange-50 flex justify-start cursor-pointer 
+             items-center gap-3 px-3 py-2 w-full text-gray-700 `}
+            onClick={() => setOpenReport((prev) => !prev)}
+          >
+            <TbReportAnalytics size={22} /> Reports
+            {openReport ? (
+              <FiArrowDown size={22} />
+            ) : (
+              <FiArrowRight size={22} />
+            )}
+          </li>
+          {openReport && (
+            <div className=" w-full">
+              {report.map((item, index) => (
+                <li key={item.name} className=" w-full">
+                  <Link
+                    href={`/${item.link}`}
+                    className="w-full"
+                    onClick={() => changeState(item.name)}
+                  >
+                    <div
+                      className={`${
+                        active === item.name
+                          ? "border-l-4    border-primary  bg-orange-50 text-primary"
+                          : "border-none  text-gray-600 "
+                      } px-6 hover:text-primary hover:bg-orange-50 flex justify-start cursor-pointer  items-center gap-3  py-1 w-full  text-2xl`}
+                    >
+                      {item.icon}
+                      <h1
+                        className={`  font-medium capitalize text-[1rem] ${roboto.className} `}
+                      >
+                        {item.name}
+                      </h1>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </div>
+          )}
         </ul>
-        
       </div>
     </div>
   );
