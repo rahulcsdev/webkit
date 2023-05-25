@@ -10,7 +10,7 @@ import { User_data } from "./context/context";
 export const getAuthData = () => {
   const router = useRouter();
 
-  const { user, setUser }: any = useContext(User_data);
+  const { setUser }: any = useContext(User_data);
 
   const { data, error, loading, refetch } = useQuery(authItem, {
     context: {

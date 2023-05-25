@@ -7,6 +7,7 @@ import {
   Select,
   Grid,
   MultiSelect,
+  Input
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DateInput } from "@mantine/dates";
@@ -188,7 +189,33 @@ const ModalEditEmployee = (props: typeModal) => {
                 <form onSubmit={form.onSubmit((values) => updateUserHandler(values))}>
                   <Grid>
                     <Grid.Col span={12}>
-                      <TextInput
+                    <Input.Wrapper  label="Full Name"
+                     styles={() => ({
+                      label: {
+                        color: "#01041b",
+                        fontSize: "1.2em",
+                        fontWeight: 500,
+                        lineHeight: 1.2,
+                        marginBottom: 10,
+                      },
+                    })}
+                    >
+                    <Input 
+                     placeholder="Full Name"
+                     size="lg"
+                     required
+                     styles={(theme) => ({
+                      input: {
+                        height: 50,
+
+                        fontSize: 16,
+                        lineHeight: 50,
+                      },
+                    })}
+                     {...form.getInputProps("name")}
+                    />
+                  </Input.Wrapper>
+                      {/* <TextInput
                         variant="filled"
                         label="Full Name"
                         placeholder="Full Name"
@@ -202,11 +229,38 @@ const ModalEditEmployee = (props: typeModal) => {
                         }}
                         //   style={{ width: "400px" }}
                         {...form.getInputProps("name")}
-                      />
+                      /> */}
                     </Grid.Col>
 
                     <Grid.Col span={6}>
-                      <TextInput
+                    <Input.Wrapper   label="Email"
+                     styles={() => ({
+                      label: {
+                        color: "#01041b",
+                        fontSize: "1.2em",
+                        fontWeight: 500,
+                        lineHeight: 1.2,
+                        marginBottom: 10,
+                      },
+                    })}
+                    >
+                    <Input 
+                     placeholder="your@email.com"
+                     radius="md"
+                     size="lg"
+                     required
+                     styles={(theme) => ({
+                      input: {
+                        height: 50,
+
+                        fontSize: 16,
+                        lineHeight: 50,
+                      },
+                    })}
+                    {...form.getInputProps("email")}
+                    />
+                  </Input.Wrapper>
+                      {/* <TextInput
                         variant="filled"
                         label="Email"
                         placeholder="your@email.com"
@@ -219,11 +273,38 @@ const ModalEditEmployee = (props: typeModal) => {
                           },
                         }}
                         {...form.getInputProps("email")}
-                      />
+                      /> */}
                     </Grid.Col>
 
                     <Grid.Col span={6}>
-                      <TextInput
+                    <Input.Wrapper   label="Designation"
+                     styles={() => ({
+                      label: {
+                        color: "#01041b",
+                        fontSize: "1.2em",
+                        fontWeight: 500,
+                        lineHeight: 1.2,
+                        marginBottom: 10,
+                      },
+                    })}
+                    >
+                    <Input 
+                     placeholder="designation"
+                     radius="md"
+                     size="lg"
+                     required
+                     styles={(theme) => ({
+                      input: {
+                        height: 50,
+
+                        fontSize: 16,
+                        lineHeight: 50,
+                      },
+                    })}
+                    {...form.getInputProps("designation")}
+                    />
+                  </Input.Wrapper>
+                      {/* <TextInput
                         variant="filled"
                         label="designation"
                         placeholder="designation"
@@ -236,7 +317,7 @@ const ModalEditEmployee = (props: typeModal) => {
                           },
                         }}
                         {...form.getInputProps("designation")}
-                      />
+                      /> */}
                     </Grid.Col>
 
                     <Grid.Col span={6}>
@@ -321,13 +402,13 @@ const ModalEditEmployee = (props: typeModal) => {
                         <Button
                           type="submit"
                           size="lg"
-                          className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none"
+                          className="text-white px-6 bg-secondary rounded-md py-2 border-none"
                         >
                           Save
                         </Button>
                         <Button
                           size="lg"
-                          className="text-white px-6 bg-[#5773FF] rounded-md py-2 border-none"
+                          className="text-white px-6 bg-primary rounded-md py-2 border-none"
                           onClick={() => form.reset()}
                         >
                           Reset
