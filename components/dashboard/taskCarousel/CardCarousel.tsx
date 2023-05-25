@@ -1,7 +1,7 @@
 import React from "react";
 import { Manrope, Roboto } from "next/font/google";
 import { BiTask } from "react-icons/bi";
-import ProgressBar from "../ProgressBar";
+import ProgressBar from "../../ProgressBar";
 import Image from "next/image";
 import { FaCalendarMinus, FaCalendarPlus } from "react-icons/fa";
 import { Card } from "@mantine/core";
@@ -9,65 +9,48 @@ import { Card } from "@mantine/core";
 const manrope = Manrope({ subsets: ["latin"] });
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });
 
-interface projectCardTypes {
-  status: string;
-  startDate: string;
-  projectType: string;
-  projectManager: {
-    name: string;
-    id: string;
-  };
 
-  name: string;
-  memberCount: number;
-  member: [
-    {
-      id: string;
-      name: string;
+interface dataType    {
+    id: string,
+    name:string,
+    milestone: {
+        name: string,
+        id: string
+      },
+    project: {
+      name: string,
+      id: string
     },
-    {
-      id: string;
-      name: string;
-    },
-    {
-      id: string;
-      name: string;
-    }
-  ];
-  id: string;
-  endDate: string;
-}
+    endDate: string,
+    startDate: string,
+    status: string,
+    taskType: string,
+    estimateTime: string,
+    priority: string
+  }
+
 
 interface Props {
-  data: projectCardTypes;
+  data: dataType;
 }
 
 const CardCarousal = ({ data }: Props) => {
-  const {
-    name,
-    status,
-    member,
-    memberCount,
-    projectManager,
-    projectType,
-    startDate,
-    endDate,
-    id,
-  } = data;
+
+    const {id,endDate,name,project,startDate,status,milestone,taskType,estimateTime,priority}=data;
 
   let percentage = 0;
 
   switch (status) {
-    case "New":
+    case "Open":
       percentage = 5;
       break;
-    case "Design Developement":
+    case "Document Analysis":
       percentage = 10;
       break;
     case "In Progress":
       percentage = 50;
       break;
-    case "Testing":
+    case "Code Review":
       percentage = 70;
       break;
     case "Completed":
@@ -88,7 +71,7 @@ const CardCarousal = ({ data }: Props) => {
       ? "#50C6B4"
       : "#50C878";
 
-  // const arr = new Array(image).fill(0);
+ 
   return (
     <>
       <Card className="bg-white drop-shadow-md rounded-xl p-5 my-2 mx-3 min-w-[350px]">
@@ -117,6 +100,7 @@ const CardCarousal = ({ data }: Props) => {
               <FaCalendarPlus />
             </span>{" "}
             {new Date(startDate).toLocaleDateString()}
+            {/* {new Date(startDate).toLocaleDateString()} */}
           </p>
           <p
             className={`text-red-400 flex items-center rounded-md gap-2 px-2 py-1 bg-red-50 text-base ${roboto.className} mt-1`}
@@ -125,50 +109,31 @@ const CardCarousal = ({ data }: Props) => {
               <FaCalendarMinus />
             </span>{" "}
             {new Date(endDate).toLocaleDateString()}
+            {/* {new Date(endDate).toLocaleDateString()} */}
           </p>
         </div>
 
+        {/* <div className="flex justify-between items-center mt-6">
+          <div className="flex">
+          <h6 className={`text-md font-normal px-2 py-1 bg-[#FFCF52] rounded-md`}>{priority}</h6>
+          </div>
+
+          <h6 className={`text-md font-normal px-2 py-1 bg-[#F35421] rounded-md`}>{estimateTime}</h6>
+        
+        </div> */}
+
         <div className="flex justify-between items-center mt-6">
           <div className="flex">
-            <p className={`text-[#605C8D] text-base ${roboto.className} mt-1`}>
-              <span className="font-medium">Manager :</span>{" "}
-              {projectManager ? projectManager.name : "Non"}
-            </p>
-
-            {/* {arr.map((item, index) => (
-              <Image
-                key={index}
-                src={index % 2 == 0 ? "/assets/picTwo.jpg" : "/assets/picTwo.jpg"}
-                height={30}
-                width={30}
-                alt="image"
-                className={`rounded-full -mr-3`}
-              />
-            ))} */}
+          <h6 className={`text-[#605C8D] text-base ${roboto.className} mt-1`}><span className={`font-medium`}>Project :</span> {project?.name}</h6>
+          {/* <h6 className={`text-md font-normal px-2 py-1 bg-[#50C6B4] rounded-md`}>{project.name}</h6> */}
           </div>
-          <div className="grid grid-cols-2 gap-2 items-start justify-start ">
-            {member.slice(0, 3).map((item, index) => (
-              <div
-                key={index}
-                className={`text-white text-sm px-2 py-1 rounded-md ${
-                  index % 2 !== 0
-                    ? "bg-[#FFCF52]"
-                    : index % 3 !== 0
-                    ? "bg-[#50C6B4]"
-                    : "bg-[#51BBFE]"
-                }`}
-              >
-                {item.name}
-              </div>
-            ))}
 
-            {member.length > 3 && (
-              <div className="px-2 text-xl rounded-full bg-gray-200">
-                {memberCount - 3}+
-              </div>
-            )}
-          </div>
+          <h6 className={`text-white text-sm px-2 py-1 rounded-md bg-[#51BBFE]`}>{priority}</h6>
+          {/* <h6 className={`text-md font-normal px-2 py-1 bg-[#51BBFE] rounded-md`}>{milestone.name}</h6> */}
+        
         </div>
+
+       
       </Card>
     </>
   );
