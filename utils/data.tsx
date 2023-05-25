@@ -214,6 +214,45 @@ export const dataDev = [
   },
 ];
 
+export const UserSkiilsData = [
+  { 
+    image:'assets/01.png',
+    title:"Adobe Photoshop",
+    percentage: 85,
+    
+  },
+  { 
+    image:'assets/02.png',
+    title:"Figma",
+    percentage: 85,
+    
+  },
+  { 
+    image:'assets/03.png',
+    title:"Figma",
+    percentage: 85,
+     
+  },
+  { 
+    image:'assets/04.png',
+    title:"Adobe Photoshop",
+    percentage: 85,
+    
+  },
+  { 
+    image:'assets/05.png',
+    title:"Adobe Photoshop",
+    percentage: 85,
+    
+  },
+  { 
+    image:'assets/06.png',
+    title:"Adobe Photoshop",
+    percentage: 85,
+    
+  }
+]
+
 export const carousalData = [
   {
     title: "Product list view changes",
