@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm, isNotEmpty } from "@mantine/form";
 import DatePicker from "react-datepicker";
+
 import {
   Textarea,
   NumberInput,
@@ -9,6 +10,10 @@ import {
   Button,
   Modal,
   Group,
+  Pagination,
+  Badge,
+  Tooltip,
+  Text
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { useDisclosure } from "@mantine/hooks";
@@ -17,6 +22,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Manrope } from "next/font/google";
 
 import { FiEdit } from "react-icons/fi";
+import client from "@/apolloClient";
 
 const LayoutNav = dynamic(() => import("@/components/LayoutNav"));
 import { useRouter } from "next/navigation";
@@ -26,12 +32,18 @@ const manrope = Manrope({ subsets: ["latin"] });
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
 import { TableSkeleton } from "@/utils/skeleton";
 
-const TimeEntries = () => {
+const ProjectManagerTimeEntries = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isExpand, setIsExpand] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
+
+  const INITIAL_PAGE = 1;
+  const ITEMS_PER_PAGE = 15;
+  const [page, setPage] = useState(INITIAL_PAGE);
+  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
+  const [total, setTotal] = useState(0);
 
   const router = useRouter();
 
@@ -49,11 +61,38 @@ const TimeEntries = () => {
     },
   });
 
+  const getTotalLength = async (id: string) => {
+    await client
+      .query({
+        query: getSpecificManagerTimeEntries,
+        variables: {
+          where: {
+            projectManager: {
+              id: {
+                equals:id
+              }
+            }
+          },
+          orderBy: [
+            {
+              date: "asc",
+            },
+          ],
+        },
+      })
+      .then(({ data }) => {
+        // console.log("all enteries",data);
+        setTotal(data?.timeEnteries.length);
+        // console.log(data);
+      });
+  };
+
   useEffect(() => {
     // console.log('l')
     const userId = localStorage.getItem("userId");
     if (userId) {
       form.setFieldValue("userId", userId);
+      getTotalLength(userId);
     }
   }, []);
 
@@ -61,7 +100,9 @@ const TimeEntries = () => {
     variables: {
       where: {
         projectManager: {
-          equals: form.values.userId,
+          id: {
+            equals:form.values.userId 
+          }
         },
       },
       orderBy: [
@@ -69,10 +110,10 @@ const TimeEntries = () => {
           date: "asc",
         },
       ],
+      take: ITEMS_PER_PAGE,
+      skip: (page - 1) * ITEMS_PER_PAGE,
     },
   });
-
-  // console.log(data);
 
   const [createProject, {}] = useMutation(updateTimeEntry);
 
@@ -108,35 +149,64 @@ const TimeEntries = () => {
       })
       .catch((error) => console.log(error));
   };
-  const clickS = "bg-[#5773FF] text-white";
+
+  const handlePageChange = (page: any) => {
+    // console.log("page", page);
+
+    setCurrentPage(page);
+    refetch({
+      where: {
+        projectManager: {
+          id: {
+            equals:form.values.userId 
+          }
+        },
+      },
+      orderBy: [
+        {
+          date: "asc",
+        },
+      ],
+      take: ITEMS_PER_PAGE,
+      skip: (page - 1) * ITEMS_PER_PAGE,
+    });
+  };
+
+  const clickS = "bg-secondary text-white";
   const notClickS = "bg-gray-100 text-black";
+
+  // console.log('p',data);
 
   const getStatus = (status: string) => {
     if (status === "Pending") {
       return (
-        <p className="bg-orange-500 text-white rounded px-2 py-[1px]">
+        <Badge color="yellow" variant="filled">
           {status}
-        </p>
+        </Badge>
       );
     }
 
     if (status === "Approved") {
       return (
-        <p className="bg-green-500 text-white rounded px-2 py-[1px]">
+        <Badge color="green" variant="filled">
           {status}
-        </p>
+        </Badge>
       );
     }
 
     if (status === "Rejected") {
       return (
-        <p className="bg-red-600 text-white rounded px-2 py-[1px]">{status}</p>
+        <Badge color="red" variant="filled">
+          {status}
+        </Badge>
       );
     }
   };
 
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+
   return loading ? (
-    TableSkeleton
+    <TableSkeleton />
   ) : (
     <LayoutNav>
       <form
@@ -151,9 +221,10 @@ const TimeEntries = () => {
       >
         <>
           <Modal opened={opened} onClose={close} centered>
-            change status
             <Select
               placeholder="change status"
+              label="status"
+              withAsterisk
               withinPortal
               {...form.getInputProps(`status`)}
               data={[
@@ -165,6 +236,7 @@ const TimeEntries = () => {
             <Textarea
               className="mt-4"
               placeholder="write remark"
+              label="remark"
               withAsterisk
               {...form.getInputProps(`remark`)}
             />
@@ -174,7 +246,7 @@ const TimeEntries = () => {
                 onClick={() => changeStatus()}
                 className="text-white mt-2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
               >
-                save
+                submit
               </button>
             </Group>
           </Modal>
@@ -184,9 +256,9 @@ const TimeEntries = () => {
           <div className="p-5 bg-white drop-shadow-md rounded-xl">
             <div className="flex items-center justify-between">
               <h1
-                className={`text-[#140F49] text-[1.2em] font-semibold ${manrope.style} `}
+                className={`text-secondary text-[1.2em] font-semibold ${manrope.style} `}
               >
-                Project Manager Time Entries
+                Approval as Project Manager
               </h1>
               <div className="flex items-center gap-4 justify-center">
                 <div className="relative"></div>
@@ -220,31 +292,31 @@ const TimeEntries = () => {
 
               <div className="relative overflow-x-auto">
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <thead className="capitalize bg-[#F8F7F7] font-semibold text-[1em] text-[#140F49]">
                     <tr>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         Project
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         Task
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         date
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         createdBy
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         Duration
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         Activities
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-6 py-3 text-center">
                         status
                       </th>
-                      <th scope="col" className="px-6 py-3">
-                        change status
+                      <th scope="col" className="px-6 py-3 text-center">
+                        Approval
                       </th>
                     </tr>
                   </thead>
@@ -256,27 +328,39 @@ const TimeEntries = () => {
                         if (item.key === 0) {
                         } else {
                           return (
-                            <tr
-                              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                              key={index}
-                            >
+                            <tr   key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                               <th
                                 scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                className="text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                               >
                                 {item.project?.name}
                               </th>
-                              <td className="px-6 py-4">{item.task?.name}</td>
-                              <td className="px-6 py-4">
-                                {item.date.slice(0, 10)}
+                              <td className="text-center px-6 py-4">{item.task?.name}</td>
+                              <td className="text-center px-6 py-4">
+                                {item.date?.slice(0, 10)}
                               </td>
-                              <td className="px-6 py-4">
+                              <td className="text-center px-6 py-4">
                                 {" "}
                                 {item.userName.name}
                               </td>
-                              <td className="px-6 py-4">{item.duration}</td>
-                              <td className="px-6 py-4">{item.activities}</td>
-                              <td className="px-6 py-4">
+                              <td className="text-center px-6 py-4">{item.duration}</td>
+                              <td className="px-6 py-4 text-center">
+                            {" "}
+                            <Tooltip
+                              multiline
+                              color="blue"
+                              width={200}
+                              offset={10}
+                              withArrow
+                              transitionProps={{ duration: 200 }}
+                              label={item.activities}
+                            >
+                              <Text truncate w={60}>
+                                {item.activities}
+                              </Text>
+                            </Tooltip>{" "}
+                          </td>
+                              <td className="text-center px-6 py-4">
                                 {" "}
                                 {getStatus(item.reviewStatus)}{" "}
                               </td>
@@ -304,6 +388,22 @@ const TimeEntries = () => {
                       })}
                   </tbody>
                 </table>
+                <div className="my-5 flex items-center justify-center">
+                  {
+                    <Pagination
+                      total={totalPages}
+                      onChange={handlePageChange}
+                      value={currentPage}
+                      styles={(theme) => ({
+                        control: {
+                          "&[data-active]": {
+                            backgroundColor: "#006180",
+                          },
+                        },
+                      })}
+                    />
+                  }
+                </div>
               </div>
             </div>
           </div>
@@ -318,4 +418,4 @@ const TimeEntries = () => {
   );
 };
 
-export default TimeEntries;
+export default ProjectManagerTimeEntries;

@@ -416,8 +416,8 @@ type Task {
   priority: String
   status: String
   milestone: Milestone
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
   totalTimeUtilized: Float
   estimateTime: String
   taskType: String
@@ -440,8 +440,8 @@ input TaskWhereInput {
   priority: StringNullableFilter
   status: StringNullableFilter
   milestone: MilestoneWhereInput
-  startDate: StringFilter
-  endDate: StringFilter
+  startDate: DateTimeNullableFilter
+  endDate: DateTimeNullableFilter
   totalTimeUtilized: FloatNullableFilter
   estimateTime: StringFilter
   taskType: StringNullableFilter
@@ -470,8 +470,8 @@ input TaskUpdateInput {
   priority: String
   status: String
   milestone: MilestoneRelateToOneForUpdateInput
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
   totalTimeUtilized: Float
   estimateTime: String
   taskType: String
@@ -497,8 +497,8 @@ input TaskCreateInput {
   priority: String
   status: String
   milestone: MilestoneRelateToOneForCreateInput
-  startDate: String
-  endDate: String
+  startDate: DateTime
+  endDate: DateTime
   totalTimeUtilized: Float
   estimateTime: String
   taskType: String
@@ -519,7 +519,7 @@ type TimeEntery {
   FileCount(where: FileWhereInput! = {}): Int
   duration: String
   projectType: String
-  projectManager: String
+  projectManager: User
   userName: User
   reviewStatus: String
   remarks: String
@@ -544,7 +544,7 @@ input TimeEnteryWhereInput {
   File: FileManyRelationFilter
   duration: StringFilter
   projectType: StringNullableFilter
-  projectManager: StringFilter
+  projectManager: UserWhereInput
   userName: UserWhereInput
   reviewStatus: StringNullableFilter
   remarks: StringFilter
@@ -559,7 +559,6 @@ input TimeEnteryOrderByInput {
   code: OrderDirection
   duration: OrderDirection
   projectType: OrderDirection
-  projectManager: OrderDirection
   reviewStatus: OrderDirection
   remarks: OrderDirection
   reviewedAt: OrderDirection
@@ -574,7 +573,7 @@ input TimeEnteryUpdateInput {
   File: FileRelateToManyForUpdateInput
   duration: String
   projectType: String
-  projectManager: String
+  projectManager: UserRelateToOneForUpdateInput
   userName: UserRelateToOneForUpdateInput
   reviewStatus: String
   remarks: String
@@ -602,7 +601,7 @@ input TimeEnteryCreateInput {
   File: FileRelateToManyForCreateInput
   duration: String
   projectType: String
-  projectManager: String
+  projectManager: UserRelateToOneForCreateInput
   userName: UserRelateToOneForCreateInput
   reviewStatus: String
   remarks: String
