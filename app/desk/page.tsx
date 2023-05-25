@@ -17,6 +17,7 @@ import {
 
 import { RxDashboard } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
+import { getAuthData } from "../helper";
 const  DeskCardCarousal = dynamic(() => import("../../components/desk/DeskCardCarousel"));
 const DesktaskCarousel= dynamic(() => import("../../components/desk/DesktaskCarousel"));
 const DeskMilestoneCarousel=dynamic(() => import("../../components/desk/DeskMilestoneCarousel"));
@@ -26,8 +27,12 @@ const Desk = () => {
   const myDivRef = useRef<any>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
-  
 
+  const { refetch:refetchAuth} = getAuthData()
+
+  useEffect(()=>{
+    refetchAuth()
+  },[])
 
   const projectData= useQuery(getProjectList, {
     client,

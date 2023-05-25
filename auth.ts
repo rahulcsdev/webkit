@@ -13,7 +13,7 @@ const { withAuth } = createAuth({
   },
 });
 let sessionSecret = 'vbsdkblasmnc;jkcpk;,m;k[edjdjnndnleee';// Secret used for session encryption
-let sessionMaxAge = 60 * 60 * 24 * 30;  // Maximum age of the session (30 days)
+let sessionMaxAge = 480;  // Maximum age of the session (30 days)
 
 const session = statelessSessions({
   maxAge: sessionMaxAge,// Set the maximum age of the session

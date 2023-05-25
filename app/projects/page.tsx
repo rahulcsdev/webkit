@@ -3,10 +3,11 @@ import React, { useContext, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import client from "@/apolloClient";
 import { gql, useQuery } from "@apollo/client";
-import { getProjectList, getProjects } from "@/services";
+import { authItem, getProjectList, getProjects } from "@/services";
 import { Pagination } from "@mantine/core";
 import SecondNav from "@/components/SecondNav";
- 
+import { getAuthData} from "../helper";
+
 
 const EditModalProject = dynamic(
   () => import("@/components/project/EditModalProject")
@@ -34,6 +35,8 @@ const Projects = () => {
     setShowModalEdit(true);
     setType(type);
   };
+
+  const { refetch:refetchAuth} = getAuthData()
 
   const { data, loading, error, refetch } = useQuery(getProjectList, {
     client,
@@ -81,6 +84,7 @@ const Projects = () => {
   };
 
   useEffect(() => {
+    refetchAuth()
     fetchData();
     refetch()
   }, [status, currentPage]);

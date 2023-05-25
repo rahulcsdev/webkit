@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 "use client";
 import { Manrope } from "next/font/google";
 import dynamic from "next/dynamic";
@@ -160,3 +162,4 @@ export default function Home() {
     </LayoutNav>
   );
 }
+>>>>>>> 02e34131ae86b322baa8010ae261662612ec5599

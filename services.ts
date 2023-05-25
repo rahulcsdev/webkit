@@ -19,19 +19,17 @@ export const addNewUser = gql`
   }
 `;
 export const getProjects = gql`
-query (
-  $where: ProjectWhereInput
-  $take: Int
-  $skip: Int
-  $orderBy: [ProjectOrderByInput!]
-) {
-  projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
-   
-    id
-    name
-   
+  query (
+    $where: ProjectWhereInput
+    $take: Int
+    $skip: Int
+    $orderBy: [ProjectOrderByInput!]
+  ) {
+    projects(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
+      id
+      name
+    }
   }
-}
 `;
 export const addProject = gql`
   mutation ($data: ProjectCreateInput!) {
@@ -40,12 +38,14 @@ export const addProject = gql`
     }
   }
 `;
-export const GET_USERS=gql`query Users {
-  users {
-    id
-    name
+export const GET_USERS = gql`
+  query Users {
+    users {
+      id
+      name
+    }
   }
-}`
+`;
 export const addMilestone = gql`
   mutation CreateMilestone($data: MilestoneCreateInput!) {
     createMilestone(data: $data) {
@@ -70,17 +70,20 @@ export const addTimesheet = gql`
 `;
 
 export const updateTimesheet = gql`
-mutation Mutation($data: TimeEnteryUpdateInput!, $where: TimeEnteryWhereUniqueInput!) {
-  updateTimeEntery(data: $data, where: $where) {
-    id
-    reviewedBy{
-      name
-    }
-    projectManager{
-      name
+  mutation Mutation(
+    $data: TimeEnteryUpdateInput!
+    $where: TimeEnteryWhereUniqueInput!
+  ) {
+    updateTimeEntery(data: $data, where: $where) {
+      id
+      reviewedBy {
+        name
+      }
+      projectManager {
+        name
+      }
     }
   }
-}
 `;
 
 export const updateAllTimeEntry = gql`
@@ -130,8 +133,6 @@ export const updateTimeEntry = gql`
   ) {
     updateTimeEntery(where: $where, data: $data) {
       reviewStatus
- 
-      
     }
   }
 `;
@@ -168,9 +169,9 @@ export const getProjectList = gql`
         name
         id
       }
-    
+
       name
-     
+
       member {
         id
         name
@@ -185,7 +186,7 @@ export const getUser = gql`
   query (
     $where: UserWhereInput
     $take: Int
-    $skip: Int 
+    $skip: Int
     $orderBy: [UserOrderByInput!]
   ) {
     users(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
@@ -229,7 +230,6 @@ export const MILESTONE_QUERY = gql`
   ) {
     milestones(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
       id
-    
     }
   }
 `;
@@ -332,7 +332,7 @@ export const getMilestoneDetails = gql`
 export const getAll = gql`
   query TimeEnteries {
     timeEnteries {
-     id
+      id
     }
   }
 `;
@@ -371,26 +371,26 @@ export const getUserDetails = gql`
 export const getTimesheetDetails = gql`
   query ($where: TimeEnteryWhereUniqueInput!) {
     timeEntery(where: $where) {
+      id
+      project {
+        name
         id
-        project {
-          name
-          id
-        }
-        task {
-          name
-          id
-        }
-        activities
-        duration
-        reviewStatus
-        projectType
-        remarks
-        reviewedAt
-        reviewedBy {
-          id
-          name
-        }
       }
+      task {
+        name
+        id
+      }
+      activities
+      duration
+      reviewStatus
+      projectType
+      remarks
+      reviewedAt
+      reviewedBy {
+        id
+        name
+      }
+    }
   }
 `;
 
@@ -437,7 +437,7 @@ export const getSpecificManagerTimeEntries = gql`
     $take: Int
     $skip: Int
   ) {
-    timeEnteries(orderBy: $orderBy, where: $where,take:$take,skip:$skip) {
+    timeEnteries(orderBy: $orderBy, where: $where, take: $take, skip: $skip) {
       id
       project {
         name
@@ -491,34 +491,34 @@ export const addUser = gql`
 `;
 
 export const updateUser = gql`
-mutation UpdateUser($where: UserWhereUniqueInput!, $data: UserUpdateInput!) {
-  updateUser(where: $where, data: $data) {
-    id
-    name
-    email
-    designation
-    dateOfJoining
-    reportingManager {
+  mutation UpdateUser($where: UserWhereUniqueInput!, $data: UserUpdateInput!) {
+    updateUser(where: $where, data: $data) {
       id
+      name
+      email
+      designation
+      dateOfJoining
+      reportingManager {
+        id
+      }
     }
   }
-}
 `;
 
 export const getTasks = gql`
-query Query ($orderBy: [TaskOrderByInput!]!) {
-  tasks (orderBy: $orderBy) {
-    name
-    id
-    project {
+  query Query($orderBy: [TaskOrderByInput!]!) {
+    tasks(orderBy: $orderBy) {
       name
+      id
+      project {
+        name
+        status
+      }
       status
+      startDate
+      endDate
     }
-    status
-    startDate
-    endDate
   }
-}
 `;
 
 export const getTasksOfSelectedProject = gql`
@@ -529,6 +529,25 @@ export const getTasksOfSelectedProject = gql`
     }
   }
 `;
+
+
+export const authItem= gql`
+query AuthenticatedItem {
+  authenticatedItem {
+    ... on User {
+      id
+      name
+    }
+  }
+}
+`
+
+export const endSession = gql`
+mutation Mutation {
+  endSession
+}
+`
+
 
 
 
@@ -546,7 +565,7 @@ export const addTimesheets = gql`
       code
       duration
       projectType
-      projectManager{
+      projectManager {
         name
         id
       }
@@ -561,6 +580,34 @@ export const addTimesheets = gql`
         id
       }
       reviewedAt
+      date
+    }
+  }
+`;
+
+export const GET_TIME_ENTRY_BY_USER = gql`
+  query Query($where: TimeEnteryWhereInput!) {
+    timeEnteries(where: $where) {
+      userName {
+        name
+        id
+      }
+      reviewedBy {
+        name
+        id
+      }
+      reviewStatus
+      project {
+        id
+        name
+      }
+      id
+      duration
+      activities
+      task {
+        name
+        id
+      }
       date
     }
   }
