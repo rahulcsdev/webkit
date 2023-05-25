@@ -1,14 +1,13 @@
 "use client";
 import Sidebar from "../components/Sidebar";
 import "./globals.css";
-import { gql, useQuery } from "@apollo/client";
+
 import { Inter } from "next/font/google";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });
 import { Context } from "./context/context";
 import { ApolloProvider } from "@apollo/client";
 import client from "@/apolloClient";
- 
 
 export default function RootLayout({
   children,
@@ -32,11 +31,7 @@ export default function RootLayout({
           )}
           <div className={`${basisWidth} h-full bg-[#F8F7F7]`}>
             <ApolloProvider client={client}>
-              <Context>
-             
-                {children}
-              
-                </Context>
+              <Context>{children}</Context>
             </ApolloProvider>
           </div>
         </div>
