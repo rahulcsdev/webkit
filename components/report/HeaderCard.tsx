@@ -1,18 +1,22 @@
 "use client";
 import client from "@/apolloClient";
-import { GET_USERS } from "@/services";
+import { GET_TIME_ENTRY_BY_USER, GET_USERS } from "@/services";
 import { Roboto } from "next/font/google";
 import React, { useState, useEffect } from "react";
 import { MdOutlineAnalytics } from "react-icons/md";
 const roboto = Roboto({ weight: "500", subsets: ["latin"] });
-const HeaderCard = () => {
-  const initalValue = {
-    userId: "",
-    startDate: new Date(),
-    endDate: new Date(),
-  };
 
-  const [formData, setFormData] = useState(initalValue);
+interface props {
+  setFormData: any;
+  formData: any;
+  setTimeEntries: any;
+}
+
+const HeaderCard: React.FC<props> = ({
+  setFormData,
+  formData,
+  setTimeEntries,
+}) => {
   const [users, setUsers] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const onChange = (e: any) => {
@@ -22,6 +26,32 @@ const HeaderCard = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log(formData);
+    try {
+      const { data } = await client.query({
+        query: GET_TIME_ENTRY_BY_USER,
+        variables: {
+          where: {
+            userName: {
+              id: {
+                equals: formData.userId,
+              },
+            },
+            AND: [
+              {
+                date: {
+                  gte: new Date(formData.startDate).toISOString(),
+                  lte: new Date(formData.endDate).toISOString(),
+                },
+              },
+            ],
+          },
+        },
+      });
+      console.log(data);
+      setTimeEntries(data.timeEnteries);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const fetchUsers = async () => {
     try {
