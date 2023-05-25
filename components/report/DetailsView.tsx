@@ -60,7 +60,7 @@ const DetailsView: React.FC<props> = ({ timeEntries }) => {
           { accessor: "userNamename", title: "Name" },
           { accessor: "projectname", title: "Project Name" },
           { accessor: "taskname", title: "Task Name" },
-          { accessor: "duration", title: "Duration" },
+          { accessor: "duration", title: "Duration in (hr)" },
         ]}
         records={flattenedData}
       />
