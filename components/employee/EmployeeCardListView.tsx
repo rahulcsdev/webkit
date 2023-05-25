@@ -104,7 +104,7 @@ const EmployeesCardListView = (props: Props) => {
           <div className="flex items-center space-x-1 w-[5%]">
             <div>
               <div
-                className="p-2 rounded-full cursor-pointer bg-[#5776ff] text-xl text-white mr-4 "
+                className="p-2 rounded-full cursor-pointer bg-secondary text-xl text-white mr-4 "
                 onClick={() => openDetails(id)}
               >
                 <MdOutlineModeEditOutline />
