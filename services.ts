@@ -530,7 +530,6 @@ export const getTasksOfSelectedProject = gql`
   }
 `;
 
-<<<<<<< HEAD
 
 export const authItem= gql`
 query AuthenticatedItem {
@@ -552,8 +551,6 @@ mutation Mutation {
 
 
 
-=======
->>>>>>> 02e34131ae86b322baa8010ae261662612ec5599
 export const addTimesheets = gql`
   mutation Mutation($data: [TimeEnteryCreateInput!]!) {
     createTimeEnteries(data: $data) {
