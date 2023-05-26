@@ -21,6 +21,7 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 const manrope = Manrope({ subsets: ["latin"] });
 
 import { getSpecificManagerTimeEntries, updateTimeEntry } from "@/services";
+import { getAuthData } from "../helper";
 
 const ReportingManagerTimeEntries = () => {
   const [showModal, setShowModal] = useState(false);
@@ -31,7 +32,8 @@ const ReportingManagerTimeEntries = () => {
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [total, setTotal] = useState(0);
 
-  
+  const { refetch:refetchAuth} = getAuthData()
+
 
 
   const router = useRouter();
@@ -104,6 +106,7 @@ const ReportingManagerTimeEntries = () => {
 
 
   useEffect(() => {
+    refetchAuth()
     const userId = localStorage.getItem("userId");
     if (userId) {
       form.setFieldValue("userId", userId);

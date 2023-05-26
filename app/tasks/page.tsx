@@ -9,6 +9,7 @@ import { getTask } from "../../services";
 import { gql, useQuery } from "@apollo/client";
 import client from "@/apolloClient";
 import { Pagination } from "@mantine/core";
+import { getAuthData } from "../helper";
 
 const Tasks = () => {
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +20,8 @@ const Tasks = () => {
   const ITEMS_PER_PAGE = 9;
   const [page, setPage] = useState(INITIAL_PAGE);
   const [totalPageNumber, setTotalPageNumber] = useState(0);
+
+  const { refetch:refetchAuth} = getAuthData()
 
   const { data, loading, error, refetch } = useQuery(getTask, {
     client,
@@ -52,6 +55,7 @@ const Tasks = () => {
     setProjectList(data?.projects);
   };
   useEffect(() => {
+    refetchAuth()
     if (data) {
       setTaskList(data?.tasks);
     }

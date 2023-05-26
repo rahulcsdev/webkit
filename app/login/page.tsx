@@ -10,13 +10,48 @@ import Image from "next/image";
 import boy from "../../public/assets/boy.jpg";
 import { useRouter } from "next/navigation";
 import client from "../../apolloClient/index";
-import { UserLogin} from "@/services";
+import { UserLogin } from "@/services";
+import { authItem } from "@/services";
 const manrope = Manrope({ subsets: ["latin"] });
-
+import { getAuthData } from "../helper";
 
 const Login = () => {
   const router = useRouter();
 
+  const { refetch:refetch1} = getAuthData()
+
+  const getUserData = async (token: string) => {
+    const data = await client.query({
+      query: authItem,
+      context: {
+        headers: {
+          Authorization: token,
+        },
+      },
+    });
+
+    return data;
+  };
+
+  useEffect(() => {
+    const token: any = localStorage.getItem("userToken");
+
+    if (token) {
+      const data = getUserData(token);
+      data
+        .then((res: any) => {
+          console.log("res", res);
+          if (res.data?.authenticatedItem) {
+            return router.push("/");
+          } else {
+            // console.log(res.data?.authenticatedItem);
+          }
+        })
+        .catch((err) => {
+          // console.log("error",err);
+        });
+    }
+  }, []);
 
   const LoginUser = async (values: any) => {
     const { data } = await client.mutate({
@@ -32,13 +67,18 @@ const Login = () => {
     }
 
     if (data?.authenticateUserWithPassword.item) {
-      // localStorage.setItem('userToken',data.authenticateUserWithPassword.sessionToken)
+      localStorage.setItem(
+        "userToken",
+        data.authenticateUserWithPassword.sessionToken
+      );
 
+      refetch1()
       localStorage.setItem("userId", data.authenticateUserWithPassword.item.id);
 
-      router.push("/home");
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
     }
-    // console.log(data);
   };
 
   const form = useForm({
