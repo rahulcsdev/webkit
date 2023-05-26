@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { DataTable } from "mantine-datatable";
 import { createStyles } from "@mantine/core";
 import { Roboto } from "next/font/google";
-
+import { format } from "date-fns";
 const roboto = Roboto({
   weight: ["400", "700"],
   subsets: ["latin"],
@@ -29,7 +29,15 @@ function flattenObject(obj: any) {
       if (typeof obj[key] === "object" && obj[key] !== null) {
         flatten(obj[key], `${prefix}${key}`);
       } else {
-        flattened[`${prefix}${key}`] = obj[key];
+        console.log(key);
+        if (key === "date") {
+          flattened[`${prefix}${key}`] = format(
+            new Date(obj[key]),
+            "dd/MM/yyyy"
+          );
+        } else {
+          flattened[`${prefix}${key}`] = obj[key];
+        }
       }
     }
   }
@@ -39,8 +47,9 @@ function flattenObject(obj: any) {
 
 const DetailsView: React.FC<props> = ({ timeEntries }) => {
   const flattenedData = timeEntries.map((data: any) => flattenObject(data));
-  // console.log(flattenedData);
+
   const { classes } = useStyles();
+
   return (
     <div className="mt-6 -z-10 bg-white p-5 rounded-md drop-shadow-md">
       <h1
@@ -61,6 +70,7 @@ const DetailsView: React.FC<props> = ({ timeEntries }) => {
           { accessor: "projectname", title: "Project Name" },
           { accessor: "taskname", title: "Task Name" },
           { accessor: "duration", title: "Duration in (hr)" },
+          { accessor: "date", title: "Date" },
         ]}
         records={flattenedData}
       />

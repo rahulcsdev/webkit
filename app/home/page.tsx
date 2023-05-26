@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 "use client";
 import { Manrope } from "next/font/google";
 import dynamic from "next/dynamic";
@@ -16,7 +14,8 @@ const MyCarousal = dynamic(
   () => import("../../components/dashboard/MyCarousal")
 );
 const MilestonesCarousel = dynamic(
-  () => import("../../components/dashboard/milestonesCarousel/MilestonesCarousel")
+  () =>
+    import("../../components/dashboard/milestonesCarousel/MilestonesCarousel")
 );
 const TaskCarousel = dynamic(
   () => import("../../components/dashboard/taskCarousel/TaskCarousel")
@@ -121,25 +120,25 @@ export default function Home() {
           <h1
             className={`text-2xl text-center font-semibold text-[#140F49] ${manrope.className} mt-5`}
           >
-          Projects
+            Projects
           </h1>
-         
+
           <div className="w-full mt-5 flex items-center justify-center flex-col pb-5">
             <MyCarousal />
           </div>
         </div>
 
-          {/* Second carousal  */}
+        {/* Second carousal  */}
 
-          <div className="my-2 px-5">
+        <div className="my-2 px-5">
           <h1
             className={`text-2xl text-center font-semibold text-[#140F49] ${manrope.className} mt-5`}
           >
-          Milestones
+            Milestones
           </h1>
-         
+
           <div className="w-full mt-5 flex items-center justify-center flex-col pb-5">
-           <MilestonesCarousel/>
+            <MilestonesCarousel />
           </div>
         </div>
 
@@ -149,17 +148,14 @@ export default function Home() {
           <h1
             className={`text-2xl text-center font-semibold text-[#140F49] ${manrope.className} mt-5`}
           >
-          Tasks
+            Tasks
           </h1>
-         
+
           <div className="w-full mt-5 flex items-center justify-center flex-col pb-5">
-            <TaskCarousel/>
+            <TaskCarousel />
           </div>
         </div>
-
-
       </div>
     </LayoutNav>
   );
 }
->>>>>>> 02e34131ae86b322baa8010ae261662612ec5599
