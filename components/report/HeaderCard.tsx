@@ -25,7 +25,8 @@ const HeaderCard: React.FC<props> = ({
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log(formData);
+    // console.log(formData);
+    setLoading(true);
     try {
       const { data } = await client.query({
         query: GET_TIME_ENTRY_BY_USER,
@@ -47,9 +48,11 @@ const HeaderCard: React.FC<props> = ({
           },
         },
       });
-      console.log(data);
+      // console.log(data);
       setTimeEntries(data.timeEnteries);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -150,7 +153,7 @@ const HeaderCard: React.FC<props> = ({
               type="submit"
               className="px-3 py-1 rounded-md bg-secondary text-white"
             >
-              Submit
+              {loading ? "Loading..." : "Submit"}
             </button>
             <button
               type="reset"
